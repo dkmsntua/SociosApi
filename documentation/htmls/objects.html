@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Socios Doc. - Socios Objects</title>
+<link rel="stylesheet" type="text/css" href="../css/objects.css">
+<link rel="stylesheet" type="text/css" href="../css/style.css">
+<link rel="stylesheet" type="text/css" href="../css/prettyPhoto.css">
+<script type="text/javascript" src="../scripts/jquery.js"></script>
+<script type="text/javascript" src="../scripts/functions.js"></script>
+<script type="text/javascript" src="../scripts/prettyPhoto.js"></script>
+<script>
+	$(document).ready(function(){
+		$('#left > li').click(function(){
+			if ($(this).next().is(":visible")){ return; }
+			var node = $(this);
+			openMenu(node, function(){
+				changeObject(node.next().children().first());
+			});
+		});
+		$('#left > ul > li').click(function(){
+			if ($(this).hasClass('selected')){ return; }
+			changeObject($(this));
+		});
+		$('.composite').click(function(){
+			var value = $(this).text().toLowerCase();
+			var item = $('#' + value + '');
+			var leftItem = item.parent().prev();
+			if (leftItem.next().is(":visible")){ 
+				changeObject(item);
+			}
+			else{
+				openMenu(leftItem, function(){
+					changeObject(item);
+				});
+			}
+		});
+		$("a[rel^='prettyPhoto']").prettyPhoto({
+			animation_speed : 'fast',
+			hideflash : true,
+			social_tools : false
+		});
+		$('#left > ul:eq(0)').slideDown(250, function(){
+			changeObject($(this).children().first());
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="container">
+		<div class="menu topMenu">
+			<div>
+				<a href="guide.html" class="menuItem">Guide</a>
+			</div>
+			<div class="separator">&nbsp;</div>
+			<div>
+				<a href="soap.html" class="menuItem">Soap Api</a>
+			</div>
+			<div class="separator">&nbsp;</div>
+			<div>
+				<a href="rest.html" class="menuItem">Rest Api</a>
+			</div>
+			<div class="separator">&nbsp;</div>
+			<div>
+				<a href="#" class="menuItem selected">Socios objects</a>
+			</div>
+			<span class="stretch"> </span>
+		</div>
+		<div id="content">
+			<div class="description">
+				<h3>Objects Description</h3>
+				<p>The following table displays the objects of the Socios Object Model, including fields' descriptions and examples.</p>
+			</div>
+			<div id="leftHolder">
+				<ul id='left'>
+					<li>MAIN OBJECTS</li>
+					<ul class='hidden'>
+						<li id='person'>Person</li>
+						<li id='mediaitem'>MediaItem</li>
+						<li id='activity'>Activity</li>
+						<li id='comment'>Comment</li>
+						<li id='socialnetwork'>SocialNetwork</li>
+					</ul>
+					<li>SECONDARY OBJECTS</li>
+					<ul class='hidden'>
+						<li id='objectId'>ObjectId</li>
+						<li id='address'>Address</li>
+						<li id='name'>Name</li>
+						<li id='license'>License</li>
+					</ul>
+					<li>FILTERS</li>
+					<ul class='hidden'>
+						<li id='areafilter'>AreaFilter</li>
+						<li id='addressfilter'>AddressFilter</li>
+						<li id='locationFilter'>LocationFilter</li>
+						<li id='datetimefilter'>DateTimeFilter</li>
+						<li id='personFilter'>PersonFilter</li>
+						<li id='activityFilter'>ActivityFilter</li>
+						<li id='mediaItemFilter'>MediaItemFilter</li>
+					</ul>
+					<li>HELPER OBJECTS</li>
+					<ul class='hidden'>
+						<li id='personsContainer'>PersonsContainer</li>
+						<li id='mediaItemsContainer'>MediaItemsContainer</li>
+						<li id='activitiesContainer'>ActivitiesContainer</li>
+						<li id='commentsContainer'>CommentsContainer</li>
+						<li id='objectIdContainer'>ObjectIdContainer</li>
+						<li id='sociosexception'>SociosException</li>
+						<li id='faultcodes'>Fault Codes</li>
+					</ul>
+				</ul>
+			</div>
+			<div id="objectsScreen" class="box objectsBox">
+				<div id="objectsHolder"></div>
+			</div>
+			<div class='hidden'>
+				<div id='table-person'>
+					<div class="examples">
+						<a href="#personJson" rel="prettyPhoto[person]">JSON</a><span>&nbsp;|&nbsp;</span><a href="#personXml" rel="prettyPhoto[person]">XML</a>
+					</div>
+					<p class='caption'>
+						The <span class='strong'>Person</span> object represents a user's profile on a social network. It contains the user's account and profile
+						information.
+					</p>
+					<table>
+						<tr>
+							<td>id</td>
+							<td>String</td>
+							<td>The unique identifier assigned to the user by the social network</td>
+						</tr>
+						<tr>
+							<td>sn</td>
+							<td><span class='composite'>SocialNetwork</span></td>
+							<td>The social network</td>
+						</tr>
+						<tr>
+							<td>aboutMe</td>
+							<td>String</td>
+							<td>A short description of the user</td>
+						</tr>
+						<tr>
+							<td>addresses</td>
+							<td>List&lt;<span class='composite'>Address</span>&gt;
+							</td>
+							<td>A list of addresses associated with the user. Depending on the social network, this list can include the current location, the
+								hometown or the places where the user has lived</td>
+						</tr>
+						<tr>
+							<td>birthday</td>
+							<td>XMLGregorianCalendar</td>
+							<td>The user's birthday</td>
+						</tr>
+						<tr>
+							<td>currentLocation</td>
+							<td><span class='composite'>Address</span></td>
+							<td>The user's current location</td>
+						</tr>
+						<tr>
+							<td>username</td>
+							<td>String</td>
+							<td>An alias for the user. Depending on the social network this can correspond to the username, the display name, or the screen name</td>
+						</tr>
+						<tr>
+							<td>email</td>
+							<td>String</td>
+							<td>The user's email address</td>
+						</tr>
+						<tr>
+							<td>gender</td>
+							<td>String</td>
+							<td>The user's gender</td>
+						</tr>
+						<tr>
+							<td>name</td>
+							<td><span class='composite'>Name</span></td>
+							<td>The user's full name</td>
+						</tr>
+						<tr>
+							<td>photos</td>
+							<td>List&lt;String&gt;</td>
+							<td>Urls of photos associated with the user's account, such as banners, covers or background pictures</td>
+						</tr>
+						<tr>
+							<td>profileUrl</td>
+							<td>String</td>
+							<td>The url that points to the user's profile</td>
+						</tr>
+						<tr>
+							<td>memberSince</td>
+							<td>XMLGregorianCalendar</td>
+							<td>The date the user's account was created</td>
+						</tr>
+						<tr>
+							<td>thumbnailUrl</td>
+							<td>String</td>
+							<td>The user's profile picture</td>
+						</tr>
+						<tr>
+							<td>utcOffset</td>
+							<td>Integer</td>
+							<td>The user's current timezone offset from UTC</td>
+						</tr>
+						<tr>
+							<td>numFriends</td>
+							<td>Integer</td>
+							<td>The total number of users this user is connected to with a bidirectional link</td>
+						</tr>
+						<tr>
+							<td>inDegree</td>
+							<td>Integer</td>
+							<td>The total number of users following or subscribed to this user</td>
+						</tr>
+						<tr>
+							<td>outDegree</td>
+							<td>Integer</td>
+							<td>The total number of users this user follows or is subscribed to</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-mediaitem'>
+					<div class="examples">
+						<a href="#mediaItemJson" rel="prettyPhoto[mediaItem]">JSON</a><span>&nbsp;|&nbsp;</span><a href="#mediaItemXml" rel="prettyPhoto[mediaItem]">XML</a>
+					</div>
+					<p class='caption'>
+						The <span class='strong'>MediaItem</span> object represents a post published by a user in a social network. It can refer to a video, image or
+						text post.
+					</p>
+					<table>
+						<tr>
+							<td>id</td>
+							<td>String</td>
+							<td>The unique identifier assigned to the media item by the social network</td>
+						</tr>
+						<tr>
+							<td>sn</td>
+							<td><span class='composite'>SocialNetwork</span></td>
+							<td>The social network</td>
+						</tr>
+						<tr>
+							<td>title</td>
+							<td>String</td>
+							<td>The title of the media item</td>
+						</tr>
+						<tr>
+							<td>created</td>
+							<td>XMLGregorianCalendar</td>
+							<td>The date that the media item was published</td>
+						</tr>
+						<tr>
+							<td>thumbnailUrl</td>
+							<td>String</td>
+							<td>The url of the thumbnail for the video or the image</td>
+						</tr>
+						<tr>
+							<td>description</td>
+							<td>String</td>
+							<td>The text content of the media item, or a suitable description</td>
+						</tr>
+						<tr>
+							<td>duration</td>
+							<td>Integer</td>
+							<td>The video's duration in seconds</td>
+						</tr>
+						<tr>
+							<td>location</td>
+							<td><span class='composite'>Address</span></td>
+							<td>A location associated with the media item</td>
+						</tr>
+						<tr>
+							<td>language</td>
+							<td>String</td>
+							<td>The language of the media item</td>
+						</tr>
+						<tr>
+							<td>license</td>
+							<td><span class='composite'>License</span></td>
+							<td>The license attached to the media item</td>
+						</tr>
+						<tr>
+							<td>fileSize</td>
+							<td>Long</td>
+							<td>The size of the media item file (image or video) in bytes</td>
+						</tr>
+						<tr>
+							<td>rating</td>
+							<td>Double</td>
+							<td>Average rating of the media item (range depends on the social network)</td>
+						</tr>
+						<tr>
+							<td>numRatings</td>
+							<td>Integer</td>
+							<td>Total number of people who have rated the media item</td>
+						</tr>
+						<tr>
+							<td>numPositiveVotes</td>
+							<td>Integer</td>
+							<td>Total number of positive votes for the media item (likes, plus ones etc)</td>
+						</tr>
+						<tr>
+							<td>numNegativeVotes</td>
+							<td>Integer</td>
+							<td>Total number of negative votes for the media item (dislikes)</td>
+						</tr>
+						<tr>
+							<td>numComments</td>
+							<td>Integer</td>
+							<td>Total number of comments on the media item</td>
+						</tr>
+						<tr>
+							<td>numViews</td>
+							<td>Integer</td>
+							<td>Total number of times the media items has been viewed</td>
+						</tr>
+						<tr>
+							<td>numResharings</td>
+							<td>Integer</td>
+							<td>Total number of times the media item has been shared</td>
+						</tr>
+						<tr>
+							<td>numFavorites</td>
+							<td>Integer</td>
+							<td>Total number of times the media item has been favorited</td>
+						</tr>
+						<tr>
+							<td>tags</td>
+							<td>String</td>
+							<td>A string containing a list of comma separated tags attached to the media item</td>
+						</tr>
+						<tr>
+							<td>taggedPeople</td>
+							<td>String</td>
+							<td>A string containing a list of comma separated ids of users associated with the media item</td>
+						</tr>
+						<tr>
+							<td>type</td>
+							<td>MediaItemType</td>
+							<td>The type of the media item. Valid values are: IMAGE, VIDEO and TEXT</td>
+						</tr>
+						<tr>
+							<td>url</td>
+							<td>String</td>
+							<td>The url that points to the media item</td>
+						</tr>
+						<tr>
+							<td>userId</td>
+							<td>String</td>
+							<td>The id of the publisher of the media item</td>
+						</tr>
+						<tr>
+							<td>comments</td>
+							<td>List&lt;<span class='composite'>Comment</span>&gt;
+							</td>
+							<td>The list of comments of the media item</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-activity'>
+					<div class="examples">
+						<a href="#activityJson" rel="prettyPhoto[activity]">JSON</a><span>&nbsp;|&nbsp;</span><a href="#activityXml" rel="prettyPhoto[activity]">XML</a>
+					</div>
+					<p class='caption'>
+						The <span class='strong'>Activity</span> object contains information about an action performed by a user in a social network.
+					</p>
+					<table>
+						<tr>
+							<td>id</td>
+							<td>String</td>
+							<td>The unique identifier assigned to the activity by the social network</td>
+						</tr>
+						<tr>
+							<td>sn</td>
+							<td><span class='composite'>SocialNetwork</span></td>
+							<td>The social network</td>
+						</tr>
+						<tr>
+							<td>created</td>
+							<td>XMLGregorianCalendar</td>
+							<td>The date that the activity took place</td>
+						</tr>
+						<tr>
+							<td>title</td>
+							<td>String</td>
+							<td>The title of the activity</td>
+						</tr>
+						<tr>
+							<td>description</td>
+							<td>String</td>
+							<td>A description for the activity</td>
+						</tr>
+						<tr>
+							<td>location</td>
+							<td><span class='composite'>Address</span></td>
+							<td>The location where this activity occurred</td>
+						</tr>
+						<tr>
+							<td>actorId</td>
+							<td>String</td>
+							<td>The id of the user who performed the activity</td>
+						</tr>
+						<tr>
+							<td>objectType</td>
+							<td>ActivityObjectType</td>
+							<td>The type of the object(s) associated with the activity. Valid values are: PERSON, MEDIAITEM, ACTIVITY and OTHER</td>
+						</tr>
+						<tr>
+							<td>mediaItems</td>
+							<td>List&lt;<span class='composite'>MediaItem</span>&gt;
+							</td>
+							<td>Media items associated with the activity</td>
+						</tr>
+						<tr>
+							<td>persons</td>
+							<td>List&lt;<span class='composite'>Person</span>&gt;
+							</td>
+							<td>Person objects associated with the activity</td>
+						</tr>
+						<tr>
+							<td>activities</td>
+							<td>List&lt;<span class='composite'>Activity</span>&gt;
+							</td>
+							<td>Activities associated with the activity</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-comment'>
+					<div class="examples">
+						<a href="#commentJson" rel="prettyPhoto[comment]">JSON</a><span>&nbsp;|&nbsp;</span><a href="#commentXml" rel="prettyPhoto[comment]">XML</a>
+					</div>
+					<p class='caption'>
+						The <span class='strong'>Comment</span> object represents a comment on a media item published in a social network.
+					</p>
+					<table>
+						<tr>
+							<td>id</td>
+							<td>String</td>
+							<td>The unique identifier assigned to the comment by the social network</td>
+						</tr>
+						<tr>
+							<td>sn</td>
+							<td><span class='composite'>SocialNetwork</span></td>
+							<td>The social network</td>
+						</tr>
+						<tr>
+							<td>created</td>
+							<td>XMLGregorianCalendar</td>
+							<td>The date that the comment was published</td>
+						</tr>
+						<tr>
+							<td>description</td>
+							<td>String</td>
+							<td>The content (text) of the comment</td>
+						</tr>
+						<tr>
+							<td>userId</td>
+							<td>String</td>
+							<td>The id of the commenter</td>
+						</tr>
+						<tr>
+							<td>username</td>
+							<td>String</td>
+							<td>The username of the commenter</td>
+						</tr>
+						<tr>
+							<td>numPositiveVotes</td>
+							<td>Integer</td>
+							<td>Total number of positive votes for the comment (likes, plus ones etc)</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-socialnetwork'>
+					<p class='caption'>
+						The <span class='strong'>SocialNetwork</span> is an enumeration of the supported social networks.
+					</p>
+					<table>
+						<tr>
+							<td>FLICKR</td>
+						</tr>
+						<tr>
+							<td>FACEBOOK</td>
+						</tr>
+						<tr>
+							<td>TWITTER</td>
+						</tr>
+						<tr>
+							<td>YOUTUBE</td>
+						</tr>
+						<tr>
+							<td>DAILYMOTION</td>
+						</tr>
+						<tr>
+							<td>GOOGLEP</td>
+						</tr>
+						<tr>
+							<td>INSTAGRAM</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-objectId'>
+					<div class="examples">
+						<a href="#objectIdJson" rel="prettyPhoto[objectId]">JSON</a><span>&nbsp;|&nbsp;</span><a href="#objectIdXml" rel="prettyPhoto[objectId]">XML</a>
+					</div>
+					<p class='caption'>
+						The <span class='strong'>ObjectId</span> is a wrapper that defines an object in a specific social network.
+					</p>
+					<table>
+						<tr>
+							<td>id</td>
+							<td>String</td>
+							<td>The id of the object</td>
+						</tr>
+						<tr>
+							<td>socialNetwork</td>
+							<td><span class='composite'>SocialNetwork</span></td>
+							<td>The social network</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-address'>
+					<div class="examples">
+						<a href="#addressJson" rel="prettyPhoto[address]">JSON</a><span>&nbsp;|&nbsp;</span><a href="#addressXml" rel="prettyPhoto[address]">XML</a>
+					</div>
+					<p class='caption'>
+						The <span class='strong'>Address</span> object contains details about a location.
+					</p>
+					<table>
+						<tr>
+							<td>country</td>
+							<td>String</td>
+							<td>The location's country</td>
+						</tr>
+						<tr>
+							<td>extendedAddress</td>
+							<td>String</td>
+							<td>Detailed description of the location that may include street name, number, city etc</td>
+						</tr>
+						<tr>
+							<td>latitude</td>
+							<td>Double</td>
+							<td>The latitude of the location's position</td>
+						</tr>
+						<tr>
+							<td>longitude</td>
+							<td>Double</td>
+							<td>The longitude of the location's position</td>
+						</tr>
+						<tr>
+							<td>postalCode</td>
+							<td>String</td>
+							<td>The postal code of the location</td>
+						</tr>
+						<tr>
+							<td>region</td>
+							<td>String</td>
+							<td>The region of the location</td>
+						</tr>
+						<tr>
+							<td>streetAddress</td>
+							<td>String</td>
+							<td>The street name and number</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-name'>
+					<div class="examples">
+						<a href="#nameJson" rel="prettyPhoto[name]">JSON</a><span>&nbsp;|&nbsp;</span><a href="#nameXml" rel="prettyPhoto[name]">XML</a>
+					</div>
+					<p class='caption'>
+						The <span class='strong'>Name</span> object contains information about the user's full name.
+					</p>
+					<table>
+						<tr>
+							<td>firstName</td>
+							<td>String</td>
+							<td>The user's first name</td>
+						</tr>
+						<tr>
+							<td>lastName</td>
+							<td>String</td>
+							<td>The user's last name</td>
+						</tr>
+						<tr>
+							<td>additionalName</td>
+							<td>String</td>
+							<td>An additional handle such as a nickname, middle name, etc</td>
+						</tr>
+						<tr>
+							<td>fullName</td>
+							<td>String</td>
+							<td>A detailed version of the full name that may include prefixes, suffixes, academic or honorary titles etc</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-license'>
+					<div class="examples">
+						<a href="#licenseJson" rel="prettyPhoto[license]">JSON</a><span>&nbsp;|&nbsp;</span><a href="#licenseXml" rel="prettyPhoto[license]">XML</a>
+					</div>
+					<p class='caption'>
+						The <span class='strong'>License</span> object contains basic information about the license attached to a media item.
+					</p>
+					<table>
+						<tr>
+							<td>licenseType</td>
+							<td>LicenseType</td>
+							<td>The type of the license. Valid values are: "CC", for Creative Commons license, and "ALL", for all other types</td>
+						</tr>
+						<tr>
+							<td>name</td>
+							<td>String</td>
+							<td>The name of the license</td>
+						</tr>
+						<tr>
+							<td>url</td>
+							<td>String</td>
+							<td>The url where detailed information about the license can be found</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-areafilter'>
+					<p class='caption'>
+						The <span class='strong'>AreaFilter</span> object is a set of parameters intended to limit a search within an area.
+					</p>
+					<table>
+						<tr>
+							<td>latitude</td>
+							<td>Double</td>
+							<td>The latitude of the center of the search area</td>
+						</tr>
+						<tr>
+							<td>longitude</td>
+							<td>Double</td>
+							<td>The longitude of the center of the search area</td>
+						</tr>
+						<tr>
+							<td>radius</td>
+							<td>Double</td>
+							<td>The radius for defining the search area. If not provided, a default value is used, depending on the social network</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-addressfilter'>
+					<p class='caption'>
+						The <span class='strong'>AddressFilter</span> object is a set of parameters that can be used for address based searches.
+					</p>
+					<table>
+						<tr>
+							<td>country</td>
+							<td>String</td>
+							<td>The country</td>
+						</tr>
+						<tr>
+							<td>postalCode</td>
+							<td>String</td>
+							<td>The postal code</td>
+						</tr>
+						<tr>
+							<td>region</td>
+							<td>String</td>
+							<td>The region</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-locationFilter'>
+					<p class='caption'>
+						The <span class='strong'>LocationFilter</span> object is a pair of filters allowing location based searches.
+					</p>
+					<table>
+						<tr>
+							<td>addressFilter</td>
+							<td><span class='composite'>AddressFilter</span></td>
+							<td>The filter to be used for address based searches</td>
+						</tr>
+						<tr>
+							<td>areaFilter</td>
+							<td><span class='composite'>AreaFilter</span></td>
+							<td>The filter to be used for area based searches</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-datetimefilter'>
+					<p class='caption'>
+						The <span class='strong'>DateTimeFilter</span> object is a set of parameters allowing searches within a specific time frame.
+					</p>
+					<table>
+						<tr>
+							<td>from</td>
+							<td>XMLGregorianCalendar</td>
+							<td>The start date of the time frame</td>
+						</tr>
+						<tr>
+							<td>to</td>
+							<td>XMLGregorianCalendar</td>
+							<td>The end date of the time frame</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-personFilter'>
+					<p class='caption'>
+						The <span class='strong'>PersonFilter</span> object is a set of parameters that can be used to search for users.
+					</p>
+					<table>
+						<tr>
+							<td>keywords</td>
+							<td>List&lt;String&gt;</td>
+							<td>A list of keywords to be used as search terms</td>
+						</tr>
+						<tr>
+							<td>sns</td>
+							<td>List&lt;<span class='composite'>SocialNetwork</span>&gt;
+							</td>
+							<td>The list of social networks to include in the search</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-activityFilter'>
+					<p class='caption'>
+						The <span class='strong'>ActivityFilter</span> object is a set of parameters that can be used to search for activities.
+					</p>
+					<table>
+						<tr>
+							<td>keywords</td>
+							<td>List&lt;String&gt;</td>
+							<td>A list of keywords to be used as search terms</td>
+						</tr>
+						<tr>
+							<td>language</td>
+							<td>String</td>
+							<td>The language of the activities</td>
+						</tr>
+						<tr>
+							<td>sns</td>
+							<td>List&lt;<span class='composite'>SocialNetwork</span>&gt;
+							</td>
+							<td>The list of social networks to include in the search</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-mediaItemFilter'>
+					<p class='caption'>
+						The <span class='strong'>MediaItemFilter</span> object is a set of parameters that can be used to search for media items.
+					</p>
+					<table>
+						<tr>
+							<td>created</td>
+							<td><span class='composite'>DateTimeFilter</span></td>
+							<td>A filter that defines a time frame for the search</td>
+						</tr>
+						<tr>
+							<td>keywords</td>
+							<td>List&lt;String&gt;</td>
+							<td>A list of keywords to be used as search terms</td>
+						</tr>
+						<tr>
+							<td>location</td>
+							<td>LocationFilter</td>
+							<td>A filter that defines the location of the search</td>
+						</tr>
+						<tr>
+							<td>language</td>
+							<td>String</td>
+							<td>The language of the media items</td>
+						</tr>
+						<tr>
+							<td>licenseType</td>
+							<td>LicenseType</td>
+							<td>The type of the license. Valid values are: "CC", for Creative Commons license, and "ALL", for all other types</td>
+						</tr>
+						<tr>
+							<td>sns</td>
+							<td>List&lt;<span class='composite'>SocialNetwork</span>&gt;
+							</td>
+							<td>The list of social networks to include in the search</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-personsContainer'>
+					<p class='caption'>
+						The <span class='strong'>PersonsContainer</span> object contains the results of a request for users.
+					</p>
+					<table>
+						<tr>
+							<td>persons</td>
+							<td>List&lt;<span class='composite'>Person</span>&gt;
+							</td>
+							<td>A list of Person objects</td>
+						</tr>
+						<tr>
+							<td>exceptions</td>
+							<td>List&lt;<span class='composite'>SociosException</span>&gt;
+							</td>
+							<td>A list of the exceptions that occurred during the request</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-mediaItemsContainer'>
+					<p class='caption'>
+						The <span class='strong'>MediaItemsContainer</span> object contains the results of a request for media items.
+					</p>
+					<table>
+						<tr>
+							<td>mediaItems</td>
+							<td>List&lt;<span class='composite'>MediaItem</span>&gt;
+							</td>
+							<td>A list of MediaItem objects</td>
+						</tr>
+						<tr>
+							<td>exceptions</td>
+							<td>List&lt;<span class='composite'>SociosException</span>&gt;
+							</td>
+							<td>A list of the exceptions that occurred during the request</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-activitiesContainer'>
+					<p class='caption'>
+						The <span class='strong'>ActivitiesContainer</span> object contains the results of a request for activities.
+					</p>
+					<table>
+						<tr>
+							<td>activities</td>
+							<td>List&lt;<span class='composite'>Activity</span>&gt;
+							</td>
+							<td>A list of Activity objects</td>
+						</tr>
+						<tr>
+							<td>exceptions</td>
+							<td>List&lt;<span class='composite'>SociosException</span>&gt;
+							</td>
+							<td>A list of the exceptions that occurred during the request</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-commentsContainer'>
+					<p class='caption'>
+						The <span class='strong'>CommentsContainer</span> object contains the results of a request for comments.
+					</p>
+					<table>
+						<tr>
+							<td>comments</td>
+							<td>List&lt;<span class='composite'>Comment</span>&gt;
+							</td>
+							<td>A list of Comment objects</td>
+						</tr>
+						<tr>
+							<td>exceptions</td>
+							<td>List&lt;<span class='composite'>SociosException</span>&gt;
+							</td>
+							<td>A list of the exceptions that occurred during the request</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-objectIdContainer'>
+					<p class='caption'>
+						The <span class='strong'>ΟbjectIdContainer</span> contains the id of a social network object, returned as a result of a request.
+					</p>
+					<table>
+						<tr>
+							<td>objectId</td>
+							<td><span class='composite'>ObjectId</span></td>
+							<td>The id of the object</td>
+						</tr>
+						<tr>
+							<td>exceptions</td>
+							<td>List&lt;<span class='composite'>SociosException</span>&gt;
+							</td>
+							<td>A list of the exceptions that occurred during the request</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-sociosexception'>
+					<div class="examples">
+						<a href="#sociosExceptionJson" rel="prettyPhoto[sociosException]">JSON</a><span>&nbsp;|&nbsp;</span><a href="#sociosExceptionXml"
+							rel="prettyPhoto[sociosException]">XML</a>
+					</div>
+					<p class='caption'>
+						The <span class='strong'>SociosException</span> contains information about an error that occurred during a request.
+					</p>
+					<table>
+						<tr>
+							<td>message</td>
+							<td>String</td>
+							<td>A short message about the error</td>
+						</tr>
+						<tr>
+							<td>description</td>
+							<td>String</td>
+							<td>A description of the error</td>
+						</tr>
+						<tr>
+							<td>faultCode</td>
+							<td>Integer</td>
+							<td>A number indicating the error type</td>
+						</tr>
+						<tr>
+							<td>actorId</td>
+							<td>String</td>
+							<td>The id of the object that caused the exception</td>
+						</tr>
+						<tr>
+							<td>socialNetwork</td>
+							<td><span class='composite'>SocialNetwork</span></td>
+							<td>The social network</td>
+						</tr>
+					</table>
+				</div>
+				<div id='table-faultcodes'>
+					<p class='caption'>
+						The <span class='strong'>Fault Codes</span> of the socios exceptions.
+					</p>
+					<table>
+						<tr>
+							<td>400</td>
+							<td>"No valid input was detected"</td>
+						</tr>
+						<tr>
+							<td>404</td>
+							<td>"The resource you requested was not found"</td>
+						</tr>
+						<tr>
+							<td>500</td>
+							<td>"Something went wrong"</td>
+						</tr>
+						<tr>
+							<td>501</td>
+							<td>"This method is not implemented for this particular social network"</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id='footer'></div>
+	<div id="personJson" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+{
+   "id":"UJm-9A-nEvZEFjdv5BV-HA",
+   "sn":"YOUTUBE",
+   "aboutMe":"i hope you like my videos!",
+   "addresses":[
+      {
+         "country":"Greece",
+         "extendedAddress":"Agiou Gerasimou 49, Ilisia Athens",
+         "latitude":37.98642201,
+         "longitude":23.72909545,
+         "postalCode":"15771",
+         "region":"Attica",
+         "streetAddress":"Ag. Gerasimou 49"
+      }
+   ],
+   "birthday":"1982-06-05T13:54:34.000+03:00",
+   "currentLocation":{
+      "country":"Greece",
+      "extendedAddress":"Agiou Gerasimou 49, Ilisia Athens",
+      "latitude":37.98642201,
+      "longitude":23.72909545,
+      "postalCode":"15771",
+      "region":"Attica",
+      "streetAddress":"Ag. Gerasimou 49"
+   },
+   "username":"belieb3R",
+   "email":"ilovejustin@yahoo.gr",
+   "gender":"male",
+   "name":{
+      "additionalName":"little Jay",
+      "lastName":"Doe",
+      "firstName":"John",
+      "fullName":"sir John Harvey Doe"
+   },
+   "photos":[
+      {
+         "photo":"https://scontent-a.xx.fbcdn.net/hphotos-xaf1/t31.0-8/s720x720/471021_123438381114636_1352470897_o.jpg"
+      },
+      {
+         "photo":"https://scontent-a.xx.fbcdn.net/hphotos-xaf1/t31.0-8/s720x720/471021_123438381114636_1352470897_o.jpg"
+      }
+   ],
+   "profileUrl":"http://gdata.youtube.com/feeds/api/users/UJm-9A-nEvZEFjdv5BV-HA",
+   "memberSince":"2011-09-29T21:59:54.000+03:00",
+   "thumbnailUrl":"http://yt3.ggpht.com/-9D6D3w78VbY/AAAAAAAAAAI/AAAAAAAAAAA/rLAUPFx3wjk/s88-c-k-no/photo.jpg",
+   "utcOffset":2,
+   "numFriends":-1,
+   "inDegree":3,
+   "outDegree":20
+}
+   			</pre>
+		</div>
+	</div>
+	<div id="personXml" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+&lt;Person&gt;
+   &lt;aboutMe&gt;i hope you like my videos!&lt;/aboutMe&gt;
+   &lt;addresses&gt;
+      &lt;element&gt;
+         &lt;country&gt;Greece&lt;/country&gt;
+         &lt;extendedAddress&gt;Agiou Gerasimou 49, Ilisia Athens&lt;/extendedAddress&gt;
+         &lt;latitude&gt;37.986423&lt;/latitude&gt;
+         &lt;longitude&gt;23.729095&lt;/longitude&gt;
+         &lt;postalCode&gt;15771&lt;/postalCode&gt;
+         &lt;region&gt;Attica&lt;/region&gt;
+         &lt;streetAddress&gt;Ag. Gerasimou 49&lt;/streetAddress&gt;
+      &lt;/element&gt;
+   &lt;/addresses&gt;
+   &lt;birthday&gt;1982-06-05T13:54:34.000+03:00&lt;/birthday&gt;
+   &lt;currentLocation&gt;
+      &lt;country&gt;Greece&lt;/country&gt;
+      &lt;extendedAddress&gt;Agiou Gerasimou 49, Ilisia Athens&lt;/extendedAddress&gt;
+      &lt;latitude&gt;37.986423&lt;/latitude&gt;
+      &lt;longitude&gt;23.729095&lt;/longitude&gt;
+      &lt;postalCode&gt;15771&lt;/postalCode&gt;
+      &lt;region&gt;Attica&lt;/region&gt;
+      &lt;streetAddress&gt;Ag. Gerasimou 49&lt;/streetAddress&gt;
+   &lt;/currentLocation&gt;
+   &lt;email&gt;ilovejustin@yahoo.gr&lt;/email&gt;
+   &lt;gender&gt;male&lt;/gender&gt;
+   &lt;id&gt;UJm-9A-nEvZEFjdv5BV-HA&lt;/id&gt;
+   &lt;inDegree&gt;3&lt;/inDegree&gt;
+   &lt;memberSince&gt;2011-09-29T21:59:54.000+03:00&lt;/memberSince&gt;
+   &lt;name&gt;
+      &lt;additionalName&gt;little Jay&lt;/additionalName&gt;
+      &lt;firstName&gt;John&lt;/firstName&gt;
+      &lt;fullName&gt;sir John Harvey Doe&lt;/fullName&gt;
+      &lt;lastName&gt;Doe&lt;/lastName&gt;
+   &lt;/name&gt;
+   &lt;numFriends&gt;-1&lt;/numFriends&gt;
+   &lt;outDegree&gt;20&lt;/outDegree&gt;
+   &lt;photos&gt;
+      &lt;element&gt;
+         &lt;photo&gt;https://scontent-a.xx.fbcdn.net/hphotos-xaf1/t31.0-8/s720x720/471021_123438381114636_1352470897_o.jpg&lt;/photo&gt;
+      &lt;/element&gt;
+      &lt;element&gt;
+         &lt;photo&gt;https://scontent-a.xx.fbcdn.net/hphotos-xaf1/t31.0-8/s720x720/471021_123438381114636_1352470897_o.jpg&lt;/photo&gt;
+      &lt;/element&gt;
+   &lt;/photos&gt;
+   &lt;profileUrl&gt;http://gdata.youtube.com/feeds/api/users/UJm-9A-nEvZEFjdv5BV-HA&lt;/profileUrl&gt;
+   &lt;sn&gt;YOUTUBE&lt;/sn&gt;
+   &lt;thumbnailUrl&gt;http://yt3.ggpht.com/-9D6D3w78VbY/AAAAAAAAAAI/AAAAAAAAAAA/rLAUPFx3wjk/s88-c-k-no/photo.jpg&lt;/thumbnailUrl&gt;
+   &lt;username&gt;belieb3R&lt;/username&gt;
+   &lt;utcOffset&gt;2&lt;/utcOffset&gt;
+&lt;/Person&gt;
+			</pre>
+		</div>
+	</div>
+	<div id="mediaItemJson" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+{
+   "id":"aMVuOpdnu3A",
+   "sn":"YOUTUBE",
+   "title":"Java Tutorial For Begginers",
+   "created":"2013-08-20T23:50:51.000+03:00",
+   "thumbnailUrl":"http://i1.ytimg.com/vi/aMVuOpdnu3A/default.jpg",
+   "description":"This tutorial is an introduction to Java, one of the most popular programming languages",
+   "duration":"608",
+   "location":{
+      "country":"Greece",
+      "extendedAddress":"Agiou Gerasimou 49, Ilisia Athens",
+      "latitude":37.98642201,
+      "longitude":23.72909545,
+      "postalCode":"15771",
+      "region":"Attica",
+      "streetAddress":"Ag. Gerasimou 49"
+   },
+   "language":"en",
+   "license":{
+      "licenseType":"CC",
+      "name":"youtube",
+      "url":"http://www.youtube.com/t/terms"
+   },
+   "fileSize":123.456.789,
+   "rating":5.0,
+   "numRatings":39,
+   "numVotes":-1,
+   "numPositiveVotes":39,
+   "numNegativeVotes":0,
+   "numComments":50,
+   "numViews":5394,
+   "numResharings":-1,
+   "numFavorites":0,
+   "tags":"lesson,java,begginer,tutorial",
+   "taggedPeople":"UJm-9A-nEvZEFjdv5BV-HA,XJDX1KK6t121Z9FLhu5o2A",
+   "type":"VIDEO",
+   "url":"http://www.youtube.com/watch?v=aMVuOpdnu3A&amp;feature=youtube_gdata_player",
+   "userId":"wRXb5dUK4cvsHbx-rGzSgw",
+   "comments":[
+      {
+         "id":"z13iztbrlqmzjhzmp23og13ogqyocbt4504",
+         "sn":"YOUTUBE",
+         "created":"2014-01-04T22:13:53.000+02:00",
+         "description":"your videos are helping me pass my data structures class right now, i was severely behind in programming in C until i sat down for a couple days and watched your videos. thank you very much for putting time into this and helping a lot of people for free.",
+         "userId":"Uc1ryZaQlBx4sojx3xMsSg",
+         "username":"hipster666",
+         "numPositiveVotes":"-1"
+      },
+      {
+         "id":"9pHNqXM4bGSkFLwFMxQILQbUUAeNgiuS9HpPlbo2YSU",
+         "sn":"YOUTUBE",
+         "created":"2013-08-25T19:08:17.000+03:00",
+         "description":"a true educator! and you are interactive awesome",
+         "userId":"nn55Ky0OAsN4AwHttzEHJQ",
+         "username":"tian jin",
+         "numPositiveVotes":"-1"
+      }
+   ]
+}
+   			</pre>
+		</div>
+	</div>
+	<div id="mediaItemXml" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+&lt;MediaItem&gt;
+   &lt;comments&gt;
+      &lt;element&gt;
+         &lt;created&gt;2014-01-04T22:13:53.000+02:00&lt;/created&gt;
+         &lt;description&gt;your videos are helping me pass my data structures class right now, i was severely behind in programming in C until i sat down for a couple days and watched your videos. thank you very much for putting time into this and helping a lot of people for free.&lt;/description&gt;
+         &lt;id&gt;z13iztbrlqmzjhzmp23og13ogqyocbt4504&lt;/id&gt;
+         &lt;numPositiveVotes&gt;-1&lt;/numPositiveVotes&gt;
+         &lt;sn&gt;YOUTUBE&lt;/sn&gt;
+         &lt;userId&gt;Uc1ryZaQlBx4sojx3xMsSg&lt;/userId&gt;
+         &lt;username&gt;hipster666&lt;/username&gt;
+      &lt;/element&gt;
+      &lt;element&gt;
+         &lt;created&gt;2013-08-25T19:08:17.000+03:00&lt;/created&gt;
+         &lt;description&gt;a true educator! and you are interactive awesome&lt;/description&gt;
+         &lt;id&gt;9pHNqXM4bGSkFLwFMxQILQbUUAeNgiuS9HpPlbo2YSU&lt;/id&gt;
+         &lt;numPositiveVotes&gt;-1&lt;/numPositiveVotes&gt;
+         &lt;sn&gt;YOUTUBE&lt;/sn&gt;
+         &lt;userId&gt;nn55Ky0OAsN4AwHttzEHJQ&lt;/userId&gt;
+         &lt;username&gt;tian jin&lt;/username&gt;
+      &lt;/element&gt;
+   &lt;/comments&gt;
+   &lt;created&gt;2013-08-20T23:50:51.000+03:00&lt;/created&gt;
+   &lt;description&gt;This tutorial is an introduction to Java, one of the most popular programming languages&lt;/description&gt;
+   &lt;duration&gt;608&lt;/duration&gt;
+   &lt;fileSize&gt;123.456.789&lt;/fileSize&gt;
+   &lt;id&gt;aMVuOpdnu3A&lt;/id&gt;
+   &lt;language&gt;en&lt;/language&gt;
+   &lt;license&gt;
+      &lt;licenseType&gt;CC&lt;/licenseType&gt;
+      &lt;name&gt;youtube&lt;/name&gt;
+      &lt;url&gt;http://www.youtube.com/t/terms&lt;/url&gt;
+   &lt;/license&gt;
+   &lt;location&gt;
+      &lt;country&gt;Greece&lt;/country&gt;
+      &lt;extendedAddress&gt;Agiou Gerasimou 49, Ilisia Athens&lt;/extendedAddress&gt;
+      &lt;latitude&gt;37.986423&lt;/latitude&gt;
+      &lt;longitude&gt;23.729095&lt;/longitude&gt;
+      &lt;postalCode&gt;15771&lt;/postalCode&gt;
+      &lt;region&gt;Attica&lt;/region&gt;
+      &lt;streetAddress&gt;Ag. Gerasimou 49&lt;/streetAddress&gt;
+   &lt;/location&gt;
+   &lt;numComments&gt;50&lt;/numComments&gt;
+   &lt;numFavorites&gt;0&lt;/numFavorites&gt;
+   &lt;numNegativeVotes&gt;0&lt;/numNegativeVotes&gt;
+   &lt;numPositiveVotes&gt;39&lt;/numPositiveVotes&gt;
+   &lt;numRatings&gt;39&lt;/numRatings&gt;
+   &lt;numResharings&gt;-1&lt;/numResharings&gt;
+   &lt;numViews&gt;5394&lt;/numViews&gt;
+   &lt;numVotes&gt;-1&lt;/numVotes&gt;
+   &lt;rating&gt;5.0&lt;/rating&gt;
+   &lt;sn&gt;YOUTUBE&lt;/sn&gt;
+   &lt;taggedPeople&gt;UJm-9A-nEvZEFjdv5BV-HA,XJDX1KK6t121Z9FLhu5o2A&lt;/taggedPeople&gt;
+   &lt;type&gt;VIDEO&lt;/type&gt;
+   &lt;tags&gt;lesson,java,begginer,tutorial&lt;/tags&gt;
+   &lt;thumbnailUrl&gt;http://i1.ytimg.com/vi/aMVuOpdnu3A/default.jpg&lt;/thumbnailUrl&gt;
+   &lt;title&gt;Java Tutorial For Begginers&lt;/title&gt;
+   &lt;url&gt;http://www.youtube.com/watch?v=aMVuOpdnu3A&amp;amp;feature=youtube_gdata_player&lt;/url&gt;
+   &lt;userId&gt;wRXb5dUK4cvsHbx-rGzSgw&lt;/userId&gt;
+&lt;/MediaItem&gt;
+			</pre>
+		</div>
+	</div>
+	<div id="activityJson" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+{
+   "id":"z12gwfoidkb2wlwc1225utebrpjscpbbq04",
+   "sn":"GOOGLEP",
+   "created":"2013-12-13T14:17:17.000+02:00",
+   "title":"Riders on the Storm - The Doors HD",
+   "description":"i love this song!",
+   "type":"share",
+   "location":{
+      "country":"Greece",
+      "extendedAddress":"Agiou Gerasimou 49, Ilisia Athens",
+      "latitude":37.98642201,
+      "longitude":23.72909545,
+      "postalCode":"15771",
+      "region":"Attica",
+      "streetAddress":"Ag. Gerasimou 49"
+   },
+   "actorId":"115268572887188346965",
+   "objectType":"MEDIAITEM",
+   "mediaItems":[
+      {
+         "id":"z12htv0x1sjic3oly22bzzmacsa5hhuu4",
+         "sn":"GOOGLEP",
+         "title":"Riders on the Storm - The Doors HD",
+         "type":"VIDEO",
+         "created":"2007-04-17T22:54:52.000+03:00",
+         "duration":576,
+         "language":"en",
+         "description":"Rest in Peace Ray, you are with your old friend now MUST SEE for Doors and Jim Morrison Fans Live Video Performance in HD The song was recorded at the Doors ...",
+         "rating":4.8,
+         "tags": "Doors,Jim,Morrisson,Riders,storm",
+         "url":"https://www.youtube.com/watch?v=k9o78-f2mIM",
+         "userId":"109398338229575881240",
+         "numPositiveVotes":1,
+         "numComments":2,
+         "numResharings":0
+      }
+   ],
+   "persons":[
+      {
+         "id":"11112222333344445555",
+         "sn":"GOOGLEP",
+         "fullName":"Ioanna Ioannou"
+      },
+      {
+         "id":"66667777888899990000",
+         "sn":"GOOGLEP",
+         "fullName":"Giorgos Georgiou"
+      }
+   ],
+   "activities":[
+      {
+         "id":"z13bt5lidwb2dzt2l225utebrpjscpbbq04",
+         "sn":"GOOGLEP",
+         "actorId":"116710062997708964632"
+      },
+      {
+         "id":"z122i5yozsuzzxosw225utebrpjscpbbq04",
+         "sn":"GOOGLEP",
+         "actorId":"110153216974321896088"
+      }
+   ]
+}
+   			</pre>
+		</div>
+	</div>
+	<div id="activityXml" style="display: none;">
+		<div class="ppHolder">
+			<pre>
+&lt;Activity&gt;
+   &lt;activities&gt;
+      &lt;element&gt;
+         &lt;actorId&gt;116710062997708964632&lt;/actorId&gt;
+         &lt;id&gt;z13bt5lidwb2dzt2l225utebrpjscpbbq04&lt;/id&gt;
+         &lt;sn&gt;GOOGLEP&lt;/sn&gt;
+      &lt;/element&gt;
+      &lt;element&gt;
+         &lt;actorId&gt;z122i5yozsuzzxosw225utebrpjscpbbq04&lt;/actorId&gt;
+         &lt;id&gt;110153216974321896088&lt;/id&gt;
+         &lt;sn&gt;GOOGLEP&lt;/sn&gt;
+      &lt;/element&gt;
+   &lt;/activities&gt;
+   &lt;actorId&gt;115268572887188346965&lt;/actorId&gt;
+   &lt;created&gt;2013-12-13T14:17:17.000+02:00&lt;/created&gt;
+   &lt;description&gt;i love this song! &lt;3 &lt;3&lt;/description&gt;
+   &lt;id&gt;z12gwfoidkb2wlwc1225utebrpjscpbbq04&lt;/id&gt;
+   &lt;location&gt;
+      &lt;country&gt;Greece&lt;/country&gt;
+      &lt;extendedAddress&gt;Agiou Gerasimou 49, Ilisia Athens&lt;/extendedAddress&gt;
+      &lt;latitude&gt;37.986423&lt;/latitude&gt;
+      &lt;longitude&gt;23.729095&lt;/longitude&gt;
+      &lt;postalCode&gt;15771&lt;/postalCode&gt;
+      &lt;region&gt;Attica&lt;/region&gt;
+      &lt;streetAddress&gt;Ag. Gerasimou 49&lt;/streetAddress&gt;
+   &lt;/location&gt;
+   &lt;mediaItems&gt;
+      &lt;element&gt;
+         &lt;created&gt;2007-04-17T22:54:52.000+03:00&lt;/created&gt;
+         &lt;description&gt;Rest in Peace Ray, you are with your old friend now MUST SEE for Doors and Jim Morrison Fans Live Video Performance in HD The song was recorded at the Doors ...&lt;/description&gt;
+         &lt;duration&gt;576&lt;/duration&gt;
+         &lt;id&gt;z12htv0x1sjic3oly22bzzmacsa5hhuu4&lt;/id&gt;
+         &lt;language&gt;en&lt;/language&gt;
+         &lt;numComments&gt;2&lt;/numComments&gt;
+         &lt;numPositiveVotes&gt;1&lt;/numPositiveVotes&gt;
+         &lt;numResharings&gt;0&lt;/numResharings&gt;
+         &lt;rating&gt;4.8&lt;/rating&gt;
+         &lt;sn&gt;GOOGLEP&lt;/sn&gt;
+         &lt;tags&gt;Doors,Jim,Morrisson,Riders,storm&lt;/tags&gt;
+         &lt;title&gt;Riders on the Storm - The Doors HD&lt;/title&gt;
+         &lt;type&gt;VIDEO&lt;/type&gt;
+         &lt;url&gt;https://www.youtube.com/watch?v=k9o78-f2mIM&lt;/url&gt;
+         &lt;userId&gt;109398338229575881240&lt;/userId&gt;
+      &lt;/element&gt;
+   &lt;/mediaItems&gt;
+   &lt;objectType&gt;MEDIAITEM&lt;/objectType&gt;
+   &lt;persons&gt;
+      &lt;element&gt;
+         &lt;fullName&gt;Ioanna Ioannou&lt;/fullName&gt;
+         &lt;id&gt;11112222333344445555&lt;/id&gt;
+         &lt;sn&gt;GOOGLEP&lt;/sn&gt;
+      &lt;/element&gt;
+      &lt;element&gt;
+         &lt;fullName&gt;Giorgos Georgiou&lt;/fullName&gt;
+         &lt;id&gt;66667777888899990000&lt;/id&gt;
+         &lt;sn&gt;GOOGLEP&lt;/sn&gt;
+      &lt;/element&gt;
+   &lt;/persons&gt;
+   &lt;sn&gt;GOOGLEP&lt;/sn&gt;
+   &lt;title&gt;Riders on the Storm - The Doors HD&lt;/title&gt;
+   &lt;type&gt;share&lt;/type&gt;
+&lt;/Activity&gt;
+			</pre>
+		</div>
+	</div>
+	<div id="commentJson" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+{
+   "id":"1234567",
+   "sn":"DAILYMOTION",
+   "created":"2013-10-09T18:06:38.000+03:00",
+   "description":"wow what a silly cat!",
+   "userId":"x1azvwf",
+   "username":"goodGuy123",
+   "numPositiveVotes":"6"
+}
+   			</pre>
+		</div>
+	</div>
+	<div id="commentXml" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+&lt;Comment&gt;
+   &lt;created&gt;2013-10-09T18:06:38.000+03:00&lt;/created&gt;
+   &lt;description&gt;wow what a silly cat!&lt;/description&gt;
+   &lt;id&gt;1234567&lt;/id&gt;
+   &lt;numPositiveVotes&gt;6&lt;/numPositiveVotes&gt;
+   &lt;sn&gt;DAILYMOTION&lt;/sn&gt;
+   &lt;userId&gt;x1azvwf&lt;/userId&gt;
+   &lt;username&gt;goodGuy123&lt;/username&gt;
+&lt;/Comment&gt;
+			</pre>
+		</div>
+	</div>
+	<div id="objectIdJson" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+{
+   "id":"123456",
+   "socialNetwork":"TWITTER"
+}
+   			</pre>
+		</div>
+	</div>
+	<div id="objectIdXml" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+&lt;ObjectId&gt;
+   &lt;id&gt;123456&lt;/id&gt;
+   &lt;socialNetwork&gt;TWITTER&lt;/socialNetwork&gt;
+&lt;/ObjectId&gt;
+			</pre>
+		</div>
+	</div>
+	<div id="addressJson" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+{
+   "country":"Greece",
+   "extendedAddress":"Agiou Gerasimou 49, Ilisia Athens",
+   "latitude":37.98642201,
+   "longitude":23.72909545,
+   "postalCode":"15771",
+   "region":"Attica",
+   "streetAddress":"Ag. Gerasimou 49"
+}
+   			</pre>
+		</div>
+	</div>
+	<div id="addressXml" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+&lt;Address&gt;
+   &lt;country&gt;Greece&lt;/country&gt;
+   &lt;extendedAddress&gt;Agiou Gerasimou 49, Ilisia Athens&lt;/extendedAddress&gt;
+   &lt;latitude&gt;37.986423&lt;/latitude&gt;
+   &lt;longitude&gt;23.729095&lt;/longitude&gt;
+   &lt;postalCode&gt;15771&lt;/postalCode&gt;
+   &lt;region&gt;Attica&lt;/region&gt;
+   &lt;streetAddress&gt;Ag. Gerasimou 49&lt;/streetAddress&gt;
+&lt;/Address&gt;
+			</pre>
+		</div>
+	</div>
+	<div id="nameJson" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+{
+   "additionalName":"little Jay",
+   "lastName":"Doe",
+   "firstName":"John",
+   "fullName":"sir John Harvey Doe"
+}   		 </pre>
+		</div>
+	</div>
+	<div id="nameXml" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+&lt;Name&gt;
+   &lt;additionalName&gt;little Jay&lt;/additionalName&gt;
+   &lt;firstName&gt;John&lt;/firstName&gt;
+   &lt;fullName&gt;sir John Harvey Doe&lt;/fullName&gt;
+   &lt;lastName&gt;Doe&lt;/lastName&gt;
+&lt;/Name&gt;
+			</pre>
+		</div>
+	</div>
+	<div id="licenseJson" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+{
+   "licenseType":"CC",
+   "name":"youtube",
+   "url":"http://www.youtube.com/t/terms"
+}
+   			</pre>
+		</div>
+	</div>
+	<div id="licenseXml" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+&lt;License&gt;
+   &lt;licenseType&gt;CC&lt;/licenseType&gt;
+   &lt;name&gt;youtube&lt;/name&gt;
+   &lt;url&gt;http://www.youtube.com/t/terms&lt;/url&gt;
+&lt;/License&gt;
+			</pre>
+		</div>
+	</div>
+	<div id="sociosExceptionJson" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+{
+   "description":"The resource you requested was not found.",
+   "message":"https://graph.facebook.com//100001234567891?fields=id,name,first_name,last_name,gender,username",
+   "faultCode":404,
+   "actorId":"100001234567891",
+   "socialNetwork":"FACEBOOK"
+}
+   			</pre>
+		</div>
+	</div>
+	<div id="sociosExceptionXml" style="display: none;">
+		<div class="ppHolder">
+			<pre>	
+&lt;SociosException&gt;
+   &lt;actorId&gt;100001234567891&lt;/actorId&gt;
+   &lt;description&gt;The resource you requested was not found.&lt;/description&gt;
+   &lt;faultCode&gt;404&lt;/faultCode&gt;
+   &lt;message&gt;https://graph.facebook.com//100001234567891?fields=id,name,first_name,last_name,gender,username&lt;/message&gt;
+   &lt;socialNetwork&gt;FACEBOOK&lt;/socialNetwork&gt;
+&lt;/SociosException&gt;
+			</pre>
+		</div>
+	</div>
+</body>
+</html>

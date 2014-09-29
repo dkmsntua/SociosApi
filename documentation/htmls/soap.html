@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Socios Doc. - Soap Api</title>
+<link rel="stylesheet" type="text/css" href="../css/style.css">
+<script type="text/javascript" src="../scripts/jquery.js"></script>
+<script type="text/javascript" src="../scripts/functions.js"></script>
+<script>
+	$(document).ready(function(){
+		$("#left > li").click(function(){
+			if ($(this).hasClass('selected')){ return; }
+			setSelection($(this));
+			var id = $(this).text();
+			var html = getHTML('methodPool', id);
+			fadeChange('infoDisplay', 250, html, function(){
+				var sn = getSelected('sns');
+				changeComment(sn, id);
+			});
+		});
+		$("#sns > div").click(function(){
+			if ($(this).hasClass('selected')){ return; }
+			setSelection($(this));
+			var sn = $(this).text();
+			var method = getSelected('left');
+			changeComment(sn, method);
+		});
+		var methodElement = getRandomMethod();
+		setInfo(methodElement);
+		var snElement = getRandomSn();
+		setSelection(snElement);
+		var sn = snElement.text();
+		changeComment(sn, methodElement.text());
+	});
+</script>
+</head>
+<body>
+	<div id="container">
+		<div class="menu topMenu">
+			<div>
+				<a href="guide.html" class="menuItem">Guide</a>
+			</div>
+			<div class="separator">&nbsp;</div>
+			<div>
+				<a href="#" class="menuItem selected">Soap Api</a>
+			</div>
+			<div class="separator">&nbsp;</div>
+			<div>
+				<a href="rest.html" class="menuItem">Rest Api</a>
+			</div>
+			<div class="separator">&nbsp;</div>
+			<div>
+				<a href="objects.html" class="menuItem">Socios objects</a>
+			</div>
+			<span class="stretch"> </span>
+		</div>
+		<div id="content">
+			<div class="description">
+				<h3>API description</h3>
+				<p>The following table displays and briefly explains the methods exposed by the Socios SOAP API.</p>
+				<p>The functionality described below is implemented only for the social networks that support it and the implementation is subject to the limitations imposed by each social network. Only information marked as "public" can be retrieved.</p>
+				<p>If some information in a social network is marked as "private" by its owner, it cannot be retrieved by the following	methods.</p>
+				<p>In searches accepting a list of social networks as an input parameter, if the field is empty, all social networks are included in the search.</p>
+			</div>
+			<div id="leftHolder">
+				<ul id='left'>
+					<li>GetPersons</li>
+					<li>ConnectedPersons</li>
+					<li>MyConnectedPersons</li>
+					<li>FindPersons</li>
+					<li>GetMediaItems</li>
+					<li>GetMediaItemsForUser</li>
+					<li>GetMediaItemsForPage</li>
+					<li>FindMediaItems</li>
+					<li>FindRelevantMediaItems</li>
+					<li>GetActivities</li>
+					<li>GetActivitiesForUser</li>
+					<li>FindActivities</li>
+					<li>GetComments</li>
+					<li>GetCommentsForMediaItem</li>
+					<li>GetCommentsForActivity</li>
+					<li>PostMessage</li>
+				</ul>
+				<a id="wsdl" href="http://83.212.103.227:8080/sociosApi/SociosApiImpl?wsdl" target="_blank">WSDL</a>
+			</div>
+			<div id="info" class="box display restBox">
+				<div id="infoDisplay">EMPTY BOX</div>
+			</div>
+			<div id="comments" class="box display restBox">
+				<div id='commentsDisplay'>EMPTY BOX</div>
+			</div>
+			<div id="sns" class="menu box restBox">
+				<div>DAILYMOTION</div>
+				<div>FACEBOOK</div>
+				<div>FLICKR</div>
+				<div>GOOGLEP</div>
+				<div>INSTAGRAM</div>
+				<div>TWITTER</div>
+				<div>YOUTUBE</div>
+			</div>
+		</div>
+		<div id='methodPool' class='hidden'>
+			<div id='GetPersons'>
+				<h3>GetPersons</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>personIds : List of ObjectId objects, each one defining a user in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the respective users.</p>
+			</div>
+			<div id='ConnectedPersons'>
+				<h3>ConnectedPersons</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>personId : an ObjectId that defines a user in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the contacts of the user. Depending on the social network, the result can include friends, followers, followees etc.</p>
+			</div>
+			<div id='MyConnectedPersons'>
+				<h3>MyConnectedPersons*</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>personId : an ObjectId that defines a user in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the contacts of the user. Depending on the social network, the result can include friends, followers, followees etc.</p>
+				<p>* This method requires an authentication token.</p>
+			</div>
+			<div id='FindPersons'>
+				<h3>FindPersons</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>personFilter : a PersonFilter object.</li>
+					<li>mediaItemId : an ObjectId that defines a media item in a social network.</li>
+					<li>activityId : an ObjectId that defines an activity in a social network.</li>
+					<li>username : an ObjectId that defines a user in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>This method searches for users based on which input is provided (all other inputs have to be null).</p>
+				<p>When the personFilter is passed as input, the method searches for users whose profile information contains all of the filter's keywords.</p>
+				<p>If the mediaItemId is provided, the method returns users associated with the media item. The results can contain the owner of the media
+					item, users that have liked the media item, commented on it or users that were tagged in it.</p>
+				<p>When the activityId is given, the method retrieves users associated with the corresponding activity, similarly to the previous case.</p>
+				<p>Finally, when the username is provided, the method gets the user that has the exact username in the specified social network.</p>
+			</div>
+			<div id='GetMediaItems'>
+				<h3>GetMediaItems</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>mediaItemIds : List of ObjectId objects, each one defining a media item in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the respective media items.</p>
+			</div>
+			<div id='GetMediaItemsForUser'>
+				<h3>GetMediaItemsForUser</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>personId : an ObjectId that contains the identifier of a user in a social network.</li>
+					<li>username : an ObjectId that contains the username of a user in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns media items associated with the user specified by the valid input (the other one has to be null). The results can contain media
+					items the user has published, liked, was tagged in etc.</p>
+			</div>
+			<div id='GetMediaItemsForPage'>
+				<h3>GetMediaItemsForPage</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>pageId : an ObjectId that defines a social network's Page.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>This method returns the posts published on the page.</p>
+			</div>
+			<div id='FindMediaItems'>
+				<h3>FindMediaItems</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>mediaFilter : a MediaItemFilter object.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>This method searches for media items that match the filter's criteria.</p>
+				<p>All of the filter's keywords have to be contained in the media item's text fields. We can also
+					limit the search within a location by defining latitude, longitude and radius. Moreover we can search for media items published within a certain time frame. Finally we can search for media items of specific language and license. In some social networks, if the filter is empty or no media items are found, then some of the most popular media items are	returned.</p>
+			</div>
+			<div id='FindRelevantMediaItems'>
+				<h3>FindRelevantMediaItems</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>mediaItemId : an ObjectId that defines a media item in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns media items associated with the media item. Where available, we use the recommendation functionality which is provided by the
+					social networks themselves.</p>
+			</div>
+			<div id='GetActivities'>
+				<h3>GetActivities</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>activityIds : List of ObjectId objects, each one defining an activity in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the respective activities.</p>
+			</div>
+			<div id='GetActivitiesForUser'>
+				<h3>GetActivitiesForUser</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>personId : an ObjectId that defines a user in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the activities performed by the user.</p>
+			</div>
+			<div id='FindActivities'>
+				<h3>FindActivities</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>activityFilter : an ActivityFilter object.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>This method returns activities based on the keywords and language specified in the filter.</p>
+			</div>
+			<div id='GetComments'>
+				<h3>GetComments</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>commentIds : List of ObjectId objects, each one defining a comment in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the respective comments.</p>
+			</div>
+			<div id='GetCommentsForMediaItem'>
+				<h3>GetCommentsForMediaItem</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>mediaItemId : an ObjectId that defines a media item in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the comments for a media item.</p>
+			</div>
+			<div id='GetCommentsForActivity'>
+				<h3>GetCommentsForActivity</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>activityId : an ObjectId that defines an activity in a social network.</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the comments of the activity.</p>
+			</div>
+			<div id='PostMessage'>
+				<h3>PostMessage*</h3>
+				<h4>Input :</h4>
+				<ul>
+					<li>personId : an ObjectId that defines a user in a social network.</li>
+					<li>postText : the message the user wants to post.</li>
+				</ul>
+				<p>Posts a message on behalf of the user and returns the id of the new post.</p>
+				<p>* This method requires an authentication token</p>
+			</div>
+		</div>
+		<div id='commentsPool' class='hidden'>
+			<div id='GetPersons-DAILYMOTION'></div>
+			<div id='ConnectedPersons-DAILYMOTION'></div>
+			<div id='MyConnectedPersons-DAILYMOTION'></div>
+			<div id='FindPersons-DAILYMOTION'></div>
+			<div id='GetMediaItems-DAILYMOTION'></div>
+			<div id='GetMediaItemsForUser-DAILYMOTION'></div>
+			<div id='GetMediaItemsForPage-DAILYMOTION'></div>
+			<div id='FindMediaItems-DAILYMOTION'></div>
+			<div id='FindRelevantMediaItems-DAILYMOTION'></div>
+			<div id='GetActivities-DAILYMOTION'></div>
+			<div id='GetActivitiesForUser-DAILYMOTION'></div>
+			<div id='FindActivities-DAILYMOTION'></div>
+			<div id='GetComments-DAILYMOTION'></div>
+			<div id='GetCommentsForMediaItem-DAILYMOTION'></div>
+			<div id='GetCommentsForActivity-DAILYMOTION'></div>
+			<div id='PostMessage-DAILYMOTION'></div>
+			<div id='GetPersons-FACEBOOK'></div>
+			<div id='ConnectedPersons-FACEBOOK'></div>
+			<div id='MyConnectedPersons-FACEBOOK'></div>
+			<div id='FindPersons-FACEBOOK'></div>
+			<div id='GetMediaItems-FACEBOOK'></div>
+			<div id='GetMediaItemsForUser-FACEBOOK'></div>
+			<div id='GetMediaItemsForPage-FACEBOOK'></div>
+			<div id='FindMediaItems-FACEBOOK'></div>
+			<div id='FindRelevantMediaItems-FACEBOOK'></div>
+			<div id='GetActivities-FACEBOOK'></div>
+			<div id='GetActivitiesForUser-FACEBOOK'></div>
+			<div id='FindActivities-FACEBOOK'></div>
+			<div id='GetComments-FACEBOOK'></div>
+			<div id='GetCommentsForMediaItem-FACEBOOK'></div>
+			<div id='GetCommentsForActivity-FACEBOOK'></div>
+			<div id='PostMessage-FACEBOOK'></div>
+			<div id='GetPersons-FLICKR'></div>
+			<div id='ConnectedPersons-FLICKR'></div>
+			<div id='MyConnectedPersons-FLICKR'></div>
+			<div id='FindPersons-FLICKR'></div>
+			<div id='GetMediaItems-FLICKR'></div>
+			<div id='GetMediaItemsForUser-FLICKR'></div>
+			<div id='GetMediaItemsForPage-FLICKR'></div>
+			<div id='FindMediaItems-FLICKR'></div>
+			<div id='FindRelevantMediaItems-FLICKR'></div>
+			<div id='GetActivities-FLICKR'></div>
+			<div id='GetActivitiesForUser-FLICKR'></div>
+			<div id='FindActivities-FLICKR'></div>
+			<div id='GetComments-FLICKR'></div>
+			<div id='GetCommentsForMediaItem-FLICKR'></div>
+			<div id='GetCommentsForActivity-FLICKR'></div>
+			<div id='PostMessage-FLICKR'></div>
+			<div id='GetPersons-GOOGLEP'></div>
+			<div id='ConnectedPersons-GOOGLEP'></div>
+			<div id='MyConnectedPersons-GOOGLEP'></div>
+			<div id='FindPersons-GOOGLEP'></div>
+			<div id='GetMediaItems-GOOGLEP'></div>
+			<div id='GetMediaItemsForUser-GOOGLEP'></div>
+			<div id='GetMediaItemsForPage-GOOGLEP'></div>
+			<div id='FindMediaItems-GOOGLEP'></div>
+			<div id='FindRelevantMediaItems-GOOGLEP'></div>
+			<div id='GetActivities-GOOGLEP'></div>
+			<div id='GetActivitiesForUser-GOOGLEP'></div>
+			<div id='FindActivities-GOOGLEP'></div>
+			<div id='GetComments-GOOGLEP'></div>
+			<div id='GetCommentsForMediaItem-GOOGLEP'></div>
+			<div id='GetCommentsForActivity-GOOGLEP'></div>
+			<div id='PostMessage-GOOGLEP'></div>
+			<div id='GetPersons-INSTAGRAM'></div>
+			<div id='ConnectedPersons-INSTAGRAM'></div>
+			<div id='MyConnectedPersons-INSTAGRAM'></div>
+			<div id='FindPersons-INSTAGRAM'></div>
+			<div id='GetMediaItems-INSTAGRAM'></div>
+			<div id='GetMediaItemsForUser-INSTAGRAM'></div>
+			<div id='GetMediaItemsForPage-INSTAGRAM'></div>
+			<div id='FindMediaItems-INSTAGRAM'></div>
+			<div id='FindRelevantMediaItems-INSTAGRAM'></div>
+			<div id='GetActivities-INSTAGRAM'></div>
+			<div id='GetActivitiesForUser-INSTAGRAM'></div>
+			<div id='FindActivities-INSTAGRAM'></div>
+			<div id='GetComments-INSTAGRAM'></div>
+			<div id='GetCommentsForMediaItem-INSTAGRAM'></div>
+			<div id='GetCommentsForActivity-INSTAGRAM'></div>
+			<div id='PostMessage-INSTAGRAM'></div>
+			<div id='GetPersons-TWITTER'></div>
+			<div id='ConnectedPersons-TWITTER'></div>
+			<div id='MyConnectedPersons-TWITTER'></div>
+			<div id='FindPersons-TWITTER'></div>
+			<div id='GetMediaItems-TWITTER'></div>
+			<div id='GetMediaItemsForUser-TWITTER'></div>
+			<div id='GetMediaItemsForPage-TWITTER'></div>
+			<div id='FindMediaItems-TWITTER'></div>
+			<div id='FindRelevantMediaItems-TWITTER'></div>
+			<div id='GetActivities-TWITTER'></div>
+			<div id='GetActivitiesForUser-TWITTER'></div>
+			<div id='FindActivities-TWITTER'></div>
+			<div id='GetComments-TWITTER'></div>
+			<div id='GetCommentsForMediaItem-TWITTER'></div>
+			<div id='GetCommentsForActivity-TWITTER'></div>
+			<div id='PostMessage-TWITTER'></div>
+			<div id='GetPersons-YOUTUBE'></div>
+			<div id='ConnectedPersons-YOUTUBE'></div>
+			<div id='MyConnectedPersons-YOUTUBE'></div>
+			<div id='FindPersons-YOUTUBE'></div>
+			<div id='GetMediaItems-YOUTUBE'></div>
+			<div id='GetMediaItemsForUser-YOUTUBE'></div>
+			<div id='GetMediaItemsForPage-YOUTUBE'></div>
+			<div id='FindMediaItems-YOUTUBE'></div>
+			<div id='FindRelevantMediaItems-YOUTUBE'></div>
+			<div id='GetActivities-YOUTUBE'></div>
+			<div id='GetActivitiesForUser-YOUTUBE'></div>
+			<div id='FindActivities-YOUTUBE'></div>
+			<div id='GetComments-YOUTUBE'></div>
+			<div id='GetCommentsForMediaItem-YOUTUBE'></div>
+			<div id='GetCommentsForActivity-YOUTUBE'></div>
+			<div id='PostMessage-YOUTUBE'></div>
+		</div>
+		<div class='hidden'>
+			<div id='noComment'>
+				<h3>
+					<em>No comments available</em>
+				</h3>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

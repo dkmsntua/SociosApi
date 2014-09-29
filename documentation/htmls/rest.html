@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Socios Doc. - Rest Api</title>
+<link rel="stylesheet" type="text/css" href="../css/style.css">
+<script type="text/javascript" src="../scripts/jquery.js"></script>
+<script type="text/javascript" src="../scripts/functions.js"></script>
+<script type="text/javascript" src="../scripts/easyTooltip.js"></script>
+<script>
+	$(document).ready(function(){
+		$("#left > li").click(function(){
+			if ($(this).hasClass('selected')){ return; }
+			setSelection($(this));
+			var id = $(this).text();
+			var html = getHTML('methodPool', id);
+			fadeChange('infoDisplay', 250, html, function(){
+				var sn = getSelected('sns');
+				changeComment(sn, id);
+			});
+		});
+		$("#sns > div").click(function(){
+			if ($(this).hasClass('selected')){ return; }
+			setSelection($(this));
+			var sn = $(this).text();
+			var method = getSelected('left');
+			changeComment(sn, method);
+		});
+		var methodElement = getRandomMethod();
+		setInfo(methodElement);
+		var snElement = getRandomSn();
+		setSelection(snElement);
+		var sn = snElement.text();
+		changeComment(sn, methodElement.text());
+		$('#map td').easyTooltip();
+	});
+</script>
+</head>
+<body>
+	<div id="container">
+		<div class="menu topMenu">
+			<div>
+				<a href="guide.html" class="menuItem">Guide</a>
+			</div>
+			<div class="separator">&nbsp;</div>
+			<div>
+				<a href="soap.html" class="menuItem">Soap Api</a>
+			</div>
+			<div class="separator">&nbsp;</div>
+			<div>
+				<a href="#" class="menuItem selected">Rest Api</a>
+			</div>
+			<div class="separator">&nbsp;</div>
+			<div>
+				<a href="objects.html" class="menuItem">Socios objects</a>
+			</div>
+			<span class="stretch"> </span>
+		</div>
+		<div id="content">
+			<div class="description">
+				<h3>API description</h3>
+				<p>The following table displays and briefly explains the methods exposed by the Socios Rest API.</p>
+				<p>The functionality described below is implemented only for the social networks that support it and the implementation is subject to the limitations imposed by each social network. Only information marked as "public" can be retrieved.</p>
+				<p>In searches accepting a list of social networks as a query parameter, if the field is empty, all social networks are included in the
+					search.</p>
+				<p>All methods accept an extra optional query parameter named "format". If set to "json", the results will be displayed in json format. The
+					default is xml.</p>
+			</div>
+			<div id="leftHolder">
+				<ul id='left'>
+					<li>getPersons</li>
+					<li>connectedPersons</li>
+					<li>myConnectedPersons</li>
+					<li>findPersonsByKeyword</li>
+					<li>findPersonsByUsername</li>
+					<li>findPersonsByMediaItem</li>
+					<li>findPersonsByActivity</li>
+					<li>getMediaItems</li>
+					<li>getMediaItemsForUser</li>
+					<li>getMediaItemsForPage</li>
+					<li>findMediaItems</li>
+					<li>findRelevantMediaItems</li>
+					<li>getActivities</li>
+					<li>getActivitiesForUser</li>
+					<li>findActivities</li>
+					<li>getComments</li>
+					<li>getCommentsForMediaItem</li>
+					<li>getCommentsForActivity</li>
+					<li>postMessage</li>
+				</ul>
+				<a id="wsdl" href="http://83.212.103.227:8080/coreservices/rest/application.wadl" target="_blank">WADL</a>
+			</div>
+			<div id="info" class="box restBox">
+				<div id='infoDisplay' class='display'>EMPTY BOX</div>
+			</div>
+			<div id="comments" class="box restBox">
+				<div id='commentsDisplay' class='display'>EMPTY BOX</div>
+			</div>
+			<div id="sns" class="menu box restBox">
+				<div>DAILYMOTION</div>
+				<div>FACEBOOK</div>
+				<div>FLICKR</div>
+				<div>GOOGLEP</div>
+				<div>INSTAGRAM</div>
+				<div>TWITTER</div>
+				<div>YOUTUBE</div>
+			</div>
+		</div>
+		<div id='methodPool' class='hidden'>
+			<div id='getPersons'>
+				<h3>getPersons</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a user in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the user.</p>
+			</div>
+			<div id='connectedPersons'>
+				<h3>connectedPersons</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a user in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the user's contacts.</p>
+			</div>
+			<div id='myConnectedPersons'>
+				<h3>myConnectedPersons*</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a user in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the user's contacts.</p>
+				<p>* This method requires an authentication token.</p>
+			</div>
+			<div id='findPersonsByKeyword'>
+				<h3>findPersonsByKeyword*</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>keywords: list of comma separated keywords (required).</li>
+					<li>sns: list of social networks to include in the search (optional).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns users based on the search keywords (AND operator).</p>
+				<p>* For some social networks, this method requires an authentication token.</p>
+			</div>
+			<div id='findPersonsByUsername'>
+				<h3>findPersonsByUsername</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>username: the username of a user in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the user.</p>
+			</div>
+			<div id='findPersonsByMediaItem'>
+				<h3>findPersonsByMediaItem</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a media item in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns users associated with the media item. Depending on the social network, this may include just the owner or users who have commented,
+					liked or been tagged in the media item.</p>
+			</div>
+			<div id='findPersonsByActivity'>
+				<h3>findPersonsByActivity</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of an activity in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns users associated with the activity. Depending on the social network, this may include just the owner or users who have commented,
+					liked or been tagged in the activity.</p>
+			</div>
+			<div id='getMediaItems'>
+				<h3>getMediaItems</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a media item in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the media item.</p>
+			</div>
+			<div id='getMediaItemsForUser'>
+				<h3>getMediaItemsForUser</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a user in a social network.</li>
+					<li>username: the username of a user in a social network.</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns media items associated with a user. The query must include either the id or the username of the user.</p>
+			</div>
+			<div id='getMediaItemsForPage'>
+				<h3>getMediaItemsForPage</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a page in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns media items posted on the page.</p>
+			</div>
+			<div id='findMediaItems'>
+				<h3>findMediaItems</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>from: earliest upload date of a media item(optional).</li>
+					<li>to: latest upload date (optional).</li>
+					<li>keywords: list of comma separated keywords (optional).</li>
+					<li>country: country of the owner of the media item (optional).</li>
+					<li>lon: longitude of the center of the search area (optional).</li>
+					<li>lat: latitude of the center of the search area (optional).</li>
+					<li>rad: radius that defines the search area (optional).</li>
+					<li>lang: language of the media item (optional).</li>
+					<li>lic: license attached to the media item (optional).</li>
+					<li>sns: list of social networks to include in the search (optional).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns media items based on the search criteria.</p>
+			</div>
+			<div id='findRelevantMediaItems'>
+				<h3>findRelevantMediaItems</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a media item in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns media items associated with the media item. Where available, we use the recommendation functionality which is provided by the
+					social networks themselves.</p>
+			</div>
+			<div id='getActivities'>
+				<h3>getActivities</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of an activity in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the activity.</p>
+			</div>
+			<div id='getActivitiesForUser'>
+				<h3>getActivitiesForUser</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a user in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the activities performed by the user.</p>
+			</div>
+			<div id='findActivities'>
+				<h3>findActivities</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>keywords: list of comma separated keywords (optional).</li>
+					<li>lang: language of an activity (optional).</li>
+					<li>sns: list of social networks to include in the search (optional).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns activities based on the search criteria.</p>
+			</div>
+			<div id='getComments'>
+				<h3>getComments</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a comment in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the comment.</p>
+			</div>
+			<div id='getCommentsForMediaItem'>
+				<h3>getCommentsForMediaItem</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a media item in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the comments for the media item.</p>
+			</div>
+			<div id='getCommentsForActivity'>
+				<h3>getCommentsForActivity</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of an activity in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Returns the comments for the activity.</p>
+			</div>
+			<div id='postMessage'>
+				<h3>postMessage*</h3>
+				<h4>Query parameters :</h4>
+				<ul>
+					<li>id: the identifier of a user in a social network (required).</li>
+					<li>sn: the social network (required).</li>
+					<li>msg: text of the message (required).</li>
+				</ul>
+				<h4>Description :</h4>
+				<p>Posts a message on behalf of the user and returns the id of the new post.</p>
+				<p>* This method requires an authentication token.</p>
+			</div>
+		</div>
+		<div id='commentsPool' class='hidden'>
+			<div id='getPersons-DAILYMOTION'>
+				<p>Username and id can be used interchangeably.</p>
+			</div>
+			<div id='connectedPersons-DAILYMOTION'>
+				<p>This method returns users who follow this user (fans), users followed by this user (following) and this user's friends.</p>
+			</div>
+			<div id='findPersonsByKeyword-DAILYMOTION'>
+				<p>searches field: Full Name</p>
+				<p>requires all keywords</p>
+			</div>
+			<div id='findPersonsByUsername-DAILYMOTION'>
+				<p>χρησιμοποιουμε τη getPersons</p>
+			</div>
+			<div id='findPersonsByMediaItem-DAILYMOTION'>
+				<p>επιστρεφει μονο τον owner του video. Στην πραγματικοτητα, παιρνω τα στοιχεια του video και απο εκει αντλω τον owner</p>
+			</div>
+			<div id='getMediaItems-DAILYMOTION'></div>
+			<div id='getMediaItemsForUser-DAILYMOTION'>
+				<p>επιστρεφει οσα videos εχει ανεβασει ο χρηστης και οσα εχει επιλεξει ως favorite</p>
+				<p>η κληση γινεται ή με το id ή με το username</p>
+			</div>
+			<div id='findMediaItems-DAILYMOTION'>
+				<p>ολες οι μεταβλητες συνδεονται με σχεση AND. Οι ημερομηνίες πρεπει αναγκαστικα να ειναι στη μορφη: yyyy/MM/dd</p>
+			</div>
+			<div id='findRelevantMediaItems-DAILYMOTION'></div>
+			<div id='getActivities-DAILYMOTION'></div>
+			<div id='getActivitiesForUser-DAILYMOTION'></div>
+			<div id='getComments-DAILYMOTION'></div>
+			<div id='getCommentsForMediaItem-DAILYMOTION'></div>
+			<div id='getPersons-FACEBOOK'>
+				<p>username can be used instead of id</p>
+			</div>
+			<div id='myConnectedPersons-FACEBOOK'>
+				<p>επιστρεφει τους friends μονο του χρηστη που ειναι authenticated, αρα για εμας δε λειτουργει, αφου ο χρηστης που εχει δωσει το token, ειναι
+					dummy</p>
+				<p>Δυστυχως, αν δεν εισαι authenticated επιστρεφει 500 server error, και οχι unauthorized message οπως θα θελαμε</p>
+			</div>
+			<div id='findPersonsByKeyword-FACEBOOK'>
+				<p>εχει περιπλοκο αλγοριθμο αναζητησης. Ψαχνει κυριως στα πεδια τυπου ονομα, δε χρειαζεται να βρει ακριβως τη λεξη, αλλά καποια πλησιον της,
+					αλλα θελει ολες οι λεξεις της αναζητησης να βρεθουν καπου</p>
+			</div>
+			<div id='findPersonsByUsername-FACEBOOK'>
+				<p>χρησιμοποιουμε τη getPersons</p>
+			</div>
+			<div id='getMediaItems-FACEBOOK'>
+				<p>Αν ο χρηστης εχει εγκατασησει την εφαρμογη, τοτε η συναρτηση δουλευει αλλά και παλι οχι για ολα τα posts του παρα μονο για πολυ λιγα. Αν
+					δεν την εχει εγκαταστησει, τοτε δουλευει για απειροελαχιστα (αναλογα με το αν τα εχει θεσει ως public ή private ο χρηστης κλπ)</p>
+			</div>
+			<div id='getMediaItemsForUser-FACEBOOK'>
+				<p>Κανει κληση ή με το id ή με το username (αυτα τα δυο ειναι ισοδυναμα). Δε χρησιμοποιει user access token, αλλά app access token. Αν ομως ο
+					χρηστης εχει εγκατεστημενη την εφαρμογη, τοτε επιστρεφει περισσοτερα (και καλυτερα) αποτελεσματα, αρα ψιλοχρειαζεται authentification...</p>
+			</div>
+			<div id='getMediaItemsForPage-FACEBOOK'></div>
+			<div id='findMediaItems-FACEBOOK'>
+				<p>απαιτει ολα τα keywords, φερνει λιγα αποτελεσματα (λογικα παλι επηρεαζουν οι επιλογες του scope του χρηστη)</p>
+			</div>
+			<div id='getActivities-FACEBOOK'></div>
+			<div id='getActivitiesForUser-FACEBOOK'>
+				<p>(δουλευει αλλά φερνει λίγα)</p>
+			</div>
+			<div id='getComments-FACEBOOK'></div>
+			<div id='getCommentsForMediaItem-FACEBOOK'>
+				<p>fun fact: καποια posts που εχουν comments, δε μου τα φερνει η getMediaItems, αλλά τα comments τους, μου τα φερνει η
+					GetCommentsForMediaItem!!!</p>
+			</div>
+			<div id='postMessage-FACEBOOK'></div>
+			<div id='getPersons-FLICKR'></div>
+			<div id='connectedPersons-FLICKR'></div>
+			<div id='myConnectedPersons-FLICKR'>
+				<p>ηταν unstable / εκανε τα δικα του, αλλά στο τελος δουλεψε</p>
+			</div>
+			<div id='findPersonsByUsername-FLICKR'>
+				<p>επιστρεφει πολυ λιγα data</p>
+			</div>
+			<div id='findPersonsByMediaItem-FLICKR'>
+				<p>Επιστρεφει</p>
+				<p>α)οσους εχουν κανει favorite,</p>
+				<p>β)οσους ειναι tagged στη φωτογραφια</p>
+				<p>γ)τον owner (παιρνω τα στοιχεια της φωτογραφιας και απο εκει εξαγω τα στοιχεια του owner)</p>
+			</div>
+			<div id='getMediaItems-FLICKR'></div>
+			<div id='getMediaItemsForUser-FLICKR'>
+				<p>φερνει:</p>
+				<p>α) τις public photos του χρηστη</p>
+				<p>β) τις public favorite του χρηστη</p>
+				<p>γ) τις φωτογραφιες που περιεχουν τον χρηστη</p>
+			</div>
+			<div id='findMediaItems-FLICKR'>
+				<p>ολες οι παραμετροι μπαινουν με σχεση AND.</p>
+				<p>Αν εχει μπει lat και lon και δεν εχει μπει rad, τοτε θεωρειται radius = 5km</p>
+				<p>Αν μεινουν ολα τα πεδια ασυμπληρωτα, η συναρτηση θα επιστρεψει recent / interesting photos</p>
+			</div>
+			<div id='findRelevantMediaItems-FLICKR'>
+				<p>φερνει την επομενη και την προηγουμενη φωτογραφια του ίδιου photostream</p>
+			</div>
+			<div id='getCommentsForMediaItem-FLICKR'>
+				<p>ειναι λιγο περιεργο που το flickr υποστηριζει την εννοια του comment, και καθε comment εχει και δικο του id, και παρολαυτα δεν εχει
+					συναρτηση getCommentById</p>
+			</div>
+			<div id='getPersons-GOOGLEP'></div>
+			<div id='myConnectedPersons-GOOGLEP'>
+				<p>το token διαρκει μονο μια ωρα!!</p>
+			</div>
+			<div id='findPersonsByKeyword-GOOGLEP'>
+				<p>επιστρεφει persons τα οποια εχουν ολα τα keywords στα πεδια που τους χαρακτηριζουν, με πρωτη προτεραιοτητα το ονομα (δεν ξερω ακριβως σε
+					ποια αλλα πεδια ψαχνει, αλλα φανταζομαι το about me και τετοια).</p>
+			</div>
+			<div id='findPersonsByActivity-GOOGLEP'>
+				<p>επιστρεφει οσους εχουν κανει reshare ή plusone</p>
+			</div>
+			<div id='getActivities-GOOGLEP'></div>
+			<div id='getActivitiesForUser-GOOGLEP'>
+				<p>φερνει πολυ λιγα αποτελεσματα (ισως επειδη μονο λιγα ειναι εντελως public)</p>
+			</div>
+			<div id='findActivities-GOOGLEP'>
+				<p>το πεδιο language, δε δειχνει να ανταποκρινεται οπως θα περιμενε κανεις</p>
+			</div>
+			<div id='getComments-GOOGLEP'></div>
+			<div id='getCommentsForActivity-GOOGLEP'></div>
+			<div id='getPersons-INSTAGRAM'></div>
+			<div id='connectedPersons-INSTAGRAM'>
+				<p>επιστρεφει following και followed by</p>
+			</div>
+			<div id='findPersonsByKeyword-INSTAGRAM'>
+				<p>δεχεται μονο ενα string και πρεπει αυτο να υπαρχει στο full name των χρηστων που θα επιστραφουν. (αν βαλω δυο tags, τοτε ψαχνει για
+					tag1,tag2 και αρα μαλλον δε βρισκει τιποτα)</p>
+			</div>
+			<div id='findPersonsByMediaItem-INSTAGRAM'>
+				<p>επιστρεφω τα στοιχεια του mediaItem, και απο αυτα αποσπω τον owner, τους commenters, τους likers και τους tagged</p>
+			</div>
+			<div id='getMediaItems-INSTAGRAM'></div>
+			<div id='getMediaItemsForUser-INSTAGRAM'>
+				<p>φερνει τα most recent public media published by a user.</p>
+				<p>(υπαρχουν και συναρτησεις που φερνουν αυτα που εχει κανει like ο χρηστης και αυτα που βλεπει στο feed του, αλλα ειναι authorized)</p>
+			</div>
+			<div id='findMediaItems-INSTAGRAM'>
+				<p>επιστρεφει οσα mediaItems εχουν το πρωτο tag ή το δευτερο ή κλπ... ΚΑΙ οσα βρισκονται στην περιοχη που οριζουν οι συντεταγμενες (ανεξαρτητα
+					απο tags)</p>
+				<p>αν δε βαλω απολυτως τιποτα φερνει popular</p>
+			</div>
+			<div id='getCommentsForMediaItem-INSTAGRAM'>
+				<p>παλι, ενω το comment εχει υποσταση ως object με δικο του id, παρολαυτα δεν υπαρχει getCommentById</p>
+			</div>
+			<div id='getPersons-TWITTER'></div>
+			<div id='connectedPersons-TWITTER'>
+				<p>φερνει οσους ακολουθω και οσους με ακολουθουν</p>
+			</div>
+			<div id='findPersonsByKeyword-TWITTER'>
+				<p>πρεπει να εχουν ολα τα keywords καπου στα στοιχεια τους, πχ στο fullname, about me κλπ</p>
+			</div>
+			<div id='findPersonsByUsername-TWITTER'></div>
+			<div id='findPersonsByMediaItem-TWITTER'>
+				<p>δε φερνω τον χρηστη, αλλα το ιδιο το tweet και απο αυτο αποσπω τις πληροφοριες του owner</p>
+			</div>
+			<div id='getMediaItems-TWITTER'></div>
+			<div id='getMediaItemsForUser-TWITTER'>
+				<p>φερνει οσα tweets εχει κανει ο χρηστης, και οσα εχει κανει favorite</p>
+			</div>
+			<div id='findMediaItems-TWITTER'>
+				<p>ολα με σχεση AND. Το date πεδιο σημαινει οσα εγιναν μεχρι τοτε, αλλα δεν παει πολυ πισω.</p>
+				<p>Τα keywords ψαχνουν στο πεδιο description, δηλαδη στο σωμα του tweet</p>
+			</div>
+			<div id='findRelevantMediaItems-TWITTER'>
+				<p>φερνει τα retweets</p>
+			</div>
+			<div id='postMessage-TWITTER'></div>
+			<div id='getPersons-YOUTUBE'>
+				<p>username και id : interchangeably</p>
+			</div>
+			<div id='connectedPersons-YOUTUBE'>
+				<p>φερνει τα channels τα οποια ακολουθει ο χρηστης (αλλά εγω τα παρουσιάζω ως persons)</p>
+			</div>
+			<div id='myConnectedPersons-YOUTUBE'>
+				<p>φερνει και οσους ακολουθει και οσους τον ακολουθουν</p>
+			</div>
+			<div id='findPersonsByUsername-YOUTUBE'>
+				<p>καλει την Get Persons (byId)</p>
+			</div>
+			<div id='findPersonsByMediaItem-YOUTUBE'>
+				<p>φερνω το βιντεο και απο εκει αποσπω τις πληροφοριες του onwer</p>
+			</div>
+			<div id='getMediaItems-YOUTUBE'></div>
+			<div id='getMediaItemsForUser-YOUTUBE'>
+				<p>φερνει οσα εχει κανει upload και οσα εχει κανει favorite (το id και το username ειναι ισαξια)</p>
+			</div>
+			<div id='findMediaItems-YOUTUBE'>
+				<p>τα keywords, license, language λειτουργουν με σχεση AND. Αν αυτα ειναι κενα, φερνει τα πιο popular της χωρας απο το country</p>
+			</div>
+			<div id='findRelevantMediaItems-YOUTUBE'></div>
+			<div id='getActivitiesForUser-YOUTUBE'>
+				<p>θα περιμενε κανεις οτι και εδω το id και το username θα δουλευουν εξισου, αλλά κατι τετοιο δε συμβαινει, αφου αυτη η συναρτηση παρεχεται
+					απο διαφορετικο api version απο τις προηγουμενες</p>
+			</div>
+			<div id='getCommentsForMediaItem-YOUTUBE'>
+				<p>παλι, ενω το comment εχει υποσταση ως object με δικο του id, παρολαυτα δεν υπαρχει getCommentById</p>
+			</div>
+		</div>
+		<div class='hidden'>
+			<div id='noComment'></div>
+		</div>
+		<div class='hidden'>
+			<div id='notImplemented'>
+				<p>The method is not implemented for this social network.</p>
+			</div>
+		</div>
+		<h3>Map</h3>
+		<p>The following table indicates which methods are implemented for each social network.</p>
+		<p>Methods marked with an asterisk (*) require an authentication token.</p>
+		<table id='map'>
+			<tr>
+				<td class='mapMethod'>getPersons</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>connectedPersons</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>myConnectedPersons</td>
+				<td>NO</td>
+				<td>YES*</td>
+				<td>YES*</td>
+				<td>YES*</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>YES*</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>findPersonsByKeyword</td>
+				<td>YES</td>
+				<td>YES*</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES*</td>
+				<td>NO</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>findPersonsByUsername</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>findPersonsByMediaItem</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>findPersonsByActivity</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>getMediaItems</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>getMediaItemsForUser</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>getMediaItemsForPage</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>findMediaItems</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>findRelevantMediaItems</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>getActivities</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>getActivitiesForUser</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>findActivities</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>getComments</td>
+				<td>YES</td>
+				<td>YES*</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>getCommentsForMediaItem</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>YES</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>getCommentsForActivity</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>YES</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+			</tr>
+			<tr>
+				<td class='mapMethod'>postMessage</td>
+				<td>NO</td>
+				<td>YES*</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>NO</td>
+				<td>YES*</td>
+				<td>NO</td>
+			</tr>
+			<tr>
+				<td class='mapSn grey'></td>
+				<td class='mapSn'>DAILYMOTION</td>
+				<td class='mapSn'>FACEBOOK</td>
+				<td class='mapSn'>FLICKR</td>
+				<td class='mapSn'>GOOGLEP</td>
+				<td class='mapSn'>INSTAGRAM</td>
+				<td class='mapSn'>TWITTER</td>
+				<td class='mapSn'>YOUTUBE</td>
+			</tr>
+		</table>
+</body>
+</html>

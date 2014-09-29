@@ -1,0 +1,75 @@
+#objectsScreen{
+	background-color: #E8EDF4;
+	overflow-y: auto;
+	height: 556px;
+}
+
+#objectsScreen table, #objectsScreen td{
+	border: 1px solid #999;
+	border-collapse: collapse;
+}
+#objectsScreen table{
+	width: 100%;
+}
+#objectsScreen table td{
+	text-align: left;
+}
+
+#objectsScreen table tr:nth-child(odd) {
+	background-color: #D0DADD;
+}
+
+#objectsHolder a{
+	text-decoration: none;
+	color: #866E93;
+}
+
+#objectsHolder a:hover{
+	text-decoration: underline;
+}
+
+#objectsHolder{
+	padding: 10px 0px 0px 0px;
+}
+
+.caption{
+	padding: 0px 10px 0px 10px;
+	margin: 10px 0px 10px 0px;
+}
+
+div.objectsBox{
+	width: 726px;
+}
+
+.examples{
+	padding: 0px 0px 0px 10px;
+}
+
+.composite{
+	color: #866E93;
+	cursor: pointer;
+}
+
+.strong{
+	font-weight: bold;
+}
+
+.composite:hover{
+	text-decoration: underline;
+}
+
+#table-faultcodes td:nth-child(even){
+	font-style: italic;
+}
+
+.ppHolder{
+	font-size: 16px;
+	border:1px solid black;
+	height: 100%;
+	max-height:400px;
+	padding: 0px 20px 0px 20px;
+	overflow-y:auto;	
+}
+#footer{
+	height: 50px;
+}
