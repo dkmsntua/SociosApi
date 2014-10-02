@@ -29,7 +29,7 @@ public class TwitterFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -46,7 +46,7 @@ public class TwitterFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -66,7 +66,7 @@ public class TwitterFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -87,7 +87,7 @@ public class TwitterFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -103,7 +103,7 @@ public class TwitterFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -123,7 +123,7 @@ public class TwitterFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -152,7 +152,7 @@ public class TwitterFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -169,7 +169,7 @@ public class TwitterFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, exc.getMessage() + " ==> " + response, null, 500);
 		}
 		return result;
 	}

@@ -33,7 +33,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -54,7 +54,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -76,7 +76,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -92,7 +92,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -116,7 +116,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -132,7 +132,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -153,7 +153,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -169,7 +169,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -190,7 +190,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -207,7 +207,7 @@ public class FacebookFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, exc, userId, 500);
+			return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, exc.getMessage() + " ==> " + response, userId, 500);
 		}
 		return result;
 	}

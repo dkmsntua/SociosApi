@@ -63,13 +63,8 @@ public class ExceptionsUtilities
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T getException(SociosObject objectType, SocialNetwork sn, Exception exc, String actorId, int code)
+	public static <T> T getException(SociosObject objectType, SocialNetwork sn, String excMessage, String actorId, int code)
 	{
-		String excMessage = "";
-		if (exc != null)
-		{
-			excMessage = exc.getMessage();
-		}
 		SociosException se = new SociosException(map.get(code), excMessage, code, actorId, sn);
 		if (objectType == SociosObject.PERSON)
 		{

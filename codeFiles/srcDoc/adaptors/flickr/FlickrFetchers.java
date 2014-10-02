@@ -36,7 +36,7 @@ public class FlickrFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -68,7 +68,7 @@ public class FlickrFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -92,7 +92,7 @@ public class FlickrFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -120,7 +120,7 @@ public class FlickrFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -143,7 +143,7 @@ public class FlickrFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -171,7 +171,7 @@ public class FlickrFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -197,7 +197,7 @@ public class FlickrFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}
@@ -225,7 +225,7 @@ public class FlickrFetchers
 		}
 		catch (JSONException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage() + " ==> " + response, id, 500);
 		}
 		return result;
 	}

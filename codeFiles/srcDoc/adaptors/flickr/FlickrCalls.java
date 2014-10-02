@@ -54,7 +54,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		return result;
 	}
@@ -71,7 +71,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		return result;
 	}
@@ -87,7 +87,7 @@ public class FlickrCalls
 		catch (Exception exc)
 		{
 			//TODO 
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), null, 500);
 		}
 		return result;
 	}
@@ -151,7 +151,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		return result;
 	}
@@ -169,7 +169,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), null, 500);
 		}
 		return result;
 	}
@@ -185,7 +185,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, photoId, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), photoId, 500);
 		}
 		return result;
 	}
@@ -201,7 +201,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
 		}
 		return result;
 	}
@@ -308,7 +308,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
 		}
 		return result;
 	}
@@ -331,7 +331,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, userId, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), userId, 500);
 		}
 		return result;
 	}
@@ -347,7 +347,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
 		}
 		return result;
 	}
@@ -369,7 +369,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
 		}
 		return result;
 	}
@@ -386,7 +386,7 @@ public class FlickrCalls
 		}
 		catch (Exception exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage(), id, 500);
 		}
 		return result;
 	}

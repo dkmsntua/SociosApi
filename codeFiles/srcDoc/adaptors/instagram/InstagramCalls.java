@@ -49,7 +49,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -108,7 +108,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, mediaId, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), mediaId, 500);
 		}
 		catch (snException exc)
 		{
@@ -129,7 +129,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), null, 500);
 		}
 		catch (snException exc)
 		{
@@ -150,7 +150,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -171,7 +171,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -192,7 +192,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -213,7 +213,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
 		}
 		catch (snException exc)
 		{
@@ -234,7 +234,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
 		}
 		catch (snException exc)
 		{
@@ -255,7 +255,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
 		}
 		catch (snException exc)
 		{
@@ -276,7 +276,7 @@ public class InstagramCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -313,7 +313,7 @@ public class InstagramCalls
 	 * NetworkUtilities.getResponse(requestUrl); result =
 	 * InstagramFetchers.fetchMediaItems(response, null); } catch (IOException
 	 * exc) { return ExceptionsUtilities.getException(SociosObject.MEDIAITEM,
-	 * sn, exc, null, 500); } catch (snException exc) { SociosException
+	 * sn, exc.getMessage(), null, 500); } catch (snException exc) { SociosException
 	 * sociosException = InstagramParsers.parseNativeException(exc.data); return
 	 * ExceptionsUtilities.getNativeException(SociosObject.MEDIAITEM,
 	 * sociosException, null); } return result; }

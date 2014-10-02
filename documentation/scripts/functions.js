@@ -1,7 +1,8 @@
 function setSelection(el){
 	var items = el.parent().children();
 	items.each(function(){
-	if ($(this).hasClass('selected')){
+		if ($(this).hasClass('selected'))
+		{
 			$(this).removeClass('selected');
 		}
 	});
@@ -10,7 +11,8 @@ function setSelection(el){
 function getHTML(list, id){
 	var result;
 	$('#' + list + '').children().each(function(){
-		if ($(this).attr('id') == id){
+		if ($(this).attr('id') == id)
+		{
 			result = $(this).get(0).innerHTML;
 			return;
 		}
@@ -25,7 +27,8 @@ function fadeChange(list, num, value, callback){
 function getSelected(list){
 	var result;
 	$('#' + list + '').children().each(function(){
-		if ($(this).hasClass('selected')){
+		if ($(this).hasClass('selected'))
+		{
 			result = $(this).text();
 			return;
 		}
@@ -35,10 +38,12 @@ function getSelected(list){
 function changeComment(sn, method){
 	var id = method + "-" + sn;
 	var comment = getHTML('commentsPool', id);
-	if (comment == null){
+	if (comment == null)
+	{
 		comment = $('#notImplemented').get(0).innerHTML;
 	}
-	else if (!comment.trim()){
+	else if (!comment.trim())
+	{
 		comment = $('#noComment').get(0).innerHTML;
 	}
 	comment = "<h4>" + sn + "</h4>" + comment;
@@ -64,7 +69,8 @@ function setInfo(el){
 function openMenu(el, cb){
 	var number = 0;
 	el.parent().find('ul').each(function(index){
-		if ($(this).is(":visible")){
+		if ($(this).is(":visible"))
+		{
 			number = index;
 		}
 	});

@@ -27,10 +27,12 @@
 			var value = $(this).text().toLowerCase();
 			var item = $('#' + value + '');
 			var leftItem = item.parent().prev();
-			if (leftItem.next().is(":visible")){ 
+			if (leftItem.next().is(":visible"))
+			{
 				changeObject(item);
 			}
-			else{
+			else
+			{
 				openMenu(leftItem, function(){
 					changeObject(item);
 				});
@@ -634,7 +636,7 @@
 						<tr>
 							<td>radius</td>
 							<td>Double</td>
-							<td>The radius for defining the search area. If not provided, a default value is used, depending on the social network</td>
+							<td>The radius for defining the search area in kilometers. If not provided, a default value is used, depending on the social network</td>
 						</tr>
 					</table>
 				</div>
@@ -646,17 +648,12 @@
 						<tr>
 							<td>country</td>
 							<td>String</td>
-							<td>The country</td>
+							<td>The country (e.g. "Greece", "France"...)</td>
 						</tr>
 						<tr>
 							<td>postalCode</td>
 							<td>String</td>
 							<td>The postal code</td>
-						</tr>
-						<tr>
-							<td>region</td>
-							<td>String</td>
-							<td>The region</td>
 						</tr>
 					</table>
 				</div>
@@ -685,12 +682,12 @@
 						<tr>
 							<td>from</td>
 							<td>XMLGregorianCalendar</td>
-							<td>The start date of the time frame</td>
+							<td>The start date of the time frame ("yyyy-MM-dd")</td>
 						</tr>
 						<tr>
 							<td>to</td>
 							<td>XMLGregorianCalendar</td>
-							<td>The end date of the time frame</td>
+							<td>The end date of the time frame ("yyyy-MM-dd")</td>
 						</tr>
 					</table>
 				</div>
@@ -725,7 +722,7 @@
 						<tr>
 							<td>language</td>
 							<td>String</td>
-							<td>The language of the activities</td>
+							<td>The language of the activities (ISO 639-1)</td>
 						</tr>
 						<tr>
 							<td>sns</td>
@@ -758,7 +755,7 @@
 						<tr>
 							<td>language</td>
 							<td>String</td>
-							<td>The language of the media items</td>
+							<td>The language of the media items (ISO 639-1)</td>
 						</tr>
 						<tr>
 							<td>licenseType</td>

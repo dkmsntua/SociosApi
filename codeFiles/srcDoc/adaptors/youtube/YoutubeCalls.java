@@ -56,7 +56,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -77,7 +77,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -98,7 +98,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -157,7 +157,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -178,7 +178,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -237,7 +237,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, identifier, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), identifier, 500);
 		}
 		catch (snException exc)
 		{
@@ -266,7 +266,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
 		}
 		catch (snException exc)
 		{
@@ -287,7 +287,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -308,7 +308,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
 		}
 		catch (snException exc)
 		{
@@ -329,7 +329,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc, channelId, 500);
+			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc.getMessage(), channelId, 500);
 		}
 		catch (snException exc)
 		{
@@ -350,7 +350,7 @@ public class YoutubeCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{

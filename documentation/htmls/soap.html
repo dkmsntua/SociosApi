@@ -59,9 +59,11 @@
 			<div class="description">
 				<h3>API description</h3>
 				<p>The following table displays and briefly explains the methods exposed by the Socios SOAP API.</p>
-				<p>The functionality described below is implemented only for the social networks that support it and the implementation is subject to the limitations imposed by each social network. Only information marked as "public" can be retrieved.</p>
-				<p>If some information in a social network is marked as "private" by its owner, it cannot be retrieved by the following	methods.</p>
-				<p>In searches accepting a list of social networks as an input parameter, if the field is empty, all social networks are included in the search.</p>
+				<p>The functionality described below is implemented only for the social networks that support it and the implementation is subject to the
+					limitations imposed by each social network. Only information marked as "public" can be retrieved.</p>
+				<p>If some information in a social network is marked as "private" by its owner, it cannot be retrieved by the following methods.</p>
+				<p>In searches accepting a list of social networks as an input parameter, if the field is empty, all social networks are included in the
+					search.</p>
 			</div>
 			<div id="leftHolder">
 				<ul id='left'>
@@ -82,7 +84,7 @@
 					<li>GetCommentsForActivity</li>
 					<li>PostMessage</li>
 				</ul>
-				<a id="wsdl" href="http://83.212.103.227:8080/sociosApi/SociosApiImpl?wsdl" target="_blank">WSDL</a>
+				<a id="wsdl" href="http://83.212.103.227:8080/SociosApi/SociosApiSoapService?wsdl" target="_blank">WSDL</a>
 			</div>
 			<div id="info" class="box display restBox">
 				<div id="infoDisplay">EMPTY BOX</div>
@@ -183,8 +185,10 @@
 				</ul>
 				<h4>Description :</h4>
 				<p>This method searches for media items that match the filter's criteria.</p>
-				<p>All of the filter's keywords have to be contained in the media item's text fields. We can also
-					limit the search within a location by defining latitude, longitude and radius. Moreover we can search for media items published within a certain time frame. Finally we can search for media items of specific language and license. In some social networks, if the filter is empty or no media items are found, then some of the most popular media items are	returned.</p>
+				<p>All of the filter's keywords have to be contained in the media item's text fields. We can also limit the search within a location by
+					defining latitude, longitude and radius. Moreover we can search for media items published within a certain time frame. Finally we can search for
+					media items of specific language and license. In some social networks, if the filter is empty or no media items are found, then some of the most
+					popular media items are returned.</p>
 			</div>
 			<div id='FindRelevantMediaItems'>
 				<h3>FindRelevantMediaItems</h3>

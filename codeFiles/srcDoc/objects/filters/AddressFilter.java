@@ -1,11 +1,9 @@
 package objects.filters;
 
-
 public class AddressFilter
 {
 	protected String country;
 	protected String postalCode;
-	protected String region;
 
 	public String getCountry()
 	{
@@ -25,15 +23,5 @@ public class AddressFilter
 	public void setPostalCode(String value)
 	{
 		this.postalCode = value;
-	}
-
-	public String getRegion()
-	{
-		return region;
-	}
-
-	public void setRegion(String value)
-	{
-		this.region = value;
 	}
 }

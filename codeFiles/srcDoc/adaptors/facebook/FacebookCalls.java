@@ -51,7 +51,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -72,7 +72,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -93,7 +93,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), null, 500);
 		}
 		catch (snException exc)
 		{
@@ -113,7 +113,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -133,7 +133,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -154,7 +154,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc, null, 500);
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
 		}
 		catch (snException exc)
 		{
@@ -174,7 +174,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -194,7 +194,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -214,7 +214,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -235,7 +235,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{
@@ -289,7 +289,7 @@ public class FacebookCalls
 		}
 		catch (IOException exc)
 		{
-			return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, exc, id, 500);
+			return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, exc.getMessage(), id, 500);
 		}
 		catch (snException exc)
 		{

@@ -457,7 +457,31 @@ public class Utilities
 		int size = tokens.size();
 		for (String token : tokens)
 		{
-			result += token;
+			if (isValid(token) && token.contains(link))
+			{
+				String[] smallTokens = token.split(link);
+				result += getChain(smallTokens, link);
+			}
+			else
+			{
+				result += token.trim();
+				size--;
+				if (size != 0)
+				{
+					result += link;
+				}
+			}
+		}
+		return result;
+	}
+
+	private static String getChain(String[] pinakas, String link)
+	{
+		String result = "";
+		int size = pinakas.length;
+		for (int i = 0; i < pinakas.length; i++)
+		{
+			result += pinakas[i].trim();
 			size--;
 			if (size != 0)
 			{

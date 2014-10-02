@@ -173,8 +173,11 @@ public class DailymotionAdaptor implements ISnsAdaptor
 		if (Utilities.isValid(country))
 		{
 			String countryCode = Utilities.getCountryCode(country);
-			String countryParam = "country=" + countryCode;
-			queries.add(countryParam);
+			if (countryCode != null)
+			{
+				String countryParam = "country=" + countryCode;
+				queries.add(countryParam);
+			}
 		}
 		List<String> keywords = FilterUtilities.getKeywords(mediaFilter);
 		if (keywords != null)
