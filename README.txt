@@ -25,6 +25,9 @@ Athanasios Papaoikonomou (tpap @ mail.ntua.gr)
 Magdalini Kardara        (nkardara @ mail.ntua.gr)
 Konstantinos Tserpes     (tserpes @ mail.ntua.gr )
 
+NTUA - Distributed Knowledge and Media Systems Group
+http://grid.ece.ntua.gr/
+
 ==========================================================================
 
 To reference the SociosApi project, please cite this paper:
