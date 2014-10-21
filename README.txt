@@ -20,10 +20,10 @@ You can find directions on how to get started at "documentation -> htmls -> guid
 
 Authors:
 
-Vasilis Kalogirou        (vaskalogirou @ gmail.com)
-Athanasios Papaoikonomou (tpap @ mail.ntua.gr)
-Magdalini Kardara        (nkardara @ mail.ntua.gr)
-Konstantinos Tserpes     (tserpes @ mail.ntua.gr )
+Vasilis Kalogirou        (vaskalogirou (at) gmail.com)
+Athanasios Papaoikonomou (tpap (at) mail.ntua.gr)
+Magdalini Kardara        (nkardara (at) mail.ntua.gr)
+Konstantinos Tserpes     (tserpes (at) mail.ntua.gr )
 
 NTUA - Distributed Knowledge and Media Systems Group
 http://grid.ece.ntua.gr/
