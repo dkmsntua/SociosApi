@@ -22,17 +22,21 @@ Authors:
 
 Vasilis Kalogirou        (vaskalogirou @ gmail.com)
 Athanasios Papaoikonomou (tpap @ mail.ntua.gr)
-Magdalini Kardara 		 (nkardara @ mail.ntua.gr)
+Magdalini Kardara        (nkardara @ mail.ntua.gr)
 Konstantinos Tserpes     (tserpes @ mail.ntua.gr )
 
 ==========================================================================
 
 To reference the SociosApi project, please cite this paper:
+
 M. Kardara, V. Kalogirou, A. Papaoikonomou, T. Varvarigou, K. Tserpes, 
 SocIoS API: A data aggregator for accessing user generated content from online social networks, 
 15th International Conference on Web Information System Engineering (WISE 2014), Thessaloniki, Greece, 12-14 October 2014.
 
+==========================================================================
+
 Other Relevant Publications:
+
 L. Coppolino, S. D’Antonio, L. Romano, F. Aisopos, K. Tserpes, 
 Effective QoS Monitoring in Large Scale Social Networks, 
 7th International Symposium on Intelligent, Distributed Computing - IDC'2013, September 4-6, Prague, Czech Republic.
