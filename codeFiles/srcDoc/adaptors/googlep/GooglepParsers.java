@@ -1,5 +1,6 @@
 package adaptors.googlep;
 
+import helper.misc.SociosConstants;
 import helper.utilities.ParseUtilities;
 import helper.utilities.Utilities;
 import java.util.List;
@@ -22,37 +23,30 @@ import adaptors.googlep.gpObjects.gpComment;
 import adaptors.googlep.gpObjects.gpException;
 import adaptors.googlep.gpObjects.gpPerson;
 
-public class GooglepParsers
-{
-	public static Person parsePerson(JSONObject json)
-	{
+public class GooglepParsers {
+	public static Person parsePerson(JSONObject json) {
 		Person result = new Person();
 		gpPerson person = new gpPerson(json);
-		String tagline = person.tagline;
-		String aboutMe = person.aboutMe;
-		String birthday = person.birthday;
-		String currentLocation = person.currentLocation;
-		String displayName = person.displayName;
-		String gender = person.gender;
-		String id = person.id;
-		String url = person.url;
-		String image = person.image;
-		if (tagline != null && aboutMe != null)
-		{
+		String tagline = person.getTagline();
+		String aboutMe = person.getAboutMe();
+		String birthday = person.getBirthday();
+		String currentLocation = person.getCurrentLocation();
+		String displayName = person.getDisplayName();
+		String gender = person.getGender();
+		String id = person.getId();
+		String url = person.getUrl();
+		String image = person.getImage();
+		if (tagline != null && aboutMe != null) {
 			result.setAboutMe(tagline + " \n " + aboutMe);
 		}
-		else if (tagline != null && aboutMe == null)
-		{
+		else if (tagline != null) {
 			result.setAboutMe(tagline);
 		}
-		else if (tagline == null && aboutMe != null)
-		{
+		else if (aboutMe != null) {
 			result.setAboutMe(aboutMe);
 		}
-		if (person.placesLived != null)
-		{
-			for (String pl : person.placesLived)
-			{
+		if (person.getPlacesLived() != null) {
+			for (String pl : person.getPlacesLived()) {
 				Address address = new Address();
 				address.setExtendedAddress(pl);
 				result.getAddresses().add(address);
@@ -60,8 +54,7 @@ public class GooglepParsers
 		}
 		XMLGregorianCalendar birthDate = ParseUtilities.getCalendar(birthday, "yyyy-MM-dd");
 		result.setBirthday(birthDate);
-		if (Utilities.isValid(currentLocation))
-		{
+		if (Utilities.isValid(currentLocation)) {
 			Address currentAddress = new Address();
 			currentAddress.setExtendedAddress(currentLocation);
 			result.setCurrentLocation(currentAddress);
@@ -70,23 +63,20 @@ public class GooglepParsers
 		result.setGender(gender);
 		result.setSn(SocialNetwork.GOOGLEP);
 		result.setId(id);
-		if (person.name != null)
-		{
+		if (person.getName() != null) {
 			Name name = new Name();
-			String familyName = person.name.familyName;
-			String formatted = person.name.formatted;
-			String givenName = person.name.givenName;
-			String middleName = person.name.middleName;
-			String nickname = person.nickname;
+			String familyName = person.getName().getFamilyName();
+			String formatted = person.getName().getFormatted();
+			String givenName = person.getName().getGivenName();
+			String middleName = person.getName().getMiddleName();
+			String nickname = person.getNickname();
 			name.setLastName(familyName);
 			name.setFullName(formatted);
 			name.setFirstName(givenName);
-			if (!Utilities.isValid(middleName))
-			{
+			if (!Utilities.isValid(middleName)) {
 				name.setAdditionalName(nickname);
 			}
-			else
-			{
+			else {
 				name.setAdditionalName(middleName);
 			}
 			result.setName(name);
@@ -96,75 +86,64 @@ public class GooglepParsers
 		return result;
 	}
 
-	public static Activity parseActivity(JSONObject json)
-	{
+	public static Activity parseActivity(JSONObject json) {
 		Activity result = new Activity();
 		gpActivity activity = new gpActivity(json);
-		String id = activity.id;
-		String title = activity.title;
-		String annotation = activity.annotation;
-		String published = activity.published;
-		String type = activity.verb;
+		String id = activity.getId();
+		String title = activity.getTitle();
+		String annotation = activity.getAnnotation();
+		String published = activity.getPublished();
+		String type = activity.getVerb();
 		result.setSn(SocialNetwork.GOOGLEP);
 		result.setId(id);
 		result.setTitle(title);
 		result.setDescription(annotation);
-		XMLGregorianCalendar xmlCreated = ParseUtilities.getCalendar(published, "yyyy-MM-dd'T'HH:mm:ss");
+		XMLGregorianCalendar xmlCreated = ParseUtilities.getCalendar(published, SociosConstants.DATE_TIME_FORMAT);
 		result.setCreated(xmlCreated);
 		result.setType(type);
-		if (activity.actor != null)
-		{
-			String actorId = activity.actor.id;
+		if (activity.getActor() != null) {
+			String actorId = activity.getActor().getId();
 			result.setActorId(actorId);
 		}
-		if (activity.object != null)
-		{
-			List<GpaAttachment> attachments = activity.object.attachments;
-			if (attachments != null && !attachments.isEmpty())
-			{
+		if (activity.getObject() != null) {
+			List<GpaAttachment> attachments = activity.getObject().getAttachments();
+			if (attachments != null && !attachments.isEmpty()) {
 				result.setObjectType(ActivityObjectType.MEDIAITEM);
-				for (GpaAttachment attachment : attachments)
-				{
-					if (attachment != null)
-					{
+				for (GpaAttachment attachment : attachments) {
+					if (attachment != null) {
 						MediaItem item = new MediaItem();
 						//						if (result.getDescription() != null && "POST".equals(result.getType().toUpperCase()))
 						//						{
 						//							item.setUserId(result.getActorId());
 						//						}
-						String objectType = attachment.objectType;
-						if (objectType != null)
-						{
+						String objectType = attachment.getObjectType();
+						if (objectType != null) {
 							MediaItemType mit = null;
-							if ("VIDEO".equals(objectType.toUpperCase()))
-							{
+							if ("VIDEO".equals(objectType.toUpperCase())) {
 								mit = MediaItemType.VIDEO;
 							}
-							else if ("PHOTO".equals(objectType.toUpperCase()))
-							{
+							else if ("PHOTO".equals(objectType.toUpperCase())) {
 								mit = MediaItemType.IMAGE;
 							}
-							else if ("ARTICLE".equals(objectType.toUpperCase()))
-							{
+							else if ("ARTICLE".equals(objectType.toUpperCase())) {
 								mit = MediaItemType.TEXT;
 							}
 							item.setType(mit);
 						}
-						String attId = attachment.id;
-						String displayName = attachment.displayName;
-						String content = attachment.content;
-						String attUrl = attachment.url;
+						String attId = attachment.getId();
+						String displayName = attachment.getDisplayName();
+						String content = attachment.getContent();
+						String attUrl = attachment.getUrl();
 						item.setSn(SocialNetwork.GOOGLEP);
 						item.setId(attId);
 						item.setTitle(displayName);
 						item.setDescription(content);
 						item.setUrl(attUrl);
-						item.setNumPositiveVotes(activity.object.plusoners);
-						item.setNumResharings(activity.object.resharers);
-						item.setNumComments(activity.object.replies);
-						if (activity.object.actor != null)
-						{
-							item.setUserId(activity.object.actor.id);
+						item.setNumPositiveVotes(activity.getObject().getPlusoners());
+						item.setNumResharings(activity.getObject().getResharers());
+						item.setNumComments(activity.getObject().getReplies());
+						if (activity.getObject().getActor() != null) {
+							item.setUserId(activity.getObject().getActor().getId());
 						}
 						result.getMediaItems().add(item);
 					}
@@ -172,69 +151,58 @@ public class GooglepParsers
 			}
 		}
 		Address address = new Address();
-		String extendedAddress = activity.address;
-		String placeName = activity.placeName;
+		String extendedAddress = activity.getAddress();
+		String placeName = activity.getPlaceName();
 		address.setExtendedAddress(extendedAddress);
 		address.setRegion(placeName);
-		String geocode = activity.geocode;
-		if (Utilities.isValid(geocode))
-		{
-			try
-			{
-				String[] attributes = geocode.split(" ");
-				Double latitude = Double.parseDouble(attributes[0]);
-				address.setLatitude(latitude);
-				Double longitude = Double.parseDouble(attributes[1]);
-				address.setLongitude(longitude);
-			}
-			catch (Exception exc)
-			{
-			}
+		String geocode = activity.getGeocode();
+		if (Utilities.isValid(geocode)) {
+			String[] attributes = geocode.split(" ");
+			Double latitude = Double.parseDouble(attributes[0]);
+			address.setLatitude(latitude);
+			Double longitude = Double.parseDouble(attributes[1]);
+			address.setLongitude(longitude);
 		}
 		result.setLocation(address);
 		return result;
 	}
 
-	public static Comment parseComment(JSONObject json)
-	{
+	public static Comment parseComment(JSONObject json) {
 		Comment result = new Comment();
 		gpComment comment = new gpComment(json);
-		String id = comment.id;
+		String id = comment.getId();
 		result.setId(id);
-		String desrciption = comment.content;
+		String desrciption = comment.getContent();
 		result.setDescription(desrciption);
-		String userId = comment.userId;
+		String userId = comment.getUserId();
 		result.setUserId(userId);
-		String username = comment.username;
+		String username = comment.getUsername();
 		result.setUsername(username);
-		int numPositiveVotes = comment.plusOners;
+		int numPositiveVotes = comment.getPlusOners();
 		result.setNumPositiveVotes(numPositiveVotes);
-		String created = comment.published;
-		XMLGregorianCalendar xmlCreated = ParseUtilities.getCalendar(created, "yyyy-MM-dd'T'HH:mm:ss");
+		String created = comment.getPublished();
+		XMLGregorianCalendar xmlCreated = ParseUtilities.getCalendar(created, SociosConstants.DATE_TIME_FORMAT);
 		result.setCreated(xmlCreated);
 		result.setSn(SocialNetwork.GOOGLEP);
 		return result;
 	}
 
-	public static SociosException parseNativeException(String data)
-	{
+	public static SociosException parseNativeException(String data) {
 		SociosException result = new SociosException();
 		result.setSocialNetwork(SocialNetwork.GOOGLEP);
-		JSONObject json = null;
-		try
-		{
+		JSONObject json;
+		try {
 			json = new JSONObject(data);
 		}
-		catch (JSONException exc)
-		{
-			result.setFaultCode(500);
+		catch (JSONException exc) {
+			result.setFaultCode(SociosConstants.ERROR_500);
 			result.setMessage(exc.getMessage());
 			return result;
 		}
 		gpException gpExc = new gpException(json);
-		result.setFaultCode(gpExc.code);
-		result.setMessage(gpExc.message);
-		result.setDescription(gpExc.reason);
+		result.setFaultCode(gpExc.getCode());
+		result.setMessage(gpExc.getMessage());
+		result.setDescription(gpExc.getReason());
 		return result;
 	}
 }

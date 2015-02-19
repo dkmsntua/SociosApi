@@ -6,150 +6,125 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import objects.enums.ActivityObjectType;
 import objects.enums.SocialNetwork;
 
-public class Activity
-{
-	protected String id;
-	protected SocialNetwork sn;
-	protected XMLGregorianCalendar created;
-	protected String title;
-	protected String description;
-	protected String type;
-	protected Address location;
-	protected String actorId;
-	protected ActivityObjectType objectType;
-	protected List<MediaItem> mediaItems;
-	protected List<Person> persons;
-	protected List<Activity> activities;
+public class Activity {
+	private String id;
+	private SocialNetwork sn;
+	private XMLGregorianCalendar created;
+	private String title;
+	private String description;
+	private String type;
+	private Address location;
+	private String actorId;
+	private ActivityObjectType objectType;
+	private List<MediaItem> mediaItems;
+	private List<Person> persons;
+	private List<Activity> activities;
 
-	public String getId()
-	{
+	public Activity() {
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(String value)
-	{
+	public void setId(String value) {
 		this.id = value;
 	}
 
-	public SocialNetwork getSn()
-	{
+	public SocialNetwork getSn() {
 		return sn;
 	}
 
-	public void setSn(SocialNetwork value)
-	{
+	public void setSn(SocialNetwork value) {
 		this.sn = value;
 	}
 
-	public XMLGregorianCalendar getCreated()
-	{
+	public XMLGregorianCalendar getCreated() {
 		return created;
 	}
 
-	public void setCreated(XMLGregorianCalendar value)
-	{
+	public void setCreated(XMLGregorianCalendar value) {
 		this.created = value;
 	}
 
-	public String getTitle()
-	{
+	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String value)
-	{
+	public void setTitle(String value) {
 		this.title = value;
 	}
 
-	public String getDescription()
-	{
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String value)
-	{
+	public void setDescription(String value) {
 		this.description = value;
 	}
 
-	public String getType()
-	{
+	public String getType() {
 		return type;
 	}
 
-	public void setType(String value)
-	{
+	public void setType(String value) {
 		this.type = value;
 	}
 
-	public Address getLocation()
-	{
+	public Address getLocation() {
 		return location;
 	}
 
-	public void setLocation(Address value)
-	{
+	public void setLocation(Address value) {
 		this.location = value;
 	}
 
-	public String getActorId()
-	{
+	public String getActorId() {
 		return actorId;
 	}
 
-	public void setActorId(String value)
-	{
+	public void setActorId(String value) {
 		this.actorId = value;
 	}
 
-	public ActivityObjectType getObjectType()
-	{
+	public ActivityObjectType getObjectType() {
 		return objectType;
 	}
 
-	public void setObjectType(ActivityObjectType value)
-	{
+	public void setObjectType(ActivityObjectType value) {
 		this.objectType = value;
 	}
 
-	public List<MediaItem> getMediaItems()
-	{
-		if (mediaItems == null)
-		{
+	public List<MediaItem> getMediaItems() {
+		if (mediaItems == null) {
 			mediaItems = new ArrayList<MediaItem>();
 		}
 		return this.mediaItems;
 	}
 
-	public void setMediaItems(List<MediaItem> value)
-	{
+	public void setMediaItems(List<MediaItem> value) {
 		this.mediaItems = value;
 	}
 
-	public List<Person> getPersons()
-	{
-		if (persons == null)
-		{
+	public List<Person> getPersons() {
+		if (persons == null) {
 			persons = new ArrayList<Person>();
 		}
 		return this.persons;
 	}
 
-	public void setPersons(List<Person> value)
-	{
+	public void setPersons(List<Person> value) {
 		this.persons = value;
 	}
 
-	public List<Activity> getActivities()
-	{
-		if (activities == null)
-		{
+	public List<Activity> getActivities() {
+		if (activities == null) {
 			activities = new ArrayList<Activity>();
 		}
 		return this.activities;
 	}
 
-	public void setActivities(List<Activity> value)
-	{
+	public void setActivities(List<Activity> value) {
 		this.activities = value;
 	}
 }

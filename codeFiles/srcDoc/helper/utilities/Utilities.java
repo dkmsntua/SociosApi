@@ -1,6 +1,6 @@
 package helper.utilities;
 
-import org.json.JSONArray;
+import helper.misc.SociosConstants;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.GeneralSecurityException;
@@ -9,24 +9,24 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import com.sun.jersey.core.util.Base64;
 import objects.enums.SocialNetwork;
 import objects.main.Activity;
 import objects.main.Comment;
 import objects.main.MediaItem;
 import objects.main.ObjectId;
 import objects.main.Person;
+import org.json.JSONArray;
+import com.sun.jersey.core.util.Base64;
 
-public class Utilities
-{
-	private static final HashMap<String, String> countries;
-	static
-	{
-		HashMap<String, String> map = new HashMap<String, String>();
+public class Utilities {
+	private static final Map<String, String> countries;
+	static {
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("AF", "Afghanistan");
 		map.put("AL", "Albania");
 		map.put("DZ", "Algeria");
@@ -279,19 +279,15 @@ public class Utilities
 		countries = map;
 	}
 
-	private static String capitalizeFirst(String str)
-	{
-		if (!isValid(str))
-		{
+	private static String capitalizeFirst(String str) {
+		if (!isValid(str)) {
 			return null;
 		}
 		String result = "";
 		String base = str.trim().toLowerCase();
 		String[] tokens = base.split(" ");
-		for (String token : tokens)
-		{
-			if (!token.isEmpty())
-			{
+		for (String token : tokens) {
+			if (!token.isEmpty()) {
 				String first = token.substring(0, 1);
 				first = first.toUpperCase();
 				String second = token.substring(1, token.length());
@@ -303,17 +299,13 @@ public class Utilities
 		return result;
 	}
 
-	public static boolean clean(List<String> lista)
-	{
-		if (!isValid(lista))
-		{
+	public static boolean clean(List<String> lista) {
+		if (!isValid(lista)) {
 			return false;
 		}
 		List<String> existing = new ArrayList<String>();
-		for (String str : lista)
-		{
-			if (isValid(str) && !existing.contains(str.trim()))
-			{
+		for (String str : lista) {
+			if (isValid(str) && !existing.contains(str.trim())) {
 				existing.add(str.trim());
 			}
 		}
@@ -322,10 +314,8 @@ public class Utilities
 		return true;
 	}
 
-	public static boolean clean(ObjectId objectId)
-	{
-		if (objectId == null || !isValid(objectId.getId()) || objectId.getSocialNetwork() == null)
-		{
+	public static boolean clean(ObjectId objectId) {
+		if (objectId == null || !isValid(objectId.getId()) || objectId.getSocialNetwork() == null) {
 			return false;
 		}
 		objectId.setId(objectId.getId().trim());
@@ -333,49 +323,38 @@ public class Utilities
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> boolean cleanDuplicates(List<T> lista)
-	{
-		if (!isValid(lista))
-		{
+	public static <T> boolean cleanDuplicates(List<T> lista) {
+		if (!isValid(lista)) {
 			return false;
 		}
 		List<String> existingIds = new ArrayList<String>();
 		List<T> existingItems = new ArrayList<T>();
-		String id = "";
-		for (Object item : lista)
-		{
-			if (item instanceof MediaItem)
-			{
+		String id;
+		for (Object item : lista) {
+			if (item instanceof MediaItem) {
 				MediaItem mediaItem = (MediaItem) item;
 				id = mediaItem.getId();
 			}
-			else if (item instanceof Person)
-			{
+			else if (item instanceof Person) {
 				Person person = (Person) item;
 				id = person.getId();
 			}
-			else if (item instanceof Activity)
-			{
+			else if (item instanceof Activity) {
 				Activity activity = (Activity) item;
 				id = activity.getId();
 			}
-			else if (item instanceof Comment)
-			{
+			else if (item instanceof Comment) {
 				Comment comment = (Comment) item;
 				id = comment.getId();
 			}
-			else
-			{
+			else {
 				continue;
 			}
-			if (!isValid(id))
-			{
+			if (!isValid(id)) {
 				existingItems.add((T) item);
 			}
-			else
-			{
-				if (!existingIds.contains(id))
-				{
+			else {
+				if (!existingIds.contains(id)) {
 					existingIds.add(id);
 					existingItems.add((T) item);
 				}
@@ -386,88 +365,67 @@ public class Utilities
 		return true;
 	}
 
-	public static boolean cleanObjectIdList(List<ObjectId> lista)
-	{
-		if (!isValid(lista))
-		{
+	public static boolean cleanObjectIdList(List<ObjectId> lista) {
+		if (!isValid(lista)) {
 			return false;
 		}
 		List<ObjectId> objectIds = new ArrayList<ObjectId>();
-		for (ObjectId objectId : lista)
-		{
-			if (!clean(objectId))
-			{
-				continue;
-			}
-			else
-			{
+		for (ObjectId objectId : lista) {
+			if (clean(objectId)) {
 				objectIds.add(objectId);
 			}
 		}
 		lista.removeAll(lista);
 		lista.addAll(objectIds);
-		if (lista.isEmpty())
-		{
+		if (lista.isEmpty()) {
 			return false;
 		}
 		return true;
 	}
 
-	public static String computeSignature(String baseString, String keyString) throws GeneralSecurityException, UnsupportedEncodingException, Exception
-	{
-		SecretKey secretKey = null;
+	public static String computeSignature(String baseString, String keyString) throws GeneralSecurityException, UnsupportedEncodingException {
+		SecretKey secretKey;
 		byte[] keyBytes = keyString.getBytes();
 		secretKey = new SecretKeySpec(keyBytes, "HmacSHA1");
 		Mac mac = Mac.getInstance("HmacSHA1");
 		mac.init(secretKey);
 		byte[] text = baseString.getBytes();
 		byte[] foo = mac.doFinal(text);
-		String result = new String(Base64.encode(foo)).trim();
-		return result;
+		return new String(Base64.encode(foo)).trim();
 	}
 
-	public static String encodeKeys(String consumerKey, String consumerSecret)
-	{
-		try
-		{
-			String encodedConsumerKey = URLEncoder.encode(consumerKey, "UTF-8");
-			String encodedConsumerSecret = URLEncoder.encode(consumerSecret, "UTF-8");
+	public static String encodeKeys(String consumerKey, String consumerSecret) {
+		try {
+			String encodedConsumerKey = URLEncoder.encode(consumerKey, SociosConstants.UTF8);
+			String encodedConsumerSecret = URLEncoder.encode(consumerSecret, SociosConstants.UTF8);
 			String fullKey = encodedConsumerKey + ":" + encodedConsumerSecret;
 			String encodedBytes = new String(Base64.encode(fullKey.getBytes()));
 			return encodedBytes;
 		}
-		catch (Exception exc)
-		{
+		catch (UnsupportedEncodingException exc) {
 			return null;
 		}
 	}
 
-	public static String getChain(List<String> tokens)
-	{
+	public static String getChain(List<String> tokens) {
 		return getChain(tokens, ",");
 	}
 
-	public static String getChain(List<String> tokens, String link)
-	{
-		if (!clean(tokens))
-		{
+	public static String getChain(List<String> tokens, String link) {
+		if (!clean(tokens)) {
 			return null;
 		}
 		String result = "";
 		int size = tokens.size();
-		for (String token : tokens)
-		{
-			if (isValid(token) && token.contains(link))
-			{
+		for (String token : tokens) {
+			if (isValid(token) && token.contains(link)) {
 				String[] smallTokens = token.split(link);
 				result += getChain(smallTokens, link);
 			}
-			else
-			{
+			else {
 				result += token.trim();
 				size--;
-				if (size != 0)
-				{
+				if (size != 0) {
 					result += link;
 				}
 			}
@@ -475,67 +433,53 @@ public class Utilities
 		return result;
 	}
 
-	private static String getChain(String[] pinakas, String link)
-	{
+	private static String getChain(String[] pinakas, String link) {
 		String result = "";
 		int size = pinakas.length;
-		for (int i = 0; i < pinakas.length; i++)
-		{
+		for (int i = 0; i < pinakas.length; i++) {
 			result += pinakas[i].trim();
 			size--;
-			if (size != 0)
-			{
+			if (size != 0) {
 				result += link;
 			}
 		}
 		return result;
 	}
 
-	public static String getChannelId(String id)
-	{
+	public static String getChannelId(String id) {
 		String result = null;
-		if (id.length() == 22 && !id.startsWith("UC"))
-		{
+		if (id.length() == 22 && !id.startsWith("UC")) {
 			result = "UC" + id;
 		}
 		return result;
 	}
 
-	public static String getCountryCode(String country)
-	{
-		if (!isValid(country))
-		{
+	public static String getCountryCode(String country) {
+		if (!isValid(country)) {
 			return null;
 		}
 		String result = null;
-		HashMap<String, String> countries = Utilities.countries;
-		if (countries.containsKey(country.toUpperCase()))
-		{
+		Map<String, String> countries = Utilities.countries;
+		if (countries.containsKey(country.toUpperCase())) {
 			result = country.toUpperCase();
 			return result;
 		}
-		if (countries.containsValue(country))
-		{
+		if (countries.containsValue(country)) {
 			result = Utilities.getKeyByValue(countries, country);
 		}
-		else
-		{
+		else {
 			String capd = Utilities.capitalizeFirst(country);
-			if (countries.containsValue(capd))
-			{
+			if (countries.containsValue(capd)) {
 				result = Utilities.getKeyByValue(countries, capd);
 			}
 		}
 		return result;
 	}
 
-	private static String getKeyByValue(HashMap<String, String> map, String value)
-	{
-		for (Entry<String, String> entry : map.entrySet())
-		{
+	private static String getKeyByValue(Map<String, String> map, String value) {
+		for (Entry<String, String> entry : map.entrySet()) {
 			String thisValue = entry.getValue();
-			if (thisValue.equals(value))
-			{
+			if (thisValue.equals(value)) {
 				String key = entry.getKey();
 				return key;
 			}
@@ -543,27 +487,19 @@ public class Utilities
 		return null;
 	}
 
-	public static ObjectId getObjectId(String id, String snName)
-	{
-		if (!isValid(id) || !isValid(snName))
-		{
+	public static ObjectId getObjectId(String id, String snName) {
+		if (!isValid(id) || !isValid(snName)) {
 			return null;
 		}
 		ObjectId result = new ObjectId();
 		SocialNetwork sn = AdaptorUtilities.getSocialNetwork(snName);
-		if (sn == null)
-		{
-			return null;
-		}
 		result.setId(id);
 		result.setSocialNetwork(sn);
 		return result;
 	}
 
-	public static List<ObjectId> getObjectIds(ObjectId objectId)
-	{
-		if (!clean(objectId))
-		{
+	public static List<ObjectId> getObjectIds(ObjectId objectId) {
+		if (!clean(objectId)) {
 			return null;
 		}
 		List<ObjectId> result = new ArrayList<ObjectId>();
@@ -571,57 +507,42 @@ public class Utilities
 		return result;
 	}
 
-	public static List<String> getStringList(List<ObjectId> objectIds)
-	{
+	public static List<String> getStringList(List<ObjectId> objectIds) {
 		List<String> result = new ArrayList<String>();
-		for (ObjectId objectId : objectIds)
-		{
+		for (ObjectId objectId : objectIds) {
 			String id = objectId.getId();
-			if (!result.contains(id))
-			{
+			if (!result.contains(id)) {
 				result.add(id);
 			}
 		}
 		return result;
 	}
 
-	public static List<String> getStringList(String chain)
-	{
-		if (!isValid(chain))
-		{
+	public static List<String> getStringList(String chain) {
+		String myChain = chain;
+		if (!isValid(myChain)) {
 			return null;
 		}
-		List<String> result = new ArrayList<String>();
-		chain = chain.trim();
-		String[] tokens = chain.split(",");
-		for (String token : tokens)
-		{
-			result.add(token);
-		}
-		if (!clean(result))
-		{
+		myChain = myChain.trim();
+		String[] tokens = myChain.split(",");
+		List<String> result = new ArrayList<String>(Arrays.asList(tokens));
+		if (!clean(result)) {
 			return null;
 		}
 		return result;
 	}
 
-	public static boolean isValid(JSONArray array)
-	{
-		return (array != null && array.length() != 0);
+	public static boolean isValid(JSONArray array) {
+		return array != null && array.length() != 0;
 	}
 
-	public static <T> boolean isValid(List<T> lista)
-	{
-		if (lista == null || lista.size() == 0)
-		{
+	public static <T> boolean isValid(List<T> lista) {
+		if (lista == null || lista.size() == 0) {
 			return false;
 		}
-		else
-		{
-			for (T object : lista)
-			{
-				if (object != null && object.toString().trim().length() != 0)
-				{
+		else {
+			for (T object : lista) {
+				if (object != null && object.toString().trim().length() != 0) {
 					return true;
 				}
 			}
@@ -629,23 +550,19 @@ public class Utilities
 		return false;
 	}
 
-	public static boolean isValid(String str)
-	{
-		boolean result = (str != null && !str.trim().isEmpty());
-		return result;
+	public static boolean isValid(String str) {
+		return str != null && !str.trim().isEmpty();
 	}
 
-	public static boolean isValidLanguageCode(String code)
-	{
-		if (code.length() != 2)
-		{
+	public static boolean isValidLanguageCode(String code) {
+		if (code.length() != 2) {
 			return false;
 		}
 		String[] langsArray = Locale.getISOLanguages();
 		List<String> langs = Arrays.asList(langsArray);
-		code = code.toLowerCase();
-		if (langs.contains(code))
-		{
+		String mycode = code;
+		mycode = mycode.toLowerCase();
+		if (langs.contains(mycode)) {
 			return true;
 		}
 		return false;

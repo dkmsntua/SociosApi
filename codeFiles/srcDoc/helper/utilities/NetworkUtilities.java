@@ -1,5 +1,6 @@
 package helper.utilities;
 
+import helper.misc.SociosConstants;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -12,81 +13,66 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 import objects.main.snException;
 
-public class NetworkUtilities
-{
-	public static String getResponse(String mUrlString) throws IOException, snException
-	{
-		HttpURLConnection conn = null;
-		String response = "";
+public class NetworkUtilities {
+	public static String getResponse(String mUrlString) throws IOException, snException {
+		HttpURLConnection conn;
+		String response;
 		URL url = new URL(mUrlString);
-		try
-		{
+		try {
 			conn = (HttpURLConnection) url.openConnection();
 		}
-		catch (IOException exc)
-		{
+		catch (IOException exc) {
 			throw exc;
 		}
-		conn.setRequestProperty("Accept-Charset", "UTF-8");
+		conn.setRequestProperty("Accept-Charset", SociosConstants.UTF8);
 		conn.setRequestProperty("User-Agent", "Mozilla/5.0");
 		conn.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-		InputStream inStream = null;
-		try
-		{
+		InputStream inStream;
+		try {
 			inStream = conn.getInputStream();
 			response = getStringFromInputStream(inStream);
 			conn.disconnect();
 			conn = null;
 		}
-		catch (IOException e)
-		{
+		catch (IOException e) {
 			InputStream error = conn.getErrorStream();
 			response = getStringFromInputStream(error);
 			snException dataCarrier = new snException();
-			dataCarrier.data = response;
+			dataCarrier.setData(response);
 			throw dataCarrier;
 		}
-		finally
-		{
-			if (conn != null)
-			{
+		finally {
+			if (conn != null) {
 				conn.disconnect();
 			}
 		}
 		return response;
 	}
 
-	public static String readResponse(HttpURLConnection connection) throws IOException, snException
-	{
-		String result = "";
-		try
-		{
+	public static String readResponse(HttpURLConnection connection) throws IOException, snException {
+		String result;
+		try {
 			InputStream inputStream = connection.getInputStream();
 			result = getStringFromInputStream(inputStream);
 		}
-		catch (IOException exc)
-		{
+		catch (IOException exc) {
 			InputStream error = connection.getErrorStream();
 			result = getStringFromInputStream(error);
 			snException dataCarrier = new snException();
-			dataCarrier.data = result;
+			dataCarrier.setData(result);
 			throw dataCarrier;
 		}
 		return result;
 	}
 
-	public static String getStringFromInputStream(InputStream stream)
-	{
+	public static String getStringFromInputStream(InputStream stream) {
 		InputStreamReader inReader = new InputStreamReader(stream);
 		BufferedReader in = new BufferedReader(inReader);
 		StringBuilder output = new StringBuilder();
-		try
-		{
+		try {
 			String inputLine;
-			while ((inputLine = in.readLine()) != null)
-			{
-				if (!inputLine.isEmpty())
-				{
+			while ((inputLine = in.readLine()) != null) {
+				if (!inputLine.isEmpty()) {
 					output.append(inputLine);
 				}
 			}
@@ -95,52 +81,55 @@ public class NetworkUtilities
 			inReader.close();
 			inReader = null;
 		}
-		catch (IOException ex)
-		{
+		catch (IOException ex) {
+			System.out.println(ex.getMessage());
 		}
-		finally
-		{
-			if (in != null)
-			{
-				try
-				{
+		finally {
+			if (in != null) {
+				try {
 					in.close();
 				}
-				catch (IOException e)
-				{
+				catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			if (inReader != null)
-			{
-				try
-				{
+			if (inReader != null) {
+				try {
 					inReader.close();
 				}
-				catch (IOException e)
-				{
+				catch (IOException e) {
+					System.out.println(e.getMessage());
 				}
 			}
 		}
-		String result = output.toString();
-		return result;
+		return output.toString();
 	}
 
-	public static boolean writeRequest(HttpsURLConnection connection, String textBody)
-	{
-		try
-		{
-			OutputStream outStream = connection.getOutputStream();
-			OutputStreamWriter writer = new OutputStreamWriter(outStream);
-			BufferedWriter wr = new BufferedWriter(writer);
+	public static boolean writeRequest(HttpsURLConnection connection, String textBody) {
+		OutputStream outStream;
+		OutputStreamWriter writer;
+		BufferedWriter wr = null;
+		try {
+			outStream = connection.getOutputStream();
+			writer = new OutputStreamWriter(outStream);
+			wr = new BufferedWriter(writer);
 			wr.write(textBody);
 			wr.flush();
 			wr.close();
 			return true;
 		}
-		catch (Exception e)
-		{
+		catch (IOException e) {
 			return false;
+		}
+		finally {
+			if (wr != null) {
+				try {
+					wr.close();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

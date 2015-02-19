@@ -5,43 +5,38 @@ import java.util.List;
 import objects.main.ObjectId;
 import objects.main.SociosException;
 
-public class ObjectIdContainer
-{
-	protected ObjectId objectId;
-	protected List<SociosException> exceptions;
-	protected String elapsedTime;
+public class ObjectIdContainer {
+	private ObjectId objectId;
+	private List<SociosException> exceptions;
+	private String elapsedTime;
 
-	public ObjectId getObjectId()
-	{
+	public ObjectIdContainer() {
+	}
+
+	public ObjectId getObjectId() {
 		return objectId;
 	}
 
-	public void setObjectId(ObjectId value)
-	{
+	public void setObjectId(ObjectId value) {
 		this.objectId = value;
 	}
 
-	public List<SociosException> getExceptions()
-	{
-		if (exceptions == null)
-		{
+	public List<SociosException> getExceptions() {
+		if (exceptions == null) {
 			exceptions = new ArrayList<SociosException>();
 		}
 		return this.exceptions;
 	}
 
-	public void setExceptions(List<SociosException> value)
-	{
+	public void setExceptions(List<SociosException> value) {
 		this.exceptions = value;
 	}
 
-	public String getElapsedTime()
-	{
+	public String getElapsedTime() {
 		return elapsedTime;
 	}
 
-	public void setElapsedTime(String value)
-	{
+	public void setElapsedTime(String value) {
 		this.elapsedTime = value;
 	}
 }

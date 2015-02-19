@@ -1,16 +1,12 @@
 package objects.enums;
 
-
-public enum SocialNetwork
-{
+public enum SocialNetwork {
 	FLICKR, FACEBOOK, TWITTER, YOUTUBE, DAILYMOTION, GOOGLEP, INSTAGRAM;
-	public String value()
-	{
+	public String value() {
 		return name();
 	}
 
-	public static SocialNetwork fromValue(String v)
-	{
+	public static SocialNetwork fromValue(String v) {
 		return valueOf(v);
 	}
 }

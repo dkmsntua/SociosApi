@@ -1,5 +1,6 @@
 package adaptors.youtube;
 
+import helper.misc.SociosConstants;
 import helper.utilities.ParseUtilities;
 import helper.utilities.Utilities;
 import java.util.List;
@@ -28,68 +29,60 @@ import adaptors.youtube.ytObjects.ytPerson;
 import adaptors.youtube.ytObjects.ytVideo;
 import adaptors.youtube.ytObjects.ytVideoV2;
 
-public class YoutubeParsers
-{
-	public static Person parsePerson(JSONObject json)
-	{
+public class YoutubeParsers {
+	public static Person parsePerson(JSONObject json) {
 		Person result = new Person();
 		ytPerson person = new ytPerson(json);
-		String summary = person.summary;
-		String firstName = person.firstName;
-		String lastName = person.lastName;
-		String thumbnail = person.thumbnail;
-		String location = person.location;
-		String username = person.username;
-		int subscriberCount = person.subscriberCount;
-		String published = person.published;
+		String summary = person.getSummary();
+		String firstName = person.getFirstName();
+		String lastName = person.getLastName();
+		String thumbnail = person.getThumbnail();
+		String location = person.getLocation();
+		String username = person.getUsername();
+		int subscriberCount = person.getSubscriberCount();
+		String published = person.getPublished();
 		result.setSn(SocialNetwork.YOUTUBE);
 		result.setAboutMe(summary);
 		Name name = new Name();
 		name.setFirstName(firstName);
 		name.setLastName(lastName);
-		if (person.author != null)
-		{
-			String id = person.author.userId;
-			String authorName = person.author.name;
-			String url = person.author.url;
+		if (person.getAuthor() != null) {
+			String id = person.getAuthor().getUserId();
+			String authorName = person.getAuthor().getName();
+			String url = person.getAuthor().getUrl();
 			result.setId(id);
-			if (!Utilities.isValid(name.getFullName()))
-			{
+			if (!Utilities.isValid(name.getFullName())) {
 				name.setFullName(authorName);
 			}
 			result.setProfileUrl(url);
 		}
 		result.setName(name);
 		result.setThumbnailUrl(thumbnail);
-		if (Utilities.isValid(location))
-		{
+		if (Utilities.isValid(location)) {
 			Address adress = new Address();
 			adress.setCountry(location);
 			result.getAddresses().add(adress);
 		}
 		result.setUsername(username);
-		if (subscriberCount > 0)
-		{
+		if (subscriberCount > 0) {
 			result.setInDegree(subscriberCount);
 		}
-		XMLGregorianCalendar xmlDateCreated = ParseUtilities.getCalendar(published, "yyyy-MM-dd'T'HH:mm:ss");
+		XMLGregorianCalendar xmlDateCreated = ParseUtilities.getCalendar(published, SociosConstants.DATE_TIME_FORMAT);
 		result.setMemberSince(xmlDateCreated);
 		return result;
 	}
 
-	public static Person parseChannel(JSONObject json)
-	{
+	public static Person parseChannel(JSONObject json) {
 		Person result = new Person();
 		ytChannel channel = new ytChannel(json);
-		String aboutMe = channel.description;
-		String title = channel.title;
-		String id = channel.channelId;
-		String thumbnail = channel.thumbnail;
+		String aboutMe = channel.getDescription();
+		String title = channel.getTitle();
+		String id = channel.getChannelId();
+		String thumbnail = channel.getThumbnail();
 		result.setSn(SocialNetwork.YOUTUBE);
 		result.setId(id);
 		result.setAboutMe(aboutMe);
-		if (Utilities.isValid(title))
-		{
+		if (Utilities.isValid(title)) {
 			Name name = new Name();
 			name.setFullName(title);
 			result.setName(name);
@@ -98,19 +91,17 @@ public class YoutubeParsers
 		return result;
 	}
 
-	public static Person parseChannelV2(JSONObject json)
-	{
+	public static Person parseChannelV2(JSONObject json) {
 		Person result = new Person();
 		ytChannelV2 channel = new ytChannelV2(json);
-		String id = channel.channelId;
-		String thumbnail = channel.thumbnail;
-		String username = channel.username;
-		String name = channel.name;
+		String id = channel.getChannelId();
+		String thumbnail = channel.getThumbnail();
+		String username = channel.getUsername();
+		String name = channel.getName();
 		result.setSn(SocialNetwork.YOUTUBE);
 		result.setId(id);
 		result.setUsername(username);
-		if (Utilities.isValid(name))
-		{
+		if (Utilities.isValid(name)) {
 			Name fullname = new Name();
 			fullname.setFullName(name);
 			result.setName(fullname);
@@ -119,25 +110,24 @@ public class YoutubeParsers
 		return result;
 	}
 
-	public static MediaItem parseMediaItemV2(JSONObject json)
-	{
+	public static MediaItem parseMediaItemV2(JSONObject json) {
 		MediaItem result = new MediaItem();
 		ytVideoV2 video = new ytVideoV2(json);
-		String title = video.title;
-		int comments = video.comments;
-		String description = video.description;
-		int duration = video.duration;
-		String url = video.playerUrl;
-		String thumbnail = video.thumbnail;
-		int numFavorites = video.favoriteCount;
-		int numViews = video.viewCount;
-		int numRatings = video.numRaters;
-		int numNegativeVotes = video.numDislikes;
-		int numPositiveVotes = video.numLikes;
-		double rating = video.averageRating;
-		String created = video.published;
-		String licenseName = video.license;
-		String id = video.id;
+		String title = video.getTitle();
+		int comments = video.getComments();
+		String description = video.getDescription();
+		int duration = video.getDuration();
+		String url = video.getPlayerUrl();
+		String thumbnail = video.getThumbnail();
+		int numFavorites = video.getFavoriteCount();
+		int numViews = video.getViewCount();
+		int numRatings = video.getNumRaters();
+		int numNegativeVotes = video.getNumDislikes();
+		int numPositiveVotes = video.getNumLikes();
+		double rating = video.getAverageRating();
+		String created = video.getPublished();
+		String licenseName = video.getLicense();
+		String id = video.getId();
 		result.setTitle(title);
 		result.setNumComments(comments);
 		result.setDescription(description);
@@ -150,7 +140,7 @@ public class YoutubeParsers
 		result.setNumNegativeVotes(numNegativeVotes);
 		result.setNumPositiveVotes(numPositiveVotes);
 		result.setRating(rating);
-		XMLGregorianCalendar xmlDateCreated = ParseUtilities.getCalendar(created, "yyyy-MM-dd'T'HH:mm:ss");
+		XMLGregorianCalendar xmlDateCreated = ParseUtilities.getCalendar(created, SociosConstants.DATE_TIME_FORMAT);
 		result.setCreated(xmlDateCreated);
 		License license = new License();
 		license.setName(licenseName);
@@ -159,22 +149,20 @@ public class YoutubeParsers
 		result.setType(MediaItemType.VIDEO);
 		result.setSn(SocialNetwork.YOUTUBE);
 		result.setId(id);
-		if (video.author != null)
-		{
-			String userId = video.author.userId;
+		if (video.getAuthor() != null) {
+			String userId = video.getAuthor().getUserId();
 			result.setUserId(userId);
 		}
 		return result;
 	}
 
-	public static MediaItem parseMediaItemV3(JSONObject json)
-	{
+	public static MediaItem parseMediaItemV3(JSONObject json) {
 		MediaItem result = new MediaItem();
 		ytVideo video = new ytVideo(json);
-		String videoId = video.id;
-		String durationStr = video.duration;
-		String licenseName = video.license;
-		long fileSize = video.filesize;
+		String videoId = video.getId();
+		String durationStr = video.getDuration();
+		String licenseName = video.getLicense();
+		long fileSize = video.getFilesize();
 		result.setSn(SocialNetwork.YOUTUBE);
 		result.setId(videoId);
 		int duration = parseDuration(durationStr);
@@ -183,40 +171,36 @@ public class YoutubeParsers
 		license.setName(licenseName);
 		license.setUrl("http://www.youtube.com/t/terms");
 		result.setLicense(license);
-		if (fileSize > 0)
-		{
+		if (fileSize > 0) {
 			result.setFileSize(fileSize);
 		}
 		String url = "http://www.youtube.com/watch?v=" + videoId;
 		result.setUrl(url);
 		result.setType(MediaItemType.VIDEO);
-		if (video.snippet != null)
-		{
-			String title = video.snippet.title;
-			String channelId = video.snippet.channelId;
-			String description = video.snippet.description;
-			String published = video.snippet.publishedAt;
-			List<String> tags = video.snippet.tags;
-			XMLGregorianCalendar xmlDateCreated = ParseUtilities.getCalendar(published, "yyyy-MM-dd'T'HH:mm:ss");
+		if (video.getSnippet() != null) {
+			String title = video.getSnippet().getTitle();
+			String channelId = video.getSnippet().getChannelId();
+			String description = video.getSnippet().getDescription();
+			String published = video.getSnippet().getPublishedAt();
+			List<String> tags = video.getSnippet().getTags();
+			XMLGregorianCalendar xmlDateCreated = ParseUtilities.getCalendar(published, SociosConstants.DATE_TIME_FORMAT);
 			result.setCreated(xmlDateCreated);
 			result.setTitle(title);
 			result.setUserId(channelId);
 			result.setDescription(description);
-			if (video.snippet.thumbnails != null)
-			{
-				String thumbnail = video.snippet.thumbnails.defaultThumb;
+			if (video.getSnippet().getThumbnails() != null) {
+				String thumbnail = video.getSnippet().getThumbnails().getDefaultThumb();
 				result.setThumbnailUrl(thumbnail);
 			}
 			String tagsChain = Utilities.getChain(tags);
 			result.setTags(tagsChain);
 		}
-		if (video.statistics != null)
-		{
-			int likes = video.statistics.likeCount;
-			int dislikes = video.statistics.dislikeCount;
-			int comments = video.statistics.commentCount;
-			int views = video.statistics.viewCount;
-			int favorites = video.statistics.favoriteCount;
+		if (video.getStatistics() != null) {
+			int likes = video.getStatistics().getLikeCount();
+			int dislikes = video.getStatistics().getDislikeCount();
+			int comments = video.getStatistics().getCommentCount();
+			int views = video.getStatistics().getViewCount();
+			int favorites = video.getStatistics().getFavoriteCount();
 			result.setNumPositiveVotes(likes);
 			result.setNumNegativeVotes(dislikes);
 			result.setNumComments(comments);
@@ -226,18 +210,17 @@ public class YoutubeParsers
 		return result;
 	}
 
-	public static Comment parseComment(JSONObject jscomment)
-	{
+	public static Comment parseComment(JSONObject jscomment) {
 		Comment result = new Comment();
 		ytComment comment = new ytComment(jscomment);
-		String id = comment.id;
-		String description = comment.content;
-		String created = comment.published;
-		String userId = comment.userId;
-		String username = comment.username;
+		String id = comment.getId();
+		String description = comment.getContent();
+		String created = comment.getPublished();
+		String userId = comment.getUserId();
+		String username = comment.getUsername();
 		result.setId(id);
 		result.setDescription(description);
-		XMLGregorianCalendar xmlCreated = ParseUtilities.getCalendar(created, "yyyy-MM-dd'T'HH:mm:ss");
+		XMLGregorianCalendar xmlCreated = ParseUtilities.getCalendar(created, SociosConstants.DATE_TIME_FORMAT);
 		result.setCreated(xmlCreated);
 		result.setUserId(userId);
 		result.setUsername(username);
@@ -245,38 +228,34 @@ public class YoutubeParsers
 		return result;
 	}
 
-	public static Activity parseActivity(JSONObject json)
-	{
+	public static Activity parseActivity(JSONObject json) {
 		Activity result = new Activity();
 		ytActivity activity = new ytActivity(json);
-		String id = activity.id;
+		String id = activity.getId();
 		result.setSn(SocialNetwork.YOUTUBE);
 		result.setId(id);
-		if (activity.snippet != null)
-		{
-			String publishedAt = activity.snippet.publishedAt;
-			String title = activity.snippet.title;
-			String channelId = activity.snippet.channelId;
-			String description = activity.snippet.description;
-			String type = activity.snippet.type;
-			String itemVideoId = activity.itemVideoId;
-			String itemChannelId = activity.itemChannelId;
-			XMLGregorianCalendar xmlCreated = ParseUtilities.getCalendar(publishedAt, "yyyy-MM-dd'T'HH:mm:ss");
+		if (activity.getSnippet() != null) {
+			String publishedAt = activity.getSnippet().getPublishedAt();
+			String title = activity.getSnippet().getTitle();
+			String channelId = activity.getSnippet().getChannelId();
+			String description = activity.getSnippet().getDescription();
+			String type = activity.getSnippet().getType();
+			String itemVideoId = activity.getItemVideoId();
+			String itemChannelId = activity.getItemChannelId();
+			XMLGregorianCalendar xmlCreated = ParseUtilities.getCalendar(publishedAt, SociosConstants.DATE_TIME_FORMAT);
 			result.setCreated(xmlCreated);
 			result.setTitle(title);
 			result.setActorId(channelId);
 			result.setDescription(description);
 			result.setType(type);
-			if (Utilities.isValid(itemVideoId))
-			{
+			if (Utilities.isValid(itemVideoId)) {
 				MediaItem item = new MediaItem();
 				item.setSn(SocialNetwork.YOUTUBE);
 				item.setId(itemVideoId);
 				result.getMediaItems().add(item);
 				result.setObjectType(ActivityObjectType.MEDIAITEM);
 			}
-			else if (Utilities.isValid(itemChannelId))
-			{
+			else if (Utilities.isValid(itemChannelId)) {
 				Person person = new Person();
 				person.setSn(SocialNetwork.YOUTUBE);
 				person.setId(channelId);
@@ -287,74 +266,65 @@ public class YoutubeParsers
 		return result;
 	}
 
-	private static int parseDuration(String time)
-	{
+	private static int parseDuration(String time) {
 		int numHours = 0;
 		int numMinutes = 0;
 		int numSeconds = 0;
 		int prod = 0;
-		time = time.toUpperCase();
-		if (time == null || time.isEmpty() || !time.startsWith("PT"))
-		{
+		String myTime = time;
+		myTime = myTime.toUpperCase();
+		if (myTime.isEmpty() || !myTime.startsWith("PT")) {
 			return 0;
 		}
-		time = time.substring(2);
-		if (time.contains("H"))
-		{
-			int hpos = time.indexOf('H');
-			String hours = time.substring(0, hpos);
+		myTime = myTime.substring(2);
+		if (myTime.contains("H")) {
+			int hpos = myTime.indexOf('H');
+			String hours = myTime.substring(0, hpos);
 			numHours = ParseUtilities.parseInt(hours);
-			time = time.substring(hpos + 1, time.length());
+			myTime = myTime.substring(hpos + 1, myTime.length());
 		}
-		if (time.contains("M"))
-		{
-			int mpos = time.indexOf('M');
-			String minutes = time.substring(0, mpos);
+		if (myTime.contains("M")) {
+			int mpos = myTime.indexOf('M');
+			String minutes = myTime.substring(0, mpos);
 			numMinutes = ParseUtilities.parseInt(minutes);
-			time = time.substring(mpos + 1, time.length());
+			myTime = myTime.substring(mpos + 1, myTime.length());
 		}
-		if (time.contains("S"))
-		{
-			int spos = time.indexOf('S');
-			String seconds = time.substring(0, spos);
+		if (myTime.contains("S")) {
+			int spos = myTime.indexOf('S');
+			String seconds = myTime.substring(0, spos);
 			numSeconds = ParseUtilities.parseInt(seconds);
-			time = time.substring(spos + 1, time.length());
+			myTime = myTime.substring(spos + 1, myTime.length());
 		}
 		prod = 3600 * numHours + 60 * numMinutes + numSeconds;
 		return prod;
 	}
 
-	public static SociosException parseNativeException(String data)
-	{
+	public static SociosException parseNativeException(String data) {
 		SociosException result = new SociosException();
 		result.setSocialNetwork(SocialNetwork.YOUTUBE);
-		JSONObject json = null;
-		try
-		{
+		JSONObject json;
+		try {
 			json = new JSONObject(data);
 		}
-		catch (JSONException exc)
-		{
-			try
-			{
+		catch (JSONException exc) {
+			try {
 				json = XML.toJSONObject(data);
 				ytException ytExc = new ytException(json);
-				result.setMessage(ytExc.internalReason);
-				result.setDescription(ytExc.code);
+				result.setMessage(ytExc.getInternalReason());
+				result.setDescription(ytExc.getCode());
 				return result;
 			}
-			catch (Exception exception)
-			{
+			catch (JSONException exception) {
 				result.setDescription(exception.getMessage());
 			}
 			result.setMessage(exc.getMessage());
-			result.setFaultCode(500);
+			result.setFaultCode(SociosConstants.ERROR_500);
 			return result;
 		}
 		gpException gpExc = new gpException(json);
-		result.setFaultCode(gpExc.code);
-		result.setMessage(gpExc.message);
-		result.setDescription(gpExc.reason);
+		result.setFaultCode(gpExc.getCode());
+		result.setMessage(gpExc.getMessage());
+		result.setDescription(gpExc.getReason());
 		return result;
 	}
 }

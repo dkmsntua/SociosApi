@@ -5,6 +5,7 @@ import helper.utilities.ContainerUtilities;
 import helper.utilities.ExceptionsUtilities;
 import helper.utilities.FilterUtilities;
 import helper.utilities.Utilities;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,40 +29,31 @@ import objects.filters.PersonFilter;
 import objects.interfaces.ISnsAdaptor;
 import objects.main.ObjectId;
 
-public class TwitterAdaptor implements ISnsAdaptor
-{
+public class TwitterAdaptor implements ISnsAdaptor {
 	private static SocialNetwork sn = SocialNetwork.TWITTER;
 
-	public TwitterAdaptor()
-	{
+	public TwitterAdaptor() {
 	}
 
 	@Override
-	public PersonsContainer getPersons(List<ObjectId> objectIds)
-	{
+	public PersonsContainer getPersons(List<ObjectId> objectIds) {
 		final PersonsContainer result = new PersonsContainer();
 		ExecutorService pool = Executors.newFixedThreadPool(SociosConstants.threads);
 		List<String> ids = Utilities.getStringList(objectIds);
-		for (final String id : ids)
-		{
-			pool.submit(new Runnable()
-			{
+		for (final String id : ids) {
+			pool.submit(new Runnable() {
 				@Override
-				public void run()
-				{
-					PersonsContainer person = TwitterCalls.getPerson(id, "id");
+				public void run() {
+					PersonsContainer person = TwitterCalls.getPersonById(id);
 					ContainerUtilities.merge(result, person);
-					return;
 				}
 			});
 		}
 		pool.shutdown();
-		try
-		{
+		try {
 			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
 		}
-		catch (InterruptedException e)
-		{
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		pool.shutdownNow();
@@ -69,72 +61,57 @@ public class TwitterAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public PersonsContainer connectedPersons(ObjectId personId)
-	{
+	public PersonsContainer connectedPersons(ObjectId personId) {
 		String id = personId.getId();
-		PersonsContainer result = TwitterCalls.getConnectedPersons(id);
-		return result;
+		return TwitterCalls.getConnectedPersons(id);
 	}
 
 	@Override
-	public PersonsContainer myConnectedPersons(ObjectId personId, String accessToken, String accessSecret)
-	{
-		return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, personId.getId(), 501);
+	public PersonsContainer myConnectedPersons(ObjectId personId, String accessToken, String accessSecret) {
+		return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, personId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public PersonsContainer findPersons(PersonFilter personFilter, ObjectId mediaItemId, ObjectId activityId, ObjectId username)
-	{
+	public PersonsContainer findPersons(PersonFilter personFilter, ObjectId mediaItemId, ObjectId activityId, ObjectId username) {
 		PersonsContainer result = new PersonsContainer();
-		if (personFilter != null)
-		{
+		if (personFilter != null) {
 			List<String> keywords = FilterUtilities.getKeywords(personFilter);
 			String chain = Utilities.getChain(keywords);
 			result = TwitterCalls.searchAuthPersons(chain);
 		}
-		else if (mediaItemId != null)
-		{
+		else if (mediaItemId != null) {
 			String mediaId = mediaItemId.getId();
 			result = TwitterCalls.getPersonForMediaItem(mediaId);
 		}
-		else if (activityId != null)
-		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, activityId.getId(), 501);
+		else if (activityId != null) {
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, activityId.getId(), SociosConstants.ERROR_501);
 		}
-		else if (username != null)
-		{
+		else if (username != null) {
 			String name = username.getId();
-			result = TwitterCalls.getPersons(name, "screen_name");
+			result = TwitterCalls.getPersonByUsername(name);
 		}
 		return result;
 	}
 
 	@Override
-	public MediaItemsContainer getMediaItems(List<ObjectId> objectIds)
-	{
+	public MediaItemsContainer getMediaItems(List<ObjectId> objectIds) {
 		final MediaItemsContainer result = new MediaItemsContainer();
 		ExecutorService pool = Executors.newFixedThreadPool(SociosConstants.threads);
 		List<String> ids = Utilities.getStringList(objectIds);
-		for (final String id : ids)
-		{
-			pool.submit(new Runnable()
-			{
+		for (final String id : ids) {
+			pool.submit(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					MediaItemsContainer mediaItem = TwitterCalls.getMediaItem(id);
 					ContainerUtilities.merge(result, mediaItem);
-					return;
 				}
 			});
 		}
 		pool.shutdown();
-		try
-		{
+		try {
 			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
 		}
-		catch (InterruptedException e)
-		{
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		pool.shutdownNow();
@@ -142,16 +119,13 @@ public class TwitterAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public MediaItemsContainer getMediaItemsForUser(ObjectId personId, ObjectId username)
-	{
-		MediaItemsContainer result = new MediaItemsContainer();
-		if (personId != null)
-		{
+	public MediaItemsContainer getMediaItemsForUser(ObjectId personId, ObjectId username) {
+		MediaItemsContainer result;
+		if (personId != null) {
 			String id = personId.getId();
 			result = TwitterCalls.getMediaItemsForUser(id, "id");
 		}
-		else
-		{
+		else {
 			String id = username.getId();
 			result = TwitterCalls.getMediaItemsForUser(id, "screen_name");
 		}
@@ -159,153 +133,122 @@ public class TwitterAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public MediaItemsContainer getMediaItemsForPage(ObjectId pageId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, pageId.getId(), 501);
+	public MediaItemsContainer getMediaItemsForPage(ObjectId pageId) {
+		return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, pageId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public MediaItemsContainer findMediaItems(MediaItemFilter mediaFilter)
-	{
+	public MediaItemsContainer findMediaItems(MediaItemFilter mediaFilter) {
 		List<String> queries = FilterUtilities.getKeywords(mediaFilter);
 		String query = "";
-		if (queries != null)
-		{
+		if (queries != null) {
 			String chain = Utilities.getChain(queries);
-			try
-			{
-				chain = URLEncoder.encode(chain, "UTF-8");
+			try {
+				chain = URLEncoder.encode(chain, SociosConstants.UTF8);
 			}
-			catch (Exception exc)
-			{
+			catch (UnsupportedEncodingException exc) {
+				System.out.println(exc.getMessage());
 			}
 			query = "q=" + chain;
 		}
 		String language = FilterUtilities.getLanguage(mediaFilter);
-		if (language != null && Utilities.isValidLanguageCode(language))
-		{
-			if (!query.isEmpty())
-			{
+		if (language != null && Utilities.isValidLanguageCode(language)) {
+			if (!query.isEmpty()) {
 				query += "&";
 			}
-			else
-			{
+			else {
 				query += "q=\"\"&";
 			}
 			query += "lang=" + language;
 		}
 		LocationFilter location = mediaFilter.getLocation();
-		String geocode = "";
-		if (location != null && location.getAreaFilter() != null)
-		{
+		String geocode;
+		if (location != null && location.getAreaFilter() != null) {
 			Double latitude = location.getAreaFilter().getLatitude();
 			Double longitude = location.getAreaFilter().getLongitude();
 			Double radius = location.getAreaFilter().getRadius();
-			if (longitude != null && latitude != null && latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180)
-			{
-				if (radius == null)
-				{
+			if (longitude != null && latitude != null && latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
+				if (radius == null) {
 					radius = 10d;
 				}
 				geocode = latitude + "," + longitude + "," + radius + "km";
-				if (!query.isEmpty())
-				{
+				if (!query.isEmpty()) {
 					query += "&";
 				}
-				else
-				{
+				else {
 					query += "q=\"\"&";
 				}
 				query += "geocode=" + geocode;
 			}
 		}
 		DateTimeFilter dateFilter = mediaFilter.getCreated();
-		if (dateFilter != null)
-		{
+		if (dateFilter != null) {
 			XMLGregorianCalendar xmlCal = dateFilter.getTo();
-			if (xmlCal != null)
-			{
+			if (xmlCal != null) {
 				Date dt = xmlCal.toGregorianCalendar().getTime();
-				if (dt != null)
-				{
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					String until = format.format(dt);
-					if (!query.isEmpty())
-					{
-						query += "&until=" + until;
-					}
-					// de dexetai query mono me "until", prepei na exei kai kati
-					// allo oposdipote
-					// oute kan to q=""&until="asdfasdf"
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				String until = format.format(dt);
+				if (!query.isEmpty()) {
+					query += "&until=" + until;
 				}
+				// de dexetai query mono me "until", prepei na exei kai kati
+				// allo oposdipote
+				// oute kan to q=""&until="asdfasdf"
 			}
 		}
 		MediaItemsContainer result = new MediaItemsContainer();
-		if (!query.isEmpty())
-		{
+		if (!query.isEmpty()) {
 			result = TwitterCalls.searchMediaItems(query);
 		}
 		return result;
 	}
 
 	@Override
-	public MediaItemsContainer findRelevantMediaItems(ObjectId mediaItemId)
-	{
+	public MediaItemsContainer findRelevantMediaItems(ObjectId mediaItemId) {
 		String id = mediaItemId.getId();
-		MediaItemsContainer result = TwitterCalls.getRetweets(id);
-		return result;
+		return TwitterCalls.getRetweets(id);
 	}
 
 	@Override
-	public ActivitiesContainer getActivities(List<ObjectId> activityIds)
-	{
-		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, 501);
+	public ActivitiesContainer getActivities(List<ObjectId> activityIds) {
+		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public ActivitiesContainer getActivitiesForUser(ObjectId personId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, personId.getId(), 501);
+	public ActivitiesContainer getActivitiesForUser(ObjectId personId) {
+		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, personId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public ActivitiesContainer findActivities(ActivityFilter activityFilter)
-	{
-		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, 501);
+	public ActivitiesContainer findActivities(ActivityFilter activityFilter) {
+		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public CommentsContainer getComments(List<ObjectId> objectIds)
-	{
-		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, null, 501);
+	public CommentsContainer getComments(List<ObjectId> objectIds) {
+		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, null, SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public CommentsContainer getCommentsForMediaItem(ObjectId mediaItemId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, mediaItemId.getId(), 501);
+	public CommentsContainer getCommentsForMediaItem(ObjectId mediaItemId) {
+		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, mediaItemId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public CommentsContainer getCommentsForActivity(ObjectId activityId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, activityId.getId(), 501);
+	public CommentsContainer getCommentsForActivity(ObjectId activityId) {
+		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, activityId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public ObjectIdContainer postMessage(ObjectId personId, String postText, String accessToken, String accessSecret)
-	{
-		if (!Utilities.isValid(accessSecret))
-		{
-			return ExceptionsUtilities.getException(SociosObject.OBJECTID, null, null, null, 400);
+	public ObjectIdContainer postMessage(ObjectId personId, String postText, String accessToken, String accessSecret) {
+		if (!Utilities.isValid(accessSecret)) {
+			return ExceptionsUtilities.getException(SociosObject.OBJECTID, null, null, null, SociosConstants.ERROR_400);
 		}
-		ObjectIdContainer result = TwitterCalls.postMessage(postText, accessToken, accessSecret);
-		return result;
+		return TwitterCalls.postMessage(postText, accessToken, accessSecret);
 	}
 
 	@Override
-	public String postMessageWithPhoto(String postText, String fileName, String fileData, String accessToken, String accessSecret)
-	{
+	public String postMessageWithPhoto(String postText, String fileName, String fileData, String accessToken, String accessSecret) {
 		return TwitterCalls.postMessageWithPhoto(postText, fileName, fileData, accessToken, accessSecret);
 	}
 }

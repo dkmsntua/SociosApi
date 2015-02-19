@@ -1,15 +1,12 @@
 package objects.enums;
 
-public enum MediaItemType
-{
+public enum MediaItemType {
 	IMAGE, VIDEO, TEXT;
-	public String value()
-	{
+	public String value() {
 		return name();
 	}
 
-	public static MediaItemType fromValue(String v)
-	{
+	public static MediaItemType fromValue(String v) {
 		return valueOf(v);
 	}
 }

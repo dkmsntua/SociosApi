@@ -1,79 +1,169 @@
 package adaptors.youtube.ytObjects;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import helper.utilities.ParseUtilities;
 import helper.utilities.Utilities;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-public class ytPerson
-{
-	public static class ytAuthor
-	{
-		public String name;
-		public String url;
-		public String userId;
+public class ytPerson {
+	private ytAuthor author;
+	private String channelId;
+	private String firstName;
+	private String googlePlusUserId;
+	private String lastName;
+	private String location;
+	private String published;
+	private int subscriberCount;
+	private String summary;
+	private String thumbnail;
+	private String username;
 
-		public ytAuthor()
-		{
-		}
-
-		public ytAuthor(JSONObject json)
-		{
-			String name = ParseUtilities.doubleJsParse(json, "name", "$t");
-			this.name = name;
-			String userId = ParseUtilities.doubleJsParse(json, "yt$userId", "$t");
-			this.userId = userId;
-			String url = ParseUtilities.doubleJsParse(json, "uri", "$t");
-			this.url = url;
-		}
-	}
-	public ytAuthor author;
-	public String channelId;
-	public String firstName;
-	public String googlePlusUserId;
-	public String lastName;
-	public String location;
-	public String published;
-	public int subscriberCount;
-	public String summary;
-	public String thumbnail;
-	public String username;
-
-	public ytPerson()
-	{
+	public ytPerson() {
 	}
 
-	public ytPerson(JSONObject json)
-	{
-		String summary = ParseUtilities.doubleJsParse(json, "summary", "$t");
-		this.summary = summary;
+	public ytPerson(JSONObject json) {
+		this.setSummary(ParseUtilities.doubleJsParse(json, "summary", "$t"));
 		JSONArray authorArray = json.optJSONArray("author");
-		if (Utilities.isValid(authorArray))
-		{
+		if (Utilities.isValid(authorArray)) {
 			JSONObject jsauthor = authorArray.optJSONObject(0);
-			if (jsauthor != null)
-			{
-				ytAuthor author = new ytAuthor(jsauthor);
-				this.author = author;
+			if (jsauthor != null) {
+				this.setAuthor(new ytAuthor(jsauthor));
 			}
 		}
-		String channelId = ParseUtilities.doubleJsParse(json, "yt$channelId", "$t");
-		this.channelId = channelId;
-		String firstName = ParseUtilities.doubleJsParse(json, "yt$firstName", "$t");
-		this.firstName = firstName;
-		String googlePlusUserId = ParseUtilities.doubleJsParse(json, "yt$googlePlusUserId", "$t");
-		this.googlePlusUserId = googlePlusUserId;
-		String lastName = ParseUtilities.doubleJsParse(json, "yt$lastName", "$t");
-		this.lastName = lastName;
-		String location = ParseUtilities.doubleJsParse(json, "yt$location", "$t");
-		this.location = location;
-		int subscriberCount = ParseUtilities.doubleJsParseInt(json, "yt$statistics", "subscriberCount");
-		this.subscriberCount = subscriberCount;
-		String thumbnail = ParseUtilities.doubleJsParse(json, "media$thumbnail", "url");
-		this.thumbnail = thumbnail;
-		String username = ParseUtilities.doubleJsParse(json, "yt$username", "display");
+		this.setChannelId(ParseUtilities.doubleJsParse(json, "yt$channelId", "$t"));
+		this.setFirstName(ParseUtilities.doubleJsParse(json, "yt$firstName", "$t"));
+		this.setGooglePlusUserId(ParseUtilities.doubleJsParse(json, "yt$googlePlusUserId", "$t"));
+		this.setLastName(ParseUtilities.doubleJsParse(json, "yt$lastName", "$t"));
+		this.setLocation(ParseUtilities.doubleJsParse(json, "yt$location", "$t"));
+		this.setSubscriberCount(ParseUtilities.doubleJsParseInt(json, "yt$statistics", "subscriberCount"));
+		this.setThumbnail(ParseUtilities.doubleJsParse(json, "media$thumbnail", "url"));
+		this.setUsername(ParseUtilities.doubleJsParse(json, "yt$username", "display"));
+		this.setPublished(ParseUtilities.doubleJsParse(json, "published", "$t"));
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
 		this.username = username;
-		String published = ParseUtilities.doubleJsParse(json, "published", "$t");
+	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public int getSubscriberCount() {
+		return subscriberCount;
+	}
+
+	public void setSubscriberCount(int subscriberCount) {
+		this.subscriberCount = subscriberCount;
+	}
+
+	public String getPublished() {
+		return published;
+	}
+
+	public void setPublished(String published) {
 		this.published = published;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getGooglePlusUserId() {
+		return googlePlusUserId;
+	}
+
+	public void setGooglePlusUserId(String googlePlusUserId) {
+		this.googlePlusUserId = googlePlusUserId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
+	}
+
+	public ytAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(ytAuthor author) {
+		this.author = author;
+	}
+	public static class ytAuthor {
+		private String name;
+		private String url;
+		private String userId;
+
+		public ytAuthor() {
+		}
+
+		public ytAuthor(JSONObject json) {
+			this.setName(ParseUtilities.doubleJsParse(json, "name", "$t"));
+			this.setUserId(ParseUtilities.doubleJsParse(json, "yt$userId", "$t"));
+			this.setUrl(ParseUtilities.doubleJsParse(json, "uri", "$t"));
+		}
+
+		public String getUserId() {
+			return userId;
+		}
+
+		public void setUserId(String userId) {
+			this.userId = userId;
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
 	}
 }

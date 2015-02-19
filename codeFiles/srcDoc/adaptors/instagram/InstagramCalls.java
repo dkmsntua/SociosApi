@@ -18,78 +18,61 @@ import objects.enums.SociosObject;
 import objects.main.SociosException;
 import objects.main.snException;
 
-public class InstagramCalls
-{
+public class InstagramCalls {
 	private static SocialNetwork sn = SocialNetwork.INSTAGRAM;
 	private static String baseUrl = "https://api.instagram.com/v1";
 	private static String igApplicationKey;
-	static
-	{
-		final InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("socios.properties");
-		final Properties properties = new Properties();
-		try
-		{
+	static {
+		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("socios.properties");
+		Properties properties = new Properties();
+		try {
 			properties.load(inputStream);
-			igApplicationKey = properties.getProperty("igApplicationKey");
 		}
-		catch (Exception exc)
-		{
+		catch (IOException exc) {
 			System.out.println("Static initialization error" + sn + ": " + exc.getMessage());
 		}
+		igApplicationKey = properties.getProperty("igApplicationKey");
 	}
 
-	public static PersonsContainer getPerson(String id)
-	{
-		PersonsContainer result = new PersonsContainer();
+	public static PersonsContainer getPerson(String id) {
+		PersonsContainer result;
 		String requestUrl = baseUrl + "/users/" + id + "?client_id=" + igApplicationKey;
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchPerson(response, id);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.PERSON, sociosException, id);
 		}
 		return result;
 	}
 
-	public static PersonsContainer getConnectedPersons(final String id)
-	{
+	public static PersonsContainer getConnectedPersons(final String id) {
 		final PersonsContainer result = new PersonsContainer();
 		ExecutorService pool = Executors.newFixedThreadPool(2);
-		pool.submit(new Runnable()
-		{
+		pool.submit(new Runnable() {
 			@Override
-			public void run()
-			{
+			public void run() {
 				PersonsContainer followingContainer = getConnectedPersonsByType(id, "follows");
 				ContainerUtilities.merge(result, followingContainer);
-				return;
 			}
 		});
-		pool.submit(new Runnable()
-		{
+		pool.submit(new Runnable() {
 			@Override
-			public void run()
-			{
+			public void run() {
 				PersonsContainer followedByContainer = InstagramCalls.getConnectedPersonsByType(id, "followed-by");
 				ContainerUtilities.merge(result, followedByContainer);
-				return;
 			}
 		});
 		pool.shutdown();
-		try
-		{
+		try {
 			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
 		}
-		catch (InterruptedException e)
-		{
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		pool.shutdownNow();
@@ -97,190 +80,154 @@ public class InstagramCalls
 		return result;
 	}
 
-	public static PersonsContainer getRelevantPersons(String mediaId)
-	{
-		PersonsContainer result = new PersonsContainer();
+	public static PersonsContainer getRelevantPersons(String mediaId) {
+		PersonsContainer result;
 		String requestUrl = baseUrl + "/media/" + mediaId + "?client_id=" + igApplicationKey;
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchRelevantPersons(response, mediaId);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), mediaId, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), mediaId, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.PERSON, sociosException, mediaId);
 		}
 		return result;
 	}
 
-	public static PersonsContainer searchPersons(String username)
-	{
-		PersonsContainer result = new PersonsContainer();
+	public static PersonsContainer searchPersons(String username) {
+		PersonsContainer result;
 		String requestUrl = baseUrl + "/users/search?q=" + username + "&client_id=" + igApplicationKey + "&count=100";
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchPersons(response, username);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), null, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), null, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.PERSON, sociosException, null);
 		}
 		return result;
 	}
 
-	private static PersonsContainer getConnectedPersonsByType(String id, String type)
-	{
-		PersonsContainer result = new PersonsContainer();
+	private static PersonsContainer getConnectedPersonsByType(String id, String type) {
+		PersonsContainer result;
 		String requestUrl = baseUrl + "/users/" + id + "/" + type + "?client_id=" + igApplicationKey + "&count=100";
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchPersons(response, id);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage(), id, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.PERSON, sociosException, id);
 		}
 		return result;
 	}
 
-	public static MediaItemsContainer getMediaItem(String id)
-	{
-		MediaItemsContainer result = new MediaItemsContainer();
+	public static MediaItemsContainer getMediaItem(String id) {
+		MediaItemsContainer result;
 		String requestUrl = baseUrl + "/media/" + id + "?client_id=" + igApplicationKey;
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchMediaItem(response, id);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.MEDIAITEM, sociosException, id);
 		}
 		return result;
 	}
 
-	public static MediaItemsContainer findMyRecentMediaItems(String id)
-	{
-		MediaItemsContainer result = new MediaItemsContainer();
+	public static MediaItemsContainer findMyRecentMediaItems(String id) {
+		MediaItemsContainer result;
 		String requestUrl = baseUrl + "/users/" + id + "/media/recent?client_id=" + igApplicationKey + "&count=100";
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchMediaItems(response, id);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), id, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.MEDIAITEM, sociosException, id);
 		}
 		return result;
 	}
 
-	public static MediaItemsContainer getPopularMediaItems()
-	{
-		MediaItemsContainer result = new MediaItemsContainer();
+	public static MediaItemsContainer getPopularMediaItems() {
+		MediaItemsContainer result;
 		String requestUrl = baseUrl + "/media/popular?client_id=" + igApplicationKey + "&count=100";
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchMediaItems(response, null);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.MEDIAITEM, sociosException, null);
 		}
 		return result;
 	}
 
-	public static MediaItemsContainer searchMediaItems(String tag)
-	{
-		MediaItemsContainer result = new MediaItemsContainer();
+	public static MediaItemsContainer searchMediaItems(String tag) {
+		MediaItemsContainer result;
 		String requestUrl = baseUrl + "/tags/" + tag + "/media/recent?client_id=" + igApplicationKey + "&count=100";
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchMediaItems(response, null);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.MEDIAITEM, sociosException, tag);
 		}
 		return result;
 	}
 
-	public static MediaItemsContainer searchMediaItemsByLocation(String locationQuery)
-	{
-		MediaItemsContainer result = new MediaItemsContainer();
+	public static MediaItemsContainer searchMediaItemsByLocation(String locationQuery) {
+		MediaItemsContainer result;
 		String requestUrl = baseUrl + "/media/search?" + locationQuery + "&client_id=" + igApplicationKey + "&count=100";
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchMediaItems(response, null);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage(), null, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.MEDIAITEM, sociosException, null);
 		}
 		return result;
 	}
 
-	public static CommentsContainer getCommentsForMediaItem(String id)
-	{
-		CommentsContainer result = new CommentsContainer();
+	public static CommentsContainer getCommentsForMediaItem(String id) {
+		CommentsContainer result;
 		String requestUrl = baseUrl + "/media/" + id + "/comments?client_id=" + igApplicationKey;
-		try
-		{
+		try {
 			String response = NetworkUtilities.getResponse(requestUrl);
 			result = InstagramFetchers.fetchComments(response, id);
 		}
-		catch (IOException exc)
-		{
-			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage(), id, 500);
+		catch (IOException exc) {
+			return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, exc.getMessage(), id, SociosConstants.ERROR_500);
 		}
-		catch (snException exc)
-		{
-			SociosException sociosException = InstagramParsers.parseNativeException(exc.data);
+		catch (snException exc) {
+			SociosException sociosException = InstagramParsers.parseNativeException(exc.getData());
 			return ExceptionsUtilities.getNativeException(SociosObject.COMMENT, sociosException, id);
 		}
 		return result;
@@ -313,8 +260,9 @@ public class InstagramCalls
 	 * NetworkUtilities.getResponse(requestUrl); result =
 	 * InstagramFetchers.fetchMediaItems(response, null); } catch (IOException
 	 * exc) { return ExceptionsUtilities.getException(SociosObject.MEDIAITEM,
-	 * sn, exc.getMessage(), null, 500); } catch (snException exc) { SociosException
-	 * sociosException = InstagramParsers.parseNativeException(exc.data); return
+	 * sn, exc.getMessage(), null, SociosConstants.ERROR_500); } catch
+	 * (snException exc) { SociosException sociosException =
+	 * InstagramParsers.parseNativeException(exc.data); return
 	 * ExceptionsUtilities.getNativeException(SociosObject.MEDIAITEM,
 	 * sociosException, null); } return result; }
 	 * 
@@ -325,8 +273,9 @@ public class InstagramCalls
 	 * NetworkUtilities.getResponse(requestUrl); result =
 	 * InstagramFetchers.fetchMediaItems(response, null); } catch (IOException
 	 * exc) { return ExceptionsUtilities.getException(SociosObject.MEDIAITEM,
-	 * sn, exc, null, 500); } catch (snException exc) { SociosException
-	 * sociosException = InstagramParsers.parseNativeException(exc.data); return
+	 * sn, exc, null, SociosConstants.ERROR_500); } catch (snException exc) {
+	 * SociosException sociosException =
+	 * InstagramParsers.parseNativeException(exc.data); return
 	 * ExceptionsUtilities.getNativeException(SociosObject.MEDIAITEM,
 	 * sociosException, null); } return result; }
 	 * 
@@ -337,8 +286,9 @@ public class InstagramCalls
 	 * NetworkUtilities.getResponse(requestUrl); result =
 	 * InstagramFetchers.fetchMediaItems(response, id); } catch (IOException
 	 * exc) { return ExceptionsUtilities.getException(SociosObject.MEDIAITEM,
-	 * sn, exc, id, 500); } catch (snException exc) { SociosException
-	 * sociosException = InstagramParsers.parseNativeException(exc.data); return
+	 * sn, exc, id, SociosConstants.ERROR_500); } catch (snException exc) {
+	 * SociosException sociosException =
+	 * InstagramParsers.parseNativeException(exc.data); return
 	 * ExceptionsUtilities.getNativeException(SociosObject.MEDIAITEM,
 	 * sociosException, id); } return result; } */
 }

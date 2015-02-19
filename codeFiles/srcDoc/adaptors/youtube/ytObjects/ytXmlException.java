@@ -9,18 +9,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "errors", namespace = "http://schemas.google.com/g/2005")
-public class ytXmlException
-{
+public class ytXmlException {
 	@XmlElement(name = "error", type = ytXmlError.class)
 	private List<ytXmlError> error = new ArrayList<ytXmlError>();
 
-	public List<ytXmlError> getError()
-	{
+	public ytXmlException() {
+	}
+
+	public List<ytXmlError> getError() {
 		return error;
 	}
 
-	public void setError(List<ytXmlError> error)
-	{
+	public void setError(List<ytXmlError> error) {
 		this.error = error;
 	}
 }

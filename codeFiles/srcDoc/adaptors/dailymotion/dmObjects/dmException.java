@@ -2,27 +2,44 @@ package adaptors.dailymotion.dmObjects;
 
 import org.json.JSONObject;
 
-public class dmException
-{
-	public int code;
-	public String message;
-	public String type;
+public class dmException {
+	private int code;
+	private String message;
+	private String type;
 
-	public dmException()
-	{
+	public dmException() {
 	}
 
-	public dmException(JSONObject json)
-	{
+	public dmException(JSONObject json) {
 		JSONObject error = json.optJSONObject("error");
-		if (error != null)
-		{
-			int code = error.optInt("code", 0);
-			this.code = code;
-			String message = error.optString("message", null);
-			this.message = message;
-			String type = error.optString("type", null);
-			this.type = type;
+		if (error != null) {
+			this.setCode(error.optInt("code", 0));
+			this.setMessage(error.optString("message", null));
+			this.setType(error.optString("type", null));
 		}
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
 	}
 }

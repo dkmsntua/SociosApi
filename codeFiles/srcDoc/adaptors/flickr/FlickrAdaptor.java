@@ -26,39 +26,30 @@ import objects.filters.PersonFilter;
 import objects.interfaces.ISnsAdaptor;
 import objects.main.ObjectId;
 
-public class FlickrAdaptor implements ISnsAdaptor
-{
+public class FlickrAdaptor implements ISnsAdaptor {
 	private static SocialNetwork sn = SocialNetwork.FLICKR;
 
-	public FlickrAdaptor()
-	{
+	public FlickrAdaptor() {
 	}
 
-	public PersonsContainer getPersons(List<ObjectId> objectIds)
-	{
+	public PersonsContainer getPersons(List<ObjectId> objectIds) {
 		final PersonsContainer result = new PersonsContainer();
 		ExecutorService pool = Executors.newFixedThreadPool(SociosConstants.threads);
 		List<String> ids = Utilities.getStringList(objectIds);
-		for (final String id : ids)
-		{
-			pool.submit(new Runnable()
-			{
+		for (final String id : ids) {
+			pool.submit(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					PersonsContainer person = FlickrCalls.getPerson(id);
 					ContainerUtilities.merge(result, person);
-					return;
 				}
 			});
 		}
 		pool.shutdown();
-		try
-		{
+		try {
 			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
 		}
-		catch (InterruptedException e)
-		{
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		pool.shutdownNow();
@@ -66,24 +57,19 @@ public class FlickrAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public PersonsContainer findPersons(PersonFilter personFilter, ObjectId mediaItemId, ObjectId activityId, ObjectId username)
-	{
+	public PersonsContainer findPersons(PersonFilter personFilter, ObjectId mediaItemId, ObjectId activityId, ObjectId username) {
 		PersonsContainer result = new PersonsContainer();
-		if (personFilter != null)
-		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, null, 501);
+		if (personFilter != null) {
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, null, SociosConstants.ERROR_501);
 		}
-		else if (mediaItemId != null)
-		{
+		else if (mediaItemId != null) {
 			String id = mediaItemId.getId();
 			result = FlickrCalls.getRelevantPersons(id);
 		}
-		else if (activityId != null)
-		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, activityId.getId(), 501);
+		else if (activityId != null) {
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, activityId.getId(), SociosConstants.ERROR_501);
 		}
-		else if (username != null)
-		{
+		else if (username != null) {
 			String name = username.getId();
 			result = FlickrCalls.getPersonByUserName(name);
 		}
@@ -91,45 +77,34 @@ public class FlickrAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public PersonsContainer connectedPersons(ObjectId personId)
-	{
+	public PersonsContainer connectedPersons(ObjectId personId) {
 		String id = personId.getId();
-		PersonsContainer result = FlickrCalls.getConnectedPersons(id);
-		return result;
+		return FlickrCalls.getConnectedPersons(id);
 	}
 
 	@Override
-	public PersonsContainer myConnectedPersons(ObjectId personId, String accessToken, String accessSecret)
-	{
-		PersonsContainer result = FlickrCalls.getMyConnectedPersons(accessToken, accessSecret);
-		return result;
+	public PersonsContainer myConnectedPersons(ObjectId personId, String accessToken, String accessSecret) {
+		return FlickrCalls.getMyConnectedPersons(accessToken, accessSecret);
 	}
 
-	public MediaItemsContainer getMediaItems(List<ObjectId> objectIds)
-	{
+	public MediaItemsContainer getMediaItems(List<ObjectId> objectIds) {
 		final MediaItemsContainer result = new MediaItemsContainer();
 		ExecutorService pool = Executors.newFixedThreadPool(SociosConstants.threads);
 		List<String> ids = Utilities.getStringList(objectIds);
-		for (final String id : ids)
-		{
-			pool.submit(new Runnable()
-			{
+		for (final String id : ids) {
+			pool.submit(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					MediaItemsContainer mediaItem = FlickrCalls.getMediaItem(id);
 					ContainerUtilities.merge(result, mediaItem);
-					return;
 				}
 			});
 		}
 		pool.shutdown();
-		try
-		{
+		try {
 			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
 		}
-		catch (InterruptedException e)
-		{
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		pool.shutdownNow();
@@ -137,147 +112,121 @@ public class FlickrAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public MediaItemsContainer getMediaItemsForUser(ObjectId personId, ObjectId username)
-	{
-		MediaItemsContainer result = new MediaItemsContainer();
-		if (personId != null)
-		{
+	public MediaItemsContainer getMediaItemsForUser(ObjectId personId, ObjectId username) {
+		MediaItemsContainer result;
+		if (personId != null) {
 			String id = personId.getId();
 			result = FlickrCalls.getMediaItemsForUser(id);
 		}
-		else
-		{
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, username.getId(), 501);
+		else {
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, username.getId(), SociosConstants.ERROR_501);
 		}
 		return result;
 	}
 
 	@Override
-	public MediaItemsContainer getMediaItemsForPage(ObjectId pageId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, pageId.getId(), 501);
+	public MediaItemsContainer getMediaItemsForPage(ObjectId pageId) {
+		return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, pageId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public MediaItemsContainer findMediaItems(MediaItemFilter mediaFilter)
-	{
+	public MediaItemsContainer findMediaItems(MediaItemFilter mediaFilter) {
 		List<String> queries = new ArrayList<String>();
 		List<String> keywords = FilterUtilities.getKeywords(mediaFilter);
-		if (keywords != null)
-		{
+		if (keywords != null) {
 			String tagsParam = "tags=" + Utilities.getChain(keywords);
 			queries.add(tagsParam);
 		}
 		LicenseType licenseType = mediaFilter.getLicenseType();
-		if (licenseType != null && licenseType.equals(LicenseType.CC))
-		{
+		if (licenseType != null && licenseType.equals(LicenseType.CC)) {
 			String licenseParam = "license=1,2,3,4,5,6";
 			queries.add(licenseParam);
 		}
 		LocationFilter location = mediaFilter.getLocation();
-		if (location != null)
-		{
+		if (location != null) {
 			Double latitude = location.getAreaFilter().getLatitude();
-			if (latitude != null && !latitude.toString().isEmpty())
-			{
+			if (latitude != null && !latitude.toString().isEmpty()) {
 				String latitudeParam = "lat=" + latitude;
 				queries.add(latitudeParam);
 			}
 			Double longitude = location.getAreaFilter().getLongitude();
-			if (longitude != null && !longitude.toString().isEmpty())
-			{
+			if (longitude != null && !longitude.toString().isEmpty()) {
 				String longitudeParam = "lon=" + longitude;
 				queries.add(longitudeParam);
 			}
 			Double radius = location.getAreaFilter().getRadius();
-			if (radius != null && !radius.toString().isEmpty())
-			{
+			if (radius != null && !radius.toString().isEmpty()) {
 				String radiusParam = "radius=" + radius;
 				queries.add(radiusParam);
 			}
 		}
 		XMLGregorianCalendar from = FilterUtilities.getFrom(mediaFilter);
-		if (from != null)
-		{
-			long timestamp = from.toGregorianCalendar().getTimeInMillis() / 1000;
+		if (from != null) {
+			long timestamp = from.toGregorianCalendar().getTimeInMillis() / SociosConstants.ONE_THOUSAND;
 			String fromParam = "min_upload_date=" + timestamp;
 			queries.add(fromParam);
 		}
 		XMLGregorianCalendar to = FilterUtilities.getTo(mediaFilter);
-		if (to != null)
-		{
-			long timestamp = to.toGregorianCalendar().getTimeInMillis() / 1000;
+		if (to != null) {
+			long timestamp = to.toGregorianCalendar().getTimeInMillis() / SociosConstants.ONE_THOUSAND;
 			String toParam = "max_upload_date=" + timestamp;
 			queries.add(toParam);
 		}
 		String chain = Utilities.getChain(queries, "&");
-		MediaItemsContainer result = new MediaItemsContainer();
-		if (Utilities.isValid(chain))
-		{
+		MediaItemsContainer result;
+		if (Utilities.isValid(chain)) {
 			result = FlickrCalls.searchMediaItems(chain);
 		}
-		else
-		{
+		else {
 			result = FlickrCalls.getRandomMedia();
 		}
 		return result;
 	}
 
 	@Override
-	public MediaItemsContainer findRelevantMediaItems(ObjectId mediaItemId)
-	{
+	public MediaItemsContainer findRelevantMediaItems(ObjectId mediaItemId) {
 		String id = mediaItemId.getId();
-		MediaItemsContainer result = FlickrCalls.findRelevantMediaItems(id);
-		return result;
+		return FlickrCalls.findRelevantMediaItems(id);
 	}
 
 	@Override
-	public ActivitiesContainer getActivities(List<ObjectId> objectIds)
-	{
-		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, 501);
+	public ActivitiesContainer getActivities(List<ObjectId> objectIds) {
+		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public ActivitiesContainer getActivitiesForUser(ObjectId personId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, personId.getId(), 501);
+	public ActivitiesContainer getActivitiesForUser(ObjectId personId) {
+		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, personId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public ActivitiesContainer findActivities(ActivityFilter activityFilter)
-	{
-		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, 501);
+	public ActivitiesContainer findActivities(ActivityFilter activityFilter) {
+		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public CommentsContainer getComments(List<ObjectId> objectIds)
-	{
-		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, null, 501);
+	public CommentsContainer getComments(List<ObjectId> objectIds) {
+		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, null, SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public CommentsContainer getCommentsForMediaItem(ObjectId mediaItemId)
-	{
+	public CommentsContainer getCommentsForMediaItem(ObjectId mediaItemId) {
 		String id = mediaItemId.getId();
-		CommentsContainer result = FlickrCalls.getCommentsForMediaItem(id);
-		return result;
+		return FlickrCalls.getCommentsForMediaItem(id);
 	}
 
 	@Override
-	public CommentsContainer getCommentsForActivity(ObjectId activityId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, activityId.getId(), 501);
+	public CommentsContainer getCommentsForActivity(ObjectId activityId) {
+		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, activityId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public ObjectIdContainer postMessage(ObjectId personId, String postText, String accessToken, String accessSecret)
-	{
-		return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, null, null, 501);
+	public ObjectIdContainer postMessage(ObjectId personId, String postText, String accessToken, String accessSecret) {
+		return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, null, null, SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public String postMessageWithPhoto(String postText, String fileName, String fileData, String accessToken, String accessSecret)
-	{
-		return ExceptionsUtilities.exc501;
+	public String postMessageWithPhoto(String postText, String fileName, String fileData, String accessToken, String accessSecret) {
+		return ExceptionsUtilities.getExc501();
 	}
 }

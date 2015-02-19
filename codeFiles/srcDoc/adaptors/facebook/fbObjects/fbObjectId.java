@@ -2,20 +2,31 @@ package adaptors.facebook.fbObjects;
 
 import org.json.JSONObject;
 
-public class fbObjectId
-{
-	public String id;
-	public String name;
+public class fbObjectId {
+	private String id;
+	private String name;
 
-	public fbObjectId()
-	{
+	public fbObjectId() {
 	}
 
-	public fbObjectId(JSONObject json)
-	{
-		String id = json.optString("id", null);
-		this.id = id;
-		String name = json.optString("name", null);
+	public fbObjectId(JSONObject json) {
+		this.setId(json.optString("id", null));
+		this.setName(json.optString("name", null));
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

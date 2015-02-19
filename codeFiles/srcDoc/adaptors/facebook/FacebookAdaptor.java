@@ -22,64 +22,50 @@ import objects.filters.PersonFilter;
 import objects.interfaces.ISnsAdaptor;
 import objects.main.ObjectId;
 
-public class FacebookAdaptor implements ISnsAdaptor
-{
+public class FacebookAdaptor implements ISnsAdaptor {
 	private static SocialNetwork sn = SocialNetwork.FACEBOOK;
 
-	public FacebookAdaptor()
-	{
+	public FacebookAdaptor() {
 	}
 
-	public PersonsContainer getPersons(List<ObjectId> objectIds)
-	{
+	public PersonsContainer getPersons(List<ObjectId> objectIds) {
 		final PersonsContainer result = new PersonsContainer();
 		ExecutorService pool = Executors.newFixedThreadPool(SociosConstants.threads);
 		List<String> ids = Utilities.getStringList(objectIds);
-		for (final String id : ids)
-		{
-			pool.submit(new Runnable()
-			{
+		for (final String id : ids) {
+			pool.submit(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					PersonsContainer person = FacebookCalls.getPerson(id);
 					ContainerUtilities.merge(result, person);
-					return;
 				}
 			});
 		}
 		pool.shutdown();
-		try
-		{
+		try {
 			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
 		}
-		catch (InterruptedException e)
-		{
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		pool.shutdownNow();
 		return result;
 	}
 
-	public PersonsContainer findPersons(PersonFilter personFilter, ObjectId mediaItemId, ObjectId activityId, ObjectId username)
-	{
+	public PersonsContainer findPersons(PersonFilter personFilter, ObjectId mediaItemId, ObjectId activityId, ObjectId username) {
 		PersonsContainer result = null;
-		if (personFilter != null)
-		{
+		if (personFilter != null) {
 			List<String> keywords = FilterUtilities.getKeywords(personFilter);
 			String chain = Utilities.getChain(keywords);
 			result = FacebookCalls.searchAuthPersons(chain);
 		}
-		else if (mediaItemId != null)
-		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, mediaItemId.getId(), 501);
+		else if (mediaItemId != null) {
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, mediaItemId.getId(), SociosConstants.ERROR_501);
 		}
-		else if (activityId != null)
-		{
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, activityId.getId(), 501);
+		else if (activityId != null) {
+			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, activityId.getId(), SociosConstants.ERROR_501);
 		}
-		else if (username != null)
-		{
+		else if (username != null) {
 			String name = username.getId();
 			result = FacebookCalls.getPerson(name);
 		}
@@ -87,45 +73,35 @@ public class FacebookAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public PersonsContainer connectedPersons(ObjectId personId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, personId.getId(), 501);
+	public PersonsContainer connectedPersons(ObjectId personId) {
+		return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, personId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public PersonsContainer myConnectedPersons(ObjectId personId, String accessToken, String accessSecret)
-	{
+	public PersonsContainer myConnectedPersons(ObjectId personId, String accessToken, String accessSecret) {
 		String id = personId.getId();
-		PersonsContainer result = FacebookCalls.getMyConnectedPersons(id, accessToken);
-		return result;
+		return FacebookCalls.getMyConnectedPersons(id, accessToken);
 	}
 
 	@Override
-	public MediaItemsContainer getMediaItems(List<ObjectId> objectIds)
-	{
+	public MediaItemsContainer getMediaItems(List<ObjectId> objectIds) {
 		final MediaItemsContainer result = new MediaItemsContainer();
 		ExecutorService pool = Executors.newFixedThreadPool(SociosConstants.threads);
 		List<String> ids = Utilities.getStringList(objectIds);
-		for (final String id : ids)
-		{
-			pool.submit(new Runnable()
-			{
+		for (final String id : ids) {
+			pool.submit(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					MediaItemsContainer mediaItem = FacebookCalls.getMediaItem(id);
 					ContainerUtilities.merge(result, mediaItem);
-					return;
 				}
 			});
 		}
 		pool.shutdown();
-		try
-		{
+		try {
 			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
 		}
-		catch (InterruptedException e)
-		{
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		pool.shutdownNow();
@@ -133,37 +109,28 @@ public class FacebookAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public MediaItemsContainer getMediaItemsForUser(ObjectId personId, ObjectId username)
-	{
-		MediaItemsContainer result = new MediaItemsContainer();
-		String id = null;
-		if (personId != null)
-		{
+	public MediaItemsContainer getMediaItemsForUser(ObjectId personId, ObjectId username) {
+		String id;
+		if (personId != null) {
 			id = personId.getId();
 		}
-		else
-		{
+		else {
 			id = username.getId();
 		}
-		result = FacebookCalls.getMediaItemsForEntity(id, false);
-		return result;
+		return FacebookCalls.getMediaItemsForEntity(id, false);
 	}
 
 	@Override
-	public MediaItemsContainer getMediaItemsForPage(ObjectId pageId)
-	{
+	public MediaItemsContainer getMediaItemsForPage(ObjectId pageId) {
 		String id = pageId.getId();
-		MediaItemsContainer result = FacebookCalls.getMediaItemsForEntity(id, true);
-		return result;
+		return FacebookCalls.getMediaItemsForEntity(id, true);
 	}
 
 	@Override
-	public MediaItemsContainer findMediaItems(MediaItemFilter mediaFilter)
-	{
+	public MediaItemsContainer findMediaItems(MediaItemFilter mediaFilter) {
 		MediaItemsContainer result = new MediaItemsContainer();
 		List<String> keywords = FilterUtilities.getKeywords(mediaFilter);
-		if (keywords != null)
-		{
+		if (keywords != null) {
 			String query = Utilities.getChain(keywords);
 			result = FacebookCalls.searchMediaItems(query);
 		}
@@ -171,37 +138,29 @@ public class FacebookAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public MediaItemsContainer findRelevantMediaItems(ObjectId mediaItemId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, mediaItemId.getId(), 501);
+	public MediaItemsContainer findRelevantMediaItems(ObjectId mediaItemId) {
+		return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, mediaItemId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public ActivitiesContainer getActivities(List<ObjectId> objectIds)
-	{
+	public ActivitiesContainer getActivities(List<ObjectId> objectIds) {
 		final ActivitiesContainer result = new ActivitiesContainer();
 		ExecutorService pool = Executors.newFixedThreadPool(SociosConstants.threads);
 		List<String> ids = Utilities.getStringList(objectIds);
-		for (final String id : ids)
-		{
-			pool.submit(new Runnable()
-			{
+		for (final String id : ids) {
+			pool.submit(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					ActivitiesContainer mediaItem = FacebookCalls.getActivity(id);
 					ContainerUtilities.merge(result, mediaItem);
-					return;
 				}
 			});
 		}
 		pool.shutdown();
-		try
-		{
+		try {
 			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
 		}
-		catch (InterruptedException e)
-		{
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		pool.shutdownNow();
@@ -209,45 +168,35 @@ public class FacebookAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public ActivitiesContainer getActivitiesForUser(ObjectId personId)
-	{
+	public ActivitiesContainer getActivitiesForUser(ObjectId personId) {
 		String id = personId.getId();
-		ActivitiesContainer result = FacebookCalls.getActivitiesForUser(id);
-		return result;
+		return FacebookCalls.getActivitiesForUser(id);
 	}
 
 	@Override
-	public ActivitiesContainer findActivities(ActivityFilter activityFilter)
-	{
-		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, 501);
+	public ActivitiesContainer findActivities(ActivityFilter activityFilter) {
+		return ExceptionsUtilities.getException(SociosObject.ACTIVITY, sn, null, null, SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public CommentsContainer getComments(List<ObjectId> objectIds)
-	{
+	public CommentsContainer getComments(List<ObjectId> objectIds) {
 		final CommentsContainer result = new CommentsContainer();
 		ExecutorService pool = Executors.newFixedThreadPool(SociosConstants.threads);
 		List<String> ids = Utilities.getStringList(objectIds);
-		for (final String id : ids)
-		{
-			pool.submit(new Runnable()
-			{
+		for (final String id : ids) {
+			pool.submit(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					CommentsContainer activity = FacebookCalls.getComment(id);
 					ContainerUtilities.merge(result, activity);
-					return;
 				}
 			});
 		}
 		pool.shutdown();
-		try
-		{
+		try {
 			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
 		}
-		catch (InterruptedException e)
-		{
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		pool.shutdownNow();
@@ -255,34 +204,27 @@ public class FacebookAdaptor implements ISnsAdaptor
 	}
 
 	@Override
-	public CommentsContainer getCommentsForMediaItem(ObjectId mediaItemId)
-	{
+	public CommentsContainer getCommentsForMediaItem(ObjectId mediaItemId) {
 		String id = mediaItemId.getId();
-		CommentsContainer result = FacebookCalls.getCommentsForMediaItem(id);
-		return result;
+		return FacebookCalls.getCommentsForMediaItem(id);
 	}
 
 	@Override
-	public CommentsContainer getCommentsForActivity(ObjectId activityId)
-	{
-		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, activityId.getId(), 501);
+	public CommentsContainer getCommentsForActivity(ObjectId activityId) {
+		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, activityId.getId(), SociosConstants.ERROR_501);
 	}
 
 	@Override
-	public ObjectIdContainer postMessage(ObjectId personId, String postText, String accessToken, String accessSecret)
-	{
-		if (!Utilities.clean(personId))
-		{
-			return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, null, null, 400);
+	public ObjectIdContainer postMessage(ObjectId personId, String postText, String accessToken, String accessSecret) {
+		if (!Utilities.clean(personId)) {
+			return ExceptionsUtilities.getException(SociosObject.OBJECTID, sn, null, null, SociosConstants.ERROR_400);
 		}
 		String id = personId.getId();
-		ObjectIdContainer result = FacebookCalls.postMessage(id, postText, accessToken);
-		return result;
+		return FacebookCalls.postMessage(id, postText, accessToken);
 	}
 
 	@Override
-	public String postMessageWithPhoto(String postText, String fileName, String fileData, String accessToken, String accessSecret)
-	{
-		return ExceptionsUtilities.exc501;
+	public String postMessageWithPhoto(String postText, String fileName, String fileData, String accessToken, String accessSecret) {
+		return ExceptionsUtilities.getExc501();
 	}
 }

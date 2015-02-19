@@ -1,34 +1,73 @@
 package adaptors.googlep.gpObjects;
 
-import org.json.JSONObject;
 import helper.utilities.ParseUtilities;
+import org.json.JSONObject;
 
-public class gpComment
-{
-	public String content;
-	public String id;
-	public int plusOners;
-	public String published;
-	public String userId;
-	public String username;
+public class gpComment {
+	private String content;
+	private String id;
+	private int plusOners;
+	private String published;
+	private String userId;
+	private String username;
 
-	public gpComment()
-	{
+	public gpComment() {
 	}
 
-	public gpComment(JSONObject json)
-	{
-		String id = json.optString("id", null);
-		this.id = id;
-		String published = json.optString("published", null);
-		this.published = published;
-		String userId = ParseUtilities.doubleJsParse(json, "actor", "id");
-		this.userId = userId;
-		String username = ParseUtilities.doubleJsParse(json, "actor", "displayName");
+	public gpComment(JSONObject json) {
+		this.setId(json.optString("id", null));
+		this.setPublished(json.optString("published", null));
+		this.setUserId(ParseUtilities.doubleJsParse(json, "actor", "id"));
+		this.setUsername(ParseUtilities.doubleJsParse(json, "actor", "displayName"));
+		this.setContent(ParseUtilities.doubleJsParse(json, "object", "content"));
+		this.setPlusOners(ParseUtilities.doubleJsParseInt(json, "plusoners", "totalItems"));
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
 		this.username = username;
-		String content = ParseUtilities.doubleJsParse(json, "object", "content");
-		this.content = content;
-		int plusOners = ParseUtilities.doubleJsParseInt(json, "plusoners", "totalItems");
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getPublished() {
+		return published;
+	}
+
+	public void setPublished(String published) {
+		this.published = published;
+	}
+
+	public int getPlusOners() {
+		return plusOners;
+	}
+
+	public void setPlusOners(int plusOners) {
 		this.plusOners = plusOners;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 }

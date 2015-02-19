@@ -5,212 +5,176 @@ import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 import objects.enums.SocialNetwork;
 
-public class Person
-{
-	protected String id;
-	protected SocialNetwork sn;
-	protected String aboutMe;
-	protected List<Address> addresses;
-	protected XMLGregorianCalendar birthday;
-	protected Address currentLocation;
-	protected String username;
-	protected String email;
-	protected String gender;
-	protected Name name;
-	protected List<String> photos;
-	protected String profileUrl;
-	protected XMLGregorianCalendar memberSince;
-	protected String thumbnailUrl;
-	protected Integer utcOffset;
-	protected Integer numFriends;
-	protected Integer inDegree;
-	protected Integer outDegree;
+public class Person {
+	private String id;
+	private SocialNetwork sn;
+	private String aboutMe;
+	private List<Address> addresses;
+	private XMLGregorianCalendar birthday;
+	private Address currentLocation;
+	private String username;
+	private String email;
+	private String gender;
+	private Name name;
+	private List<String> photos;
+	private String profileUrl;
+	private XMLGregorianCalendar memberSince;
+	private String thumbnailUrl;
+	private Integer utcOffset;
+	private Integer numFriends;
+	private Integer inDegree;
+	private Integer outDegree;
 
-	public String getId()
-	{
+	public Person() {
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(String value)
-	{
+	public void setId(String value) {
 		this.id = value;
 	}
 
-	public SocialNetwork getSn()
-	{
+	public SocialNetwork getSn() {
 		return sn;
 	}
 
-	public void setSn(SocialNetwork value)
-	{
+	public void setSn(SocialNetwork value) {
 		this.sn = value;
 	}
 
-	public String getAboutMe()
-	{
+	public String getAboutMe() {
 		return aboutMe;
 	}
 
-	public void setAboutMe(String value)
-	{
+	public void setAboutMe(String value) {
 		this.aboutMe = value;
 	}
 
-	public List<Address> getAddresses()
-	{
-		if (addresses == null)
-		{
+	public List<Address> getAddresses() {
+		if (addresses == null) {
 			addresses = new ArrayList<Address>();
 		}
 		return this.addresses;
 	}
 
-	public void setAddresses(List<Address> value)
-	{
+	public void setAddresses(List<Address> value) {
 		this.addresses = value;
 	}
 
-	public XMLGregorianCalendar getBirthday()
-	{
+	public XMLGregorianCalendar getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(XMLGregorianCalendar value)
-	{
+	public void setBirthday(XMLGregorianCalendar value) {
 		this.birthday = value;
 	}
 
-	public Address getCurrentLocation()
-	{
+	public Address getCurrentLocation() {
 		return currentLocation;
 	}
 
-	public void setCurrentLocation(Address value)
-	{
+	public void setCurrentLocation(Address value) {
 		this.currentLocation = value;
 	}
 
-	public String getUsername()
-	{
+	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String value)
-	{
+	public void setUsername(String value) {
 		this.username = value;
 	}
 
-	public String getEmail()
-	{
+	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String value)
-	{
+	public void setEmail(String value) {
 		this.email = value;
 	}
 
-	public String getGender()
-	{
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(String value)
-	{
+	public void setGender(String value) {
 		this.gender = value;
 	}
 
-	public Name getName()
-	{
+	public Name getName() {
 		return name;
 	}
 
-	public void setName(Name value)
-	{
+	public void setName(Name value) {
 		this.name = value;
 	}
 
-	public List<String> getPhotos()
-	{
-		if (photos == null)
-		{
+	public List<String> getPhotos() {
+		if (photos == null) {
 			photos = new ArrayList<String>();
 		}
 		return this.photos;
 	}
 
-	public void setPhotos(List<String> photos)
-	{
+	public void setPhotos(List<String> photos) {
 		this.photos = photos;
 	}
 
-	public String getProfileUrl()
-	{
+	public String getProfileUrl() {
 		return profileUrl;
 	}
 
-	public void setProfileUrl(String value)
-	{
+	public void setProfileUrl(String value) {
 		this.profileUrl = value;
 	}
 
-	public XMLGregorianCalendar getMemberSince()
-	{
+	public XMLGregorianCalendar getMemberSince() {
 		return memberSince;
 	}
 
-	public void setMemberSince(XMLGregorianCalendar value)
-	{
+	public void setMemberSince(XMLGregorianCalendar value) {
 		this.memberSince = value;
 	}
 
-	public String getThumbnailUrl()
-	{
+	public String getThumbnailUrl() {
 		return thumbnailUrl;
 	}
 
-	public void setThumbnailUrl(String value)
-	{
+	public void setThumbnailUrl(String value) {
 		this.thumbnailUrl = value;
 	}
 
-	public Integer getUtcOffset()
-	{
+	public Integer getUtcOffset() {
 		return utcOffset;
 	}
 
-	public void setUtcOffset(Integer value)
-	{
+	public void setUtcOffset(Integer value) {
 		this.utcOffset = value;
 	}
 
-	public Integer getNumFriends()
-	{
+	public Integer getNumFriends() {
 		return numFriends;
 	}
 
-	public void setNumFriends(Integer value)
-	{
+	public void setNumFriends(Integer value) {
 		this.numFriends = value;
 	}
 
-	public Integer getInDegree()
-	{
+	public Integer getInDegree() {
 		return inDegree;
 	}
 
-	public void setInDegree(Integer value)
-	{
+	public void setInDegree(Integer value) {
 		this.inDegree = value;
 	}
 
-	public Integer getOutDegree()
-	{
+	public Integer getOutDegree() {
 		return outDegree;
 	}
 
-	public void setOutDegree(Integer value)
-	{
+	public void setOutDegree(Integer value) {
 		this.outDegree = value;
 	}
 }
