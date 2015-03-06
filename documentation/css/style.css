@@ -301,3 +301,7 @@ td {
 .codeFiles {
 	color: #866e93;
 }
+
+.server {
+	cursor: pointer;
+}

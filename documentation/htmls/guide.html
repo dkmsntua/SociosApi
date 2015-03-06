@@ -6,6 +6,13 @@
 <title>Socios Doc. - Guide</title>
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 <script type="text/javascript" src="../scripts/jquery.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.server').click(function(){
+			$(this).next().slideToggle();
+		});
+	});
+</script>
 </head>
 <body>
 	<div id="container">
@@ -38,37 +45,85 @@
 			</div>
 			<div class="description">
 				<h4>Installation</h4>
-				<p>All the code you need to run SociosApi can be found in the "codeFiles" folder.</p>
-				<p>For this project we used * :</p>
-				<ul>
-					<li>Eclipse Java EE IDE for Web Developers. Version: Kepler Service Release 2</li>
-					<li>GlassFish Server Open Source Edition 4.1</li>
-					<li>jdk1.8.0_20</li>
-				</ul>
-				<p>Please follow these steps:</p>
-				<ul>
-					<li>Create and register applications for the social networks you want to use (see next section).</li>
-					<li>In the "socios.properties" file replace the dummy values with your own application credentials.</li>
-					<li>Move the socios.properties file in: "\glassfish4.1\glassfish\domains\domain1\lib\classes".</li>
-					<li>In eclipse create a Dynamic Web Project and name it "SociosApi" (make sure that the correct target runtime for your glassfish is
-						selected).</li>
-					<li>Copy the "web.xml" file in the "SociosApi\WebContent\WEB-INF" folder (if a "web.xml" file already exists there, then replace it).</li>
-					<li>Copy all the libs of the "libDoc" folder in "SociosApi\WebContent\WEB-INF\lib".</li>
-					<li>Copy all the subfolders of "srcDoc" folder in the "src" folder of your project in eclipse.</li>
-					<li>Deploy the project ("Run As -&gt; Run on Server").</li>
-				</ul>
-				<p>If everything went ok, you should be able to navigate to the wsdl and the wadl:</p>
-				<ul>
-					<li>http://localhost:8080/SociosApi/SociosApiSoapService?wsdl</li>
-					<li>http://localhost:8080/SociosApi/rest/application.wadl</li>
-				</ul>
-				<p>Calling this url:</p>
-				<ul>
-					<li>http://localhost:8080/SociosApi/rest/socios/hello</li>
-				</ul>
-				<p>should return "hello!!".</p>
-				<p>* In order to run the project on different servers or older versions of java, you might need to make minor code or configuration twitches.
-				</p>
+				<p>For this project we used Eclipse Java EE IDE for Web Developers. Version: Kepler Service Release 2</p>
+				<h4 class="server">Glassfish</h4>
+				<div id="glassfish" class="hidden">
+					<p>We used:</p>
+					<ul>
+						<li>GlassFish Server Open Source Edition 4.1</li>
+						<li>jdk1.8.0_20</li>
+					</ul>
+					<p>In order to deploy SocIos on a Glassfish server you will need:</p>
+					<ul>
+						<li>The "socios.properties" file located inside the "codeFiles" folder</li>
+						<li>The "srcDoc" folder</li>
+						<li>The "ResourcesForGlassfish" folder</li>
+					</ul>
+					<p>Steps:</p>
+					<ul>
+						<li>Create and register applications for the social networks you want to use (see next section).</li>
+						<li>In the "socios.properties" file replace the dummy values with your own application credentials.</li>
+						<li>Move the socios.properties file in: "\glassfish4.1\glassfish\domains\domain1\lib\classes".</li>
+						<li>In eclipse create a Dynamic Web Project and name it "SociosApi" (make sure that the correct target runtime for your glassfish is
+							selected).</li>
+						<li>Copy the "web.xml" file from the "ResourcesForGlassfish" folder, in the "SociosApi\WebContent\WEB-INF" folder of your eclipse project (if
+							a "web.xml" file already exists there, then replace it).</li>
+						<li>Copy all the libs of the "ResourcesForGlassfish"->"libDoc" folder in "SociosApi\WebContent\WEB-INF\lib". (Eclipse will automatically
+							detect the new libraries and add them to the build bath).</li>
+						<li>Copy all the subfolders of "srcDoc" folder in the "src" folder of your project in eclipse.</li>
+						<li>Deploy the project ("Run As -&gt; Run on Server").</li>
+					</ul>
+					<p>If everything went ok, you should be able to navigate to the wsdl and the wadl:</p>
+					<ul>
+						<li><a href="http://localhost:8080/SociosApi/SociosApiSoapService?wsdl" target="_blank">http://localhost:8080/SociosApi/SociosApiSoapService?wsdl</a></li>
+						<li><a href="http://localhost:8080/SociosApi/rest/application.wadl" target="_blank">http://localhost:8080/SociosApi/rest/application.wadl</a></li>
+					</ul>
+					<p>Calling this url:</p>
+					<ul>
+						<li><a href="http://localhost:8080/SociosApi/rest/socios/hello" target="_blank">http://localhost:8080/SociosApi/rest/socios/hello</a></li>
+					</ul>
+					<p>should return "hello!!".</p>
+				</div>
+				<h4 class="server">Tomcat</h4>
+				<div id="tomcat" class="hidden">
+					<p>We used:</p>
+					<ul>
+						<li>Apache Tomcat 7.0</li>
+						<li>jdk1.7.0_67</li>
+					</ul>
+					<p>In order to deploy SocIos on a Tomcat server you will need:</p>
+					<ul>
+						<li>The "socios.properties" file located inside the "codeFiles" folder</li>
+						<li>The "srcDoc" folder</li>
+						<li>The "ResourcesForTomcat" folder</li>
+					</ul>
+					<p>Steps:</p>
+					<ul>
+						<li>Create and register applications for the social networks you want to use (see next section).</li>
+						<li>In the "socios.properties" file replace the dummy values with your own application credentials.</li>
+						<li>Move the socios.properties file in: "\tomkat7\conf".</li>
+						<li>In eclipse create a Dynamic Web Project and name it "SociosApi" (make sure that the correct target runtime for your apache tomcat is
+							selected).</li>
+						<li>Copy the "web.xml" and the "sun-jaxws.xml" files from the "ResourcesForTomcat" folder, in the "SociosApi\WebContent\WEB-INF" folder of your eclipse project (if
+							a "web.xml" file already exists there, then replace it).</li>
+						<li>Copy all the libs of the "ResourcesForTomcat"->"libDoc" folder in "SociosApi\WebContent\WEB-INF\lib". (Eclipse will automatically
+							detect the new libraries and add them to the build bath).</li>
+						<li>Copy all the subfolders of "srcDoc" folder in the "src" folder of your project in eclipse.</li>
+						<li>Right click the project, and export it on a .war file.</li>
+						<li>Copy the .war file in the "\tomcat7\webapps" folder.</li>
+						<li>Start the tomcat server from a console ("\tomcat7\bin>startup.bat").</li>
+					</ul>
+					<p>If everything went ok, you should be able to navigate to the wsdl and the wadl:</p>
+					<ul>
+						<li><a href="http://localhost:8080/SociosApi/SociosApiSoapService?wsdl" target="_blank">http://localhost:8080/SociosApi/SociosApiSoapService?wsdl</a></li>
+						<li><a href="http://localhost:8080/SociosApi/rest/application.wadl" target="_blank">http://localhost:8080/SociosApi/rest/application.wadl</a></li>
+					</ul>
+					<p>Calling this url:</p>
+					<ul>
+						<li><a href="http://localhost:8080/SociosApi/rest/socios/hello" target="_blank">http://localhost:8080/SociosApi/rest/socios/hello</a></li>
+					</ul>
+					<p>should return "hello!!".</p>
+				</div>
 			</div>
 			<div class="description">
 				<h4>Registering Applications with Social Networks</h4>
