@@ -1,18 +1,3 @@
-/*******************************************************************************
- * Copyright 2015 National Technical University of Athens
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 package helper.utilities;
 
 import helper.misc.SociosConstants;
@@ -31,7 +16,7 @@ public class ExceptionsUtilities {
 	private static String exc400 = "No valid input was detected.";
 	private static String exc500 = "Something went wrong.";
 	private static String exc501 = "This method is not implemented for this particular social network.";
-	private static Map<Integer, String> map;
+	static Map<Integer, String> map;
 	static {
 		map = new HashMap<Integer, String>();
 		map.put(SociosConstants.ERROR_400, getExc400());
@@ -123,5 +108,13 @@ public class ExceptionsUtilities {
 
 	public static void setExc400(String exc400) {
 		ExceptionsUtilities.exc400 = exc400;
+	}
+
+	public static void addToMap(int code, String value) {
+		map.put(code, value);
+	}
+
+	public static Map<Integer, String> getMap() {
+		return map;
 	}
 }
