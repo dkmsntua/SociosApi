@@ -1,6 +1,8 @@
 	
 You can find all the necessary files to run the project in the "codeFiles" folder.
-You can find directions on how to get started at "documentation -> htmls -> guide.html".
+You can find directions on how to get started here: 
+http://147.102.19.96:8080/SociosApiGit/guide.html
+or at "documentation -> htmls -> guide.html" 
 
 ==========================================================================
 
