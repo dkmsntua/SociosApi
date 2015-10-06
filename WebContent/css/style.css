@@ -1,0 +1,307 @@
+body {
+	margin: 0px auto;
+	margin-bottom: 50px;
+	padding: 0px;
+	font-family: Verdana, Tahoma, Arial, 'Trebuchet MS', GRHelvetica;
+	font-size: 12px;
+	background-color: #D5D1D6;
+}
+
+html {
+	margin: 0px auto;
+	padding: 0px;
+	overflow-y: scroll;
+}
+
+a.menuItem {
+	font-weight: bold;
+	font-size: 15px;
+}
+
+a.selected {
+	text-decoration: underline;
+	cursor: default;
+}
+
+.topMenu a {
+	color: #E6EAED;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:link {
+	outline: none;
+}
+
+a:active {
+	outline: none;
+}
+
+a:visited {
+	outline: none;
+}
+
+a:hover {
+	outline: none;
+	text-decoration: underline;
+}
+
+ul,ol,div,p,span {
+	font-family: Verdana, Tahoma, Arial, 'Trebuchet MS', GRHelvetica;
+}
+
+li {
+	padding: 1px;
+}
+
+select,input,textarea {
+	font-family: Verdana, Tahoma, Arial, 'Trebuchet MS', GRHelvetica;
+}
+
+form {
+	margin: 0px;
+	padding: 0px;
+}
+
+img {
+	border: 0px;
+}
+
+p,h4 {
+	padding: 5px 5px 5px 5px;
+	margin: 0px;
+}
+
+div.clear {
+	clear: both;
+}
+
+a#wsdl {
+	text-decoration: none;
+	color: #866E93;
+	padding: 0px 0px 0px 13px;
+}
+
+div#container {
+	margin: 0 auto;
+	position: relative;
+	width: 981px;
+	margin-top: 30px;
+}
+
+div.menu {
+	text-align: justify;
+	border: 2px solid #EDEFEF;
+}
+
+div.topMenu {
+	width: 871px;
+	height: 62px;
+	margin-top: 1px;
+	background-color: #939B9E;
+	padding: 0px 50px 0px 50px;
+}
+
+div.menu div {
+	display: inline-block;
+	text-align: center;
+	*zoom: 1;
+	*display: inline;
+}
+
+div.topMenu div {
+	height: 39px;
+	padding: 22px 1px 0px 1px;
+}
+
+.stretch {
+	width: 100%;
+	display: inline-block;
+	*zoom: 1;
+	*display: inline;
+}
+
+div.separator {
+	background-position: top center;
+	background-repeat: no-repeat;
+}
+
+#content {
+	border: 2px solid #EDEFEF;
+	width: 971px;
+	overflow: hidden;
+	margin-top: 10px;
+	background-color: #939B9E;
+	position: relative;
+}
+
+.description {
+	border: 2px solid #939b9e;
+	padding: 20px;
+	background-color: #e8edf4;
+	margin: 3px 3px 0px 3px;
+}
+
+div.box {
+	margin: 5px;
+	float: left;
+	border: 2px solid #EDEFEF;
+}
+
+div.restBox {
+	width: 658px;
+	padding: 10px 33px 10px 35px;
+}
+
+div.display {
+	overflow-y: auto;
+}
+
+.hidden {
+	display: none;
+}
+
+#leftHolder {
+	height: 566px;
+	margin: 5px;
+	border: 2px solid #EDEFEF;
+	float: left;
+	background-color: #D0DADD;
+}
+
+#left {
+	width: 206px;
+	list-style-type: none;
+	padding: 5px;
+	margin: 0px;
+}
+
+#left li {
+	padding: 4px;
+	margin: 4px;
+	cursor: pointer;
+	list-style-type: none;
+}
+
+#left li:hover {
+	background-color: #B8CED6;
+}
+
+#left li.selected {
+	font-style: italic;
+	font-weight: bold;
+	background-color: #B8CED6;
+	cursor: default;
+}
+
+#info {
+	height: 360px;
+	background-color: #E8EDF4;
+}
+
+#comments {
+	height: 100px;
+	background-color: #E8EDF4;
+	overflow-y: auto;
+}
+
+#sns {
+	height: 18px;
+	background-color: #D0DADD;
+}
+
+#sns div {
+	padding: 2px 12px 2px 12px;
+	cursor: pointer;
+}
+
+#sns div:hover {
+	background-color: #B8CED6;
+}
+
+#sns div.selected {
+	font-weight: bold;
+	background-color: #B8CED6;
+	cursor: default;
+}
+
+table#map {
+	border: 2px solid white;
+	background-color: #939B9E;
+}
+
+td {
+	cursor: default;
+	border-collapse: collapse;
+	padding: 4px 10px 4px 10px;
+	text-align: center;
+}
+
+#map {
+	width: 975px;
+	padding: 4px;
+	margin: 10px 0px 0px 0px;
+}
+
+.mapMethod {
+	text-align: left;
+	font-weight: bold;
+	color: #555555;
+	width: 208px;
+	padding: 4px 4px 4px 12px;
+}
+
+.mapSn {
+	font-weight: bold;
+	color: #555555;
+}
+
+#map tr:nth-child(even) {
+	background-color: #E8EDF4;
+}
+
+#map tr:nth-child(odd) {
+	background-color: #D0DADD;
+}
+
+::selection {
+	background: #939B9E;
+	color: #FFFFFF; /* Safari */
+}
+
+::-moz-selection {
+	background: #939B9E;
+	color: #FFFFFF; /* Firefox */
+}
+
+#easyTooltip {
+	padding: 5px;
+	border: 2px solid #555555;
+	background: #DEE3E5;
+	color: #555555;
+	z-index: 10;
+}
+
+.grey {
+	background-color: #939B9E;
+	border: none !important;
+}
+
+.test {
+	float: left;
+}
+
+#foo {
+	border: 1px solid red;
+	overflow: hidden;
+}
+
+.codeFiles {
+	color: #866e93;
+}
+
+.server {
+	cursor: pointer;
+}
