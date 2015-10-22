@@ -20,7 +20,13 @@ public class ytVideo {
 	}
 
 	public ytVideo(JSONObject json) {
-		this.setId(json.optString("id", null));
+		JSONObject jsId = json.optJSONObject("id");
+		if (jsId == null) {
+			this.setId(json.optString("id", null));
+		}
+		else {
+			this.setId(jsId.optString("videoId", null));
+		}
 		JSONObject jssnippet = json.optJSONObject("snippet");
 		if (jssnippet != null) {
 			this.setSnippet(new YtvSnippet(jssnippet));

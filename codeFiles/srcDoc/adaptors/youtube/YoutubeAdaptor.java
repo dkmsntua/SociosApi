@@ -19,6 +19,8 @@ import objects.enums.LicenseType;
 import objects.enums.SocialNetwork;
 import objects.enums.SociosObject;
 import objects.filters.ActivityFilter;
+import objects.filters.AreaFilter;
+import objects.filters.LocationFilter;
 import objects.filters.MediaItemFilter;
 import objects.filters.PersonFilter;
 import objects.interfaces.ISnsAdaptor;
@@ -39,7 +41,7 @@ public class YoutubeAdaptor implements ISnsAdaptor {
 			pool.submit(new Runnable() {
 				@Override
 				public void run() {
-					PersonsContainer person = YoutubeCalls.getPerson(id);
+					PersonsContainer person = YoutubeCalls.getPerson(id, "id");
 					ContainerUtilities.merge(result, person);
 				}
 			});
@@ -58,7 +60,8 @@ public class YoutubeAdaptor implements ISnsAdaptor {
 	@Override
 	public PersonsContainer connectedPersons(ObjectId personId) {
 		String id = personId.getId();
-		return YoutubeCalls.getSubscribers(id);
+		String channelId = Utilities.getChannelId(id);
+		return YoutubeCalls.getSubscriptions(channelId);
 	}
 
 	@Override
@@ -74,16 +77,15 @@ public class YoutubeAdaptor implements ISnsAdaptor {
 		if (personFilter != null) {
 			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, null, SociosConstants.ERROR_501);
 		}
-		else if (mediaItemId != null) {
-			String mediaId = mediaItemId.getId();
-			result = YoutubeCalls.getMediaItemOwner(mediaId);
-		}
 		else if (activityId != null) {
 			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, null, activityId.getId(), SociosConstants.ERROR_501);
 		}
 		else if (username != null) {
 			String name = username.getId();
-			result = YoutubeCalls.getPerson(name);
+			result = YoutubeCalls.getPerson(name, "username");
+		}
+		else if (mediaItemId != null) {
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, mediaItemId.getId(), SociosConstants.ERROR_501);
 		}
 		return result;
 	}
@@ -115,14 +117,12 @@ public class YoutubeAdaptor implements ISnsAdaptor {
 
 	@Override
 	public MediaItemsContainer getMediaItemsForUser(ObjectId personId, ObjectId username) {
-		String identifier;
 		if (personId != null) {
-			identifier = personId.getId();
+			return YoutubeCalls.getMediaItemsForUser(personId.getId());
 		}
 		else {
-			identifier = username.getId();
+			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, null, username.getId(), SociosConstants.ERROR_501);
 		}
-		return YoutubeCalls.getMediaItemsForUser(identifier);
 	}
 
 	@Override
@@ -147,8 +147,25 @@ public class YoutubeAdaptor implements ISnsAdaptor {
 		}
 		LicenseType licenseType = mediaFilter.getLicenseType();
 		if (licenseType != null && licenseType.equals(LicenseType.CC)) {
-			String licenseParam = "license=cc";
+			String licenseParam = "videoLicense=creativeCommon";
 			queries.add(licenseParam);
+		}
+		LocationFilter locationFilter = mediaFilter.getLocation();
+		String location;
+		if (locationFilter != null) {
+			AreaFilter area = locationFilter.getAreaFilter();
+			if (area != null) {
+				Double latitude = area.getLatitude();
+				Double longitude = area.getLongitude();
+				Double radius = area.getRadius();
+				if (longitude != null && latitude != null && latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
+					if (radius == null) {
+						radius = 10d;
+					}
+					location = "location=" + latitude + "," + longitude + "&locationRadius=" + radius + "km";
+					queries.add(location);
+				}
+			}
 		}
 		String chain = Utilities.getChain(queries, "&");
 		if (chain != null) {
@@ -156,12 +173,8 @@ public class YoutubeAdaptor implements ISnsAdaptor {
 			ContainerUtilities.merge(result, mediaItemsContainer);
 		}
 		if (queries.isEmpty()) {
-			String country = FilterUtilities.getCountry(mediaFilter);
-			String countryCode = Utilities.getCountryCode(country);
-			if (countryCode != null) {
-				MediaItemsContainer mediaItemsContainer = YoutubeCalls.getPopularMediaItems(countryCode);
-				ContainerUtilities.merge(result, mediaItemsContainer);
-			}
+			MediaItemsContainer mediaItemsContainer = YoutubeCalls.getPopularMediaItems();
+			ContainerUtilities.merge(result, mediaItemsContainer);
 		}
 		return result;
 	}
@@ -191,7 +204,27 @@ public class YoutubeAdaptor implements ISnsAdaptor {
 
 	@Override
 	public CommentsContainer getComments(List<ObjectId> objectIds) {
-		return ExceptionsUtilities.getException(SociosObject.COMMENT, sn, null, null, SociosConstants.ERROR_501);
+		final CommentsContainer result = new CommentsContainer();
+		ExecutorService pool = Executors.newFixedThreadPool(SociosConstants.threads);
+		List<String> ids = Utilities.getStringList(objectIds);
+		for (final String id : ids) {
+			pool.submit(new Runnable() {
+				@Override
+				public void run() {
+					CommentsContainer comment = YoutubeCalls.getComment(id);
+					ContainerUtilities.merge(result, comment);
+				}
+			});
+		}
+		pool.shutdown();
+		try {
+			pool.awaitTermination(SociosConstants.timeOut, TimeUnit.SECONDS);
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		pool.shutdownNow();
+		return result;
 	}
 
 	@Override

@@ -9,20 +9,27 @@ public class ytChannel {
 	private String picture;
 	private String thumbnail;
 	private String title;
+	private Integer subscriberCount;
 
 	public ytChannel() {
 	}
 
 	public ytChannel(JSONObject json) {
+		this.setChannelId(json.optString("id"));
 		JSONObject jssnippet = json.optJSONObject("snippet");
 		if (jssnippet != null) {
 			this.setTitle(jssnippet.optString("title", null));
 			this.setDescription(jssnippet.optString("description", null));
-			this.setChannelId(ParseUtilities.doubleJsParse(jssnippet, "resourceId", "channelId"));
 			JSONObject jsthumbnails = jssnippet.optJSONObject("thumbnails");
 			if (jsthumbnails != null) {
 				this.setThumbnail(ParseUtilities.doubleJsParse(jsthumbnails, "default", "url"));
 				this.setPicture(ParseUtilities.doubleJsParse(jsthumbnails, "high", "url"));
+			}
+		}
+		JSONObject jsStatistics = json.optJSONObject("statistics");
+		if (jsStatistics != null) {
+			if (!jsStatistics.isNull("subscriberCount")) {
+				this.setSubscriberCount(jsStatistics.optInt("subscriberCount"));
 			}
 		}
 	}
@@ -65,5 +72,13 @@ public class ytChannel {
 
 	public void setChannelId(String channelId) {
 		this.channelId = channelId;
+	}
+
+	public Integer getSubscriberCount() {
+		return subscriberCount;
+	}
+
+	public void setSubscriberCount(Integer subscriberCount) {
+		this.subscriberCount = subscriberCount;
 	}
 }

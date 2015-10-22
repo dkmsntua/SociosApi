@@ -19,65 +19,19 @@ import org.json.JSONObject;
 public class YoutubeFetchers {
 	private static SocialNetwork sn = SocialNetwork.YOUTUBE;
 
-	public static PersonsContainer fetchPerson(String response, String id) {
-		PersonsContainer result = new PersonsContainer();
-		try {
-			JSONObject json = new JSONObject(response);
-			JSONObject jsperson = json.optJSONObject("entry");
-			Person person = YoutubeParsers.parsePerson(jsperson);
-			result.getPersons().add(person);
-		}
-		catch (JSONException exc) {
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, SociosConstants.ERROR_500);
-		}
-		return result;
-	}
-
-	public static PersonsContainer fetchPersonsFromChannel(String response, String id) {
+	public static PersonsContainer fetchPersons(String response, String id) {
 		PersonsContainer result = new PersonsContainer();
 		try {
 			JSONObject json = new JSONObject(response);
 			JSONArray array = json.optJSONArray("items");
 			for (int index = 0; index < array.length(); index++) {
-				JSONObject jsperson = array.optJSONObject(index);
-				Person person = YoutubeParsers.parseChannel(jsperson);
+				JSONObject jschannel = array.optJSONObject(index);
+				Person person = YoutubeParsers.parseChannel(jschannel);
 				result.getPersons().add(person);
 			}
 		}
 		catch (JSONException exc) {
 			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, SociosConstants.ERROR_500);
-		}
-		return result;
-	}
-
-	public static PersonsContainer fetchPersonsFromChannelV2(String response, String id) {
-		PersonsContainer result = new PersonsContainer();
-		try {
-			JSONObject json = new JSONObject(response);
-			JSONObject jsfeed = json.optJSONObject("feed");
-			JSONArray array = jsfeed.optJSONArray("entry");
-			for (int index = 0; index < array.length(); index++) {
-				JSONObject jsperson = array.optJSONObject(index);
-				Person person = YoutubeParsers.parseChannelV2(jsperson);
-				result.getPersons().add(person);
-			}
-		}
-		catch (JSONException exc) {
-			return ExceptionsUtilities.getException(SociosObject.PERSON, sn, exc.getMessage() + " ==> " + response, id, SociosConstants.ERROR_500);
-		}
-		return result;
-	}
-
-	public static MediaItemsContainer fetchMediaItem(String response, String id) {
-		MediaItemsContainer result = new MediaItemsContainer();
-		try {
-			JSONObject json = new JSONObject(response);
-			JSONObject jsmediaItem = json.optJSONObject("entry");
-			MediaItem mediaItem = YoutubeParsers.parseMediaItemV2(jsmediaItem);
-			result.getMediaItems().add(mediaItem);
-		}
-		catch (JSONException exc) {
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, SociosConstants.ERROR_500);
 		}
 		return result;
 	}
@@ -89,25 +43,7 @@ public class YoutubeFetchers {
 			JSONArray array = json.optJSONArray("items");
 			for (int index = 0; index < array.length(); index++) {
 				JSONObject jsmediaItem = array.optJSONObject(index);
-				MediaItem mediaItem = YoutubeParsers.parseMediaItemV3(jsmediaItem);
-				result.getMediaItems().add(mediaItem);
-			}
-		}
-		catch (JSONException exc) {
-			return ExceptionsUtilities.getException(SociosObject.MEDIAITEM, sn, exc.getMessage() + " ==> " + response, id, SociosConstants.ERROR_500);
-		}
-		return result;
-	}
-
-	public static MediaItemsContainer fetchMediaItemsV2(String response, String id) {
-		MediaItemsContainer result = new MediaItemsContainer();
-		try {
-			JSONObject json = new JSONObject(response);
-			JSONObject feed = json.optJSONObject("feed");
-			JSONArray array = feed.optJSONArray("entry");
-			for (int index = 0; index < array.length(); index++) {
-				JSONObject jsmediaItem = array.optJSONObject(index);
-				MediaItem mediaItem = YoutubeParsers.parseMediaItemV2(jsmediaItem);
+				MediaItem mediaItem = YoutubeParsers.parseMediaItem(jsmediaItem);
 				result.getMediaItems().add(mediaItem);
 			}
 		}
@@ -138,8 +74,7 @@ public class YoutubeFetchers {
 		CommentsContainer result = new CommentsContainer();
 		try {
 			JSONObject json = new JSONObject(response);
-			JSONObject feed = json.optJSONObject("feed");
-			JSONArray array = feed.optJSONArray("entry");
+			JSONArray array = json.optJSONArray("items");
 			for (int index = 0; index < array.length(); index++) {
 				JSONObject jscomment = array.optJSONObject(index);
 				Comment comment = YoutubeParsers.parseComment(jscomment);

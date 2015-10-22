@@ -1,60 +1,46 @@
 package adaptors.youtube.ytObjects;
 
-import helper.utilities.ParseUtilities;
-import helper.utilities.Utilities;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ytComment {
-	private String content;
 	private String id;
-	private String published;
-	private String userId;
-	private String username;
+	private String channelId;
+	private String videoId;
+	private String description;
+	private String authorDisplayName;
+	private String authorProfileImageUrl;
+	private String authorChannelUrl;
+	private String authorChannelId;
+	private Integer likeCount;
+	private String publishedAt;
 
 	public ytComment() {
 	}
 
 	public ytComment(JSONObject json) {
-		String id = ParseUtilities.doubleJsParse(json, "id", "$t");
-		if (id != null) {
-			String[] tokens = id.split(":");
-			this.setId(tokens[tokens.length - 1]);
-		}
-		this.setPublished(ParseUtilities.doubleJsParse(json, "published", "$t"));
-		this.setContent(ParseUtilities.doubleJsParse(json, "content", "$t"));
-		JSONArray jsarray = json.optJSONArray("author");
-		if (Utilities.isValid(jsarray)) {
-			JSONObject jsauthor = jsarray.optJSONObject(0);
-			if (jsauthor != null) {
-				this.setUserId(ParseUtilities.doubleJsParse(jsauthor, "yt$userId", "$t"));
-				this.setUsername(ParseUtilities.doubleJsParse(jsauthor, "name", "$t"));
+		this.setId(json.optString("id", null));
+		JSONObject jssnippet = json.optJSONObject("snippet");
+		if (jssnippet != null) {
+			JSONObject jsTopLevelComment = jssnippet.optJSONObject("topLevelComment");
+			if (jsTopLevelComment != null) {
+				JSONObject jsInnerSnippetComment = jsTopLevelComment.optJSONObject("snippet");
+				if (jsInnerSnippetComment != null) {
+					jssnippet = jsInnerSnippetComment;
+				}
+			}
+			this.channelId = jssnippet.optString("channelId", null);
+			this.videoId = jssnippet.optString("videoId", null);
+			this.setDescription(jssnippet.optString("textDisplay", null));
+			this.setAuthorDisplayName(jssnippet.optString("authorDisplayName", null));
+			this.setAuthorProfileImageUrl(jssnippet.optString("authorProfileImageUrl", null));
+			this.setAuthorChannelUrl(jssnippet.optString("authorChannelUrl", null));
+			this.setPublishedAt(jssnippet.optString("publishedAt", null));
+			this.setLikeCount(jssnippet.optInt("likeCount"));
+			JSONObject jsAuthorChannelId = jssnippet.optJSONObject("authorChannelId");
+			if (jsAuthorChannelId != null) {
+				this.setAuthorChannelId(jsAuthorChannelId.optString("value", null));
 			}
 		}
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getPublished() {
-		return published;
-	}
-
-	public void setPublished(String published) {
-		this.published = published;
 	}
 
 	public String getId() {
@@ -65,11 +51,75 @@ public class ytComment {
 		this.id = id;
 	}
 
-	public String getContent() {
-		return content;
+	public String getChannelId() {
+		return channelId;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
+	}
+
+	public String getVideoId() {
+		return videoId;
+	}
+
+	public void setVideoId(String videoId) {
+		this.videoId = videoId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getAuthorDisplayName() {
+		return authorDisplayName;
+	}
+
+	public void setAuthorDisplayName(String authorDisplayName) {
+		this.authorDisplayName = authorDisplayName;
+	}
+
+	public String getAuthorProfileImageUrl() {
+		return authorProfileImageUrl;
+	}
+
+	public void setAuthorProfileImageUrl(String authorProfileImageUrl) {
+		this.authorProfileImageUrl = authorProfileImageUrl;
+	}
+
+	public String getAuthorChannelUrl() {
+		return authorChannelUrl;
+	}
+
+	public void setAuthorChannelUrl(String authorChannelUrl) {
+		this.authorChannelUrl = authorChannelUrl;
+	}
+
+	public String getAuthorChannelId() {
+		return authorChannelId;
+	}
+
+	public void setAuthorChannelId(String authorChannelId) {
+		this.authorChannelId = authorChannelId;
+	}
+
+	public Integer getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(int i) {
+		this.likeCount = i;
+	}
+
+	public String getPublishedAt() {
+		return publishedAt;
+	}
+
+	public void setPublishedAt(String publishedAt) {
+		this.publishedAt = publishedAt;
 	}
 }
